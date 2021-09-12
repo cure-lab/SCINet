@@ -79,7 +79,7 @@ All datasets can be downloaded [here](https://drive.google.com/drive/folders/1Gv
 
 To facility the reproduction, we provide the logs on the above datasets [here](https://drive.google.com/drive/folders/1MBK5MOShD4ygLIinNBo2F8EPRM5y9qIQ?usp=sharing) in details. You can check **the hyperparameters, training loss and test results for each epoch** in these logs as well.
 
-We follow the same settings of [StemGNN](https://github.com/microsoft/StemGNN) for PEMS 03, 04, 07, 08 datasets, [MTGNN](https://github.com/nnzhan/MTGNN) for Solar, electricity, traffic, financial datasets, [Informer]((https://github.com/zhouhaoyi/Informer2020) for ETTH1, ETTH2, ETTM1 datasets. The detailed training commands are given as follows.
+We follow the same settings of [StemGNN](https://github.com/microsoft/StemGNN) for PEMS 03, 04, 07, 08 datasets, [MTGNN](https://github.com/nnzhan/MTGNN) for Solar, electricity, traffic, financial datasets, [Informer](https://github.com/zhouhaoyi/Informer2020) for ETTH1, ETTH2, ETTM1 datasets. The detailed training commands are given as follows.
 
 For PEMS dataset:
 ```
@@ -106,7 +106,7 @@ For PEMS dataset:
 | hidden-size    | hidden expansion        | h                  | 1       |
 | kernel         | convolution kernel size | k                  | 5       |
 | layers         | SCINet block layers     | L                  | 3       |
-| stacks         |                         | K                  | 1       |
+| stacks         | The number of SCINet block| K                | 1       |
 
 
 For Solar dataset:
