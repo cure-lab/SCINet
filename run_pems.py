@@ -5,7 +5,7 @@ from experiments.exp_pems import Exp_pems
 import argparse
 import pandas as pd
 import numpy as np
-from tensorboardX import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter
 #os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 parser = argparse.ArgumentParser()
