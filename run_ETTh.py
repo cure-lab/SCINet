@@ -9,23 +9,32 @@ from experiments.exp_ETTh import Exp_ETTh
 parser = argparse.ArgumentParser(description='[Informer] Long Sequences Forecasting')
 
 parser.add_argument('--model', type=str, required=False, default='SCINet', help='model of the experiment')
-
-parser.add_argument('--data', type=str, required=False, default='ETTh1', help='data')
+### -------  dataset settings --------------
+parser.add_argument('--data', type=str, required=False, default='ETTh1', choices=['ETTh1', 'ETTh2', 'ETTm1', help='name of dataset')
 parser.add_argument('--root_path', type=str, default='./datasets/ETT-data/ETT/', help='root path of the data file')
 parser.add_argument('--data_path', type=str, default='ETTh1.csv', help='location of the data file')
-parser.add_argument('--features', type=str, default='M', help='features [S, M]')
+parser.add_argument('--features', type=str, default='M', choices=['S', 'M'], help='features S is univariate, M is multivariate')
 parser.add_argument('--target', type=str, default='OT', help='target feature')
 parser.add_argument('--freq', type=str, default='h', help='freq for time features encoding, options:[s:secondly, t:minutely, h:hourly, d:daily, b:business days, w:weekly, m:monthly], you can also use more detailed freq like 15min or 3h')
 parser.add_argument('--checkpoints', type=str, default='./checkpoints/', help='location of model checkpoints')
+parser.add_argument('--embed', type=str, default='timeF', help='time features encoding, options:[timeF, fixed, learned]')
 
-
+### -------  device settings --------------
+parser.add_argument('--use_gpu', type=bool, default=True, help='use gpu')
+parser.add_argument('--gpu', type=int, default=0, help='gpu')
+parser.add_argument('--use_multi_gpu', action='store_true', help='use multiple gpus', default=False)
+parser.add_argument('--devices', type=str, default='0',help='device ids of multile gpus')
+                                                                                  
+### -------  input/output length settings --------------                                                                            
 parser.add_argument('--seq_len', type=int, default=96, help='input sequence length of Informer encoder, look back window')
 parser.add_argument('--label_len', type=int, default=48, help='start token length of Informer decoder')
 parser.add_argument('--pred_len', type=int, default=48, help='prediction sequence length, horizon')
-
-parser.add_argument('--dropout', type=float, default=0.5, help='dropout')
-parser.add_argument('--embed', type=str, default='timeF', help='time features encoding, options:[timeF, fixed, learned]')
-
+parser.add_argument('--concat_len', type=int, default=0)
+parser.add_argument('--single_step', type=int, default=0)
+parser.add_argument('--single_step_output_One', type=int, default=0)
+parser.add_argument('--lastWeight', type=float, default=1.0)
+                                                              
+### -------  training settings --------------  
 parser.add_argument('--do_predict', action='store_true', help='whether to predict unseen future data')
 parser.add_argument('--mix', action='store_false', help='use mix attention in generative decoder', default=True)
 parser.add_argument('--cols', type=str, nargs='+', help='file list')
@@ -41,12 +50,7 @@ parser.add_argument('--lradj', type=str, default='type1',help='adjust learning r
 parser.add_argument('--use_amp', action='store_true', help='use automatic mixed precision training', default=False)
 parser.add_argument('--inverse', type=bool, default =False, help='inverse output data')
 
-parser.add_argument('--use_gpu', type=bool, default=True, help='use gpu')
-parser.add_argument('--gpu', type=int, default=0, help='gpu')
-parser.add_argument('--use_multi_gpu', action='store_true', help='use multiple gpus', default=False)
-parser.add_argument('--devices', type=str, default='0',help='device ids of multile gpus')
-
-
+### -------  model settings --------------  
 parser.add_argument('--share-weight', default=0, type=int, help='share weight or not in attention q,k,v')
 parser.add_argument('--temp', default=0, type=int, help='Use temporature weights or not, if false, temp=1')
 parser.add_argument('--hidden-size', default=1, type=float, help='hidden channel of module')
@@ -54,17 +58,11 @@ parser.add_argument('--INN', default=1, type=int, help='use INN or basic strateg
 parser.add_argument('--kernel', default=5, type=int, help='kernel size, 3, 5, 7')
 parser.add_argument('--dilation', default=1, type=int, help='dilation')
 parser.add_argument('--window_size', default=12, type=int, help='input size')
-
-parser.add_argument('--single_step', type=int, default=0)
-parser.add_argument('--single_step_output_One', type=int, default=0)
-parser.add_argument('--lastWeight', type=float, default=1.0)
-
-
+parser.add_argument('--dropout', type=float, default=0.5, help='dropout')
 parser.add_argument('--positionalEcoding', type=bool, default=False)
 parser.add_argument('--groups', type=int, default=1)
 parser.add_argument('--layers', type=int, default=3)
 parser.add_argument('--stacks', type=int, default=1, help='1 stack or 2 stacks')
-
 
 parser.add_argument('--levels', type=int, default=4,
                     help='# of levels (default: 8)')
@@ -72,9 +70,6 @@ parser.add_argument('--nhid', type=int, default=32,
                     help='number of hidden units per layer (default: 30)')
 parser.add_argument('--model_name', type=str, default='EncoDeco')
 # parser.add_argument('--model_mode', type=str, default='EncoDeco')
-
-parser.add_argument('--concat_len', type=int, default=0)
-
 
 args = parser.parse_args()
 
