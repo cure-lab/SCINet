@@ -4,7 +4,20 @@
 ![pytorch](https://img.shields.io/badge/-PyTorch-%23EE4C2C?logo=PyTorch&labelColor=lightgrey)
 
 ## Some preface
-This is the original pytorch implementation in the following paper: [Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction](https://arxiv.org/pdf/2106.09305.pdf). 
+This is the original pytorch implementation for the following paper: [Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction](https://arxiv.org/pdf/2106.09305.pdf). 
+
+## Citation 
+
+If you find this repository useful for your research work, please consider citing the following paper:
+
+```
+@article{liu2021SCINet,
+  title={Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction},
+  author={Liu, Minhao and Zeng, Ailing and Lai, Qiuxia and Xu, Qiang},
+  journal={arXiv preprint arXiv:2106.09305},
+  year={2021}
+}
+```
 
 ## Updates
 [2021-09-14] SCINet is released! 
@@ -244,22 +257,9 @@ python run_ETTh.py --data ETTm1 --features S  --hidden-size 4 --layers 3 --stack
 
 
 
-## Citation 
-
-If you find this repository useful in your research, please consider citing the following paper:
-
-```
-@article{liu2021time,
-  title={Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction},
-  author={Liu, Minhao and Zeng, Ailing and Lai, Qiuxia and Xu, Qiang},
-  journal={arXiv preprint arXiv:2106.09305},
-  year={2021}
-}
-```
-
 ## Contact
 
-If you have any questions, feel free to contact us or release github issues. Pull requests are highly welcomed! 
+If you have any questions, feel free to contact us or post github issues. Pull requests are highly welcomed! 
 
 ```
 Minhao Liu: mhliu@cse.cuhk.edu.hk
@@ -268,8 +268,8 @@ Zhijian Xu: zjxu21@cse.cuhk.edu.hk
 ```
 
 ## Acknowledgements
-This code uses ([Informer](https://github.com/zhouhaoyi/Informer2020), [MTGNN](https://github.com/nnzhan/MTGNN), [StemGNN](https://github.com/microsoft/StemGNN) as our baseline. We gratefully appreciate the impact these libraries had on this work. If you use our code, please consider citing the original papers as well. 
+This code uses ([Informer](https://github.com/zhouhaoyi/Informer2020), [MTGNN](https://github.com/nnzhan/MTGNN), [StemGNN](https://github.com/microsoft/StemGNN) as  baseline methods for comparison. We gratefully appreciate their impact on this work.  
 
-We also welcome all contributions to improve this library as well as give valuable feedbacks. We wish that this toolbox could serve the growing research community to reimplement existing methods and develop their own new models.
+We welcome all contributions to this work from the growing research community in time series analysis, and plesae provide your valuable feedbacks so that we could further improve this library. 
 
 
