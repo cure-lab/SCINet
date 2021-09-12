@@ -269,8 +269,6 @@ Zhijian Xu: zjxu21@cse.cuhk.edu.hk
 ```
 
 ## Acknowledgements
-This code uses ([Informer](https://github.com/zhouhaoyi/Informer2020), [MTGNN](https://github.com/nnzhan/MTGNN), [StemGNN](https://github.com/microsoft/StemGNN)) as  baseline methods for comparison. We gratefully appreciate their impact on this work.  
+Thank you all for your attention to our work!
 
-We welcome all contributions to this work from the growing research community in time series analysis, and we sincerely hope you could provide some valuable feedbacks so that we could further improve this library. 
-
-
+This code uses ([Informer](https://github.com/zhouhaoyi/Informer2020), [MTGNN](https://github.com/nnzhan/MTGNN), [StemGNN](https://github.com/microsoft/StemGNN)) as baseline methods for comparison. 
