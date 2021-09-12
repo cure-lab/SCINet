@@ -1,12 +1,12 @@
 import os
 import torch
-#os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 from datetime import datetime
 from experiments.exp_financial import Exp_financial
 import argparse
 import pandas as pd
 import numpy as np
 from torch.utils.tensorboard import SummaryWriter
+#os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 parser = argparse.ArgumentParser(description='PyTorch Time series forecasting')
 ### -------  dataset settings --------------
