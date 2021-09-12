@@ -39,23 +39,23 @@ class Exp_financial(Exp_Basic):
         return model
     
     def _get_data(self):
-        if self.args.dataset_name = 'electricity':
-            self.args.data == './datasets/financial/electricity.txt'
+        if self.args.dataset_name == 'electricity':
+            self.args.data = './datasets/financial/electricity.txt'
             self.args.num_nodes = 321
             
 
-        if self.args.dataset_name = 'solar_AL':
-            self.args.data == './datasets/financial/solar_AL.txt'
+        if self.args.dataset_name == 'solar_AL':
+            self.args.data = './datasets/financial/solar_AL.txt'
             self.args.num_nodes = 137
             
 
-        if self.args.dataset_name = 'exchange_rate':
-            self.args.data == './datasets/financial/exchange_rate.txt'
+        if self.args.dataset_name == 'exchange_rate':
+            self.args.data = './datasets/financial/exchange_rate.txt'
             self.args.num_nodes = 8
             
 
-        if self.args.dataset_name = 'traffic':
-            self.args.data == './datasets/financial/traffic.txt'
+        if self.args.dataset_name == 'traffic':
+            self.args.data = './datasets/financial/traffic.txt'
             self.args.num_nodes = 862
             
         print('dataset {}, the channel size is {}'.format(self.args.data, self.args.num_nodes))
