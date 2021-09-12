@@ -10,9 +10,9 @@ from torch.utils.tensorboard import SummaryWriter
 
 parser = argparse.ArgumentParser(description='PyTorch Time series forecasting')
 ### -------  dataset settings --------------
+parser.add_argument('--dataset_name', type=str, default='exchange_rate', choices=['electricity', 'solar_AL', 'exchange_rate', 'traffic'])
 parser.add_argument('--data', type=str, default='./datasets/exchange_rate.txt',
                     help='location of the data file')
-parser.add_argument('--dataset_name', type=str, default='electricity')
 parser.add_argument('--normalize', type=int, default=2)
 
 ### -------  device settings --------------
