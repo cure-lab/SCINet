@@ -1,12 +1,12 @@
 import os
 import torch
-#os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 from datetime import datetime
 from experiments.exp_pems import Exp_pems
 import argparse
 import pandas as pd
 import numpy as np
 from tensorboardX import SummaryWriter
+#os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 parser = argparse.ArgumentParser()
 ### -------  dataset settings --------------
@@ -20,7 +20,7 @@ parser.add_argument('--use_gpu', type=bool, default=True, help='use gpu')
 parser.add_argument('--use_multi_gpu', action='store_true', help='use multiple gpus', default=False)
 parser.add_argument('--gpu', type=int, default=0, help='gpu')
 parser.add_argument('--device', type=str, default='cuda:0')
-                                                                      
+
 ### -------  input/output length settings --------------                                                                            
 parser.add_argument('--window_size', type=int, default=12)
 parser.add_argument('--horizon', type=int, default=12)
