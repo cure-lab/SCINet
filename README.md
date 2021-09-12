@@ -4,11 +4,7 @@
 ![pytorch](https://img.shields.io/badge/-PyTorch-%23EE4C2C?logo=PyTorch&labelColor=lightgrey)
 
 ## Some preface
-This is the original pytorch implementation for the following paper: [Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction](https://arxiv.org/pdf/2106.09305.pdf). 
-
-## Citation 
-
-If you find this repository useful for your research work, please consider citing the following paper:
+This is the original pytorch implementation for the following paper: [Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction](https://arxiv.org/pdf/2106.09305.pdf). If you find this repository useful for your research work, please consider citing it as follows:
 
 ```
 @article{liu2021SCINet,
