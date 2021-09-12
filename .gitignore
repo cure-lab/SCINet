@@ -1,0 +1,16 @@
+log/
+model/
+dataset/
+*.txt
+*.pyc
+*.idea
+*.xml
+*.pth
+*.npe
+run/
+run_ETTh/
+run_financial/
+checkpoints/
+output/
+run_PEMS/
+SingleStepCheckpoint/

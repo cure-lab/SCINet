@@ -1,21 +1,43 @@
+
+import os
 import numpy as np
 import torch
+
+def save_model(self, model, model_dir, epoch=1, model_name='best_pems08'):
+    if model_dir is None:
+        return
+    if not os.path.exists(model_dir):
+        os.makedirs(model_dir)
+    epoch = str(epoch) if epoch else ''
+    file_name = os.path.join(model_dir, epoch + model_name)
+    with open(file_name, 'wb') as f:
+        torch.save(model, f)
+        print('save model in ',file_name)
+
+def load_model(self, model_dir, epoch=1, model_name='best_pems08'):
+    if not model_dir:
+        return
+    epoch = str(epoch) if epoch else ''
+    file_name = os.path.join(model_dir, epoch + model_name) 
+    if not os.path.exists(model_dir):
+        os.makedirs(model_dir)
+    if not os.path.exists(file_name):
+        return
+    with open(file_name, 'rb') as f:
+        model = torch.load(f)
+        print('loaded the model...', file_name)
+    return model
 
 def adjust_learning_rate(optimizer, epoch, args):
     # lr = args.learning_rate * (0.2 ** (epoch // 2))
     if args.lradj=='type1':
-        lr_adjust = {epoch: args.lr * (0.95 ** ((epoch-1) // 1))}
-        #lr_adjust = {epoch: args.learning_rate * (0.95 ** ((epoch - 1) // 1))}
+        lr_adjust = {epoch: args.lr * (0.95 ** (epoch // 1))}
     elif args.lradj=='type2':
         lr_adjust = {
             2: 5e-5, 4: 1e-5, 6: 5e-6, 8: 1e-6, 
             10: 5e-7, 15: 1e-7, 20: 5e-8
         }
     elif args.lradj==2:
-        # lr_adjust = {
-        #     2: 5e-5, 4: 1e-5, 6: 5e-6, 8: 1e-6,
-        #     10: 5e-7, 15: 1e-7, 20: 5e-8
-        # }
         lr_adjust = {
             20: 0.0005, 40: 0.0001, 60: 0.00005, 80: 0.00001
 

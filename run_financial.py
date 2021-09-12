@@ -49,17 +49,16 @@ parser.add_argument('--hidden-size', default=1.0, type=float, help='hidden chann
 parser.add_argument('--INN', default=1, type=int, help='use INN or basic strategy')
 parser.add_argument('--kernel', default=5, type=int, help='kernel size')#k kernel size
 parser.add_argument('--dilation', default=1, type=int, help='dilation')
-parser.add_argument('--model_name', type=str, default='EncoDeco')
-parser.add_argument('--model_mode', type=str, default='EncoDeco')
+parser.add_argument('--model_name', type=str, default='SCINET')
 parser.add_argument('--positionalEcoding', type = bool , default=False)
 parser.add_argument('--dropout', type=float, default=0.5)
-parser.add_argument('--num_concat', type=int, default=165)
+parser.add_argument('--concat_len', type=int, default=165)
 parser.add_argument('--groups', type=int, default=1)
 parser.add_argument('--layers', type=int, default=3)
 
 args = parser.parse_args()
 
-args.num_concat = args.window_size - args.horizon
+args.concat_len = args.window_size - args.horizon
 
 if __name__ == '__main__':
 

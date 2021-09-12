@@ -1,23 +1,22 @@
-from experiments.exp_basic import Exp_Basic
-# from models.model import Informer, InformerStack
-from data_process.forecast_dataloader import ForecastDataset,ForecastTestDataset, de_normalized
-from utils.tools import EarlyStopping, adjust_learning_rate
-from metrics.ETTh_metrics import metric
-from torch.utils.tensorboard import SummaryWriter
-import numpy as np
-from utils.math_utils import evaluate, creatMask
-import torch
-import torch.nn as nn
-from torch import optim
-from torch.utils.data import DataLoader
-
 import os
 import time
 
 import warnings
 warnings.filterwarnings('ignore')
 
-from models.SCINet import SCINet, SCINetEncoder
+import numpy as np
+import torch
+import torch.nn as nn
+from torch import optim
+from torch.utils.data import DataLoader
+
+from experiments.exp_basic import Exp_Basic
+from data_process.forecast_dataloader import ForecastDataset,ForecastTestDataset, de_normalized
+from utils.tools import EarlyStopping, adjust_learning_rate, save_model, load_model
+from metrics.ETTh_metrics import metric
+from torch.utils.tensorboard import SummaryWriter
+from utils.math_utils import evaluate, creatMask
+from models.SCINet import SCINet
 
 class Exp_pems(Exp_Basic):
     def __init__(self, args):
@@ -25,14 +24,23 @@ class Exp_pems(Exp_Basic):
         self.result_file = os.path.join('output', self.args.dataset, 'train')
         self.result_test_file = os.path.join('output', args.dataset, 'test')
         self.result_train_file = os.path.join('output', args.dataset, 'train')
-    
+        if self.args.dataset = 'PEMS03'
+            self.input_dim = 358
+        elif self.args.dataset = 'PEMS04'
+            self.input_dim = 307
+        elif self.args.dataset = 'PEMS07'
+            self.input_dim = 883
+        elif self.args.dataset = 'PEMS08'
+            self.input_dim = 170
+
     def _build_model(self):
-        model = SCINet(self.args, output_len=self.args.horizon, input_len=self.args.window_size, input_dim=self.args.input_dim,num_layers=self.args.layers)
+        model = SCINet(self.args, output_len=self.args.horizon, input_len=self.args.window_size, input_dim=self.input_dim, num_layers=self.args.layers)
         #model.to(self.args.device)
         return model
 
     def _get_data(self):
         data_file = os.path.join('./datasets/PEMS', self.args.dataset + '.npz')
+        print('data file:',data_file)
         data = np.load(data_file,allow_pickle=True)
         data = data['data'][:,:,0]
         train_ratio = self.args.train_length / (self.args.train_length + self.args.valid_length + self.args.test_length)
@@ -47,7 +55,7 @@ class Exp_pems(Exp_Basic):
             raise Exception('Cannot organize enough validation data')
         if len(test_data) == 0:
             raise Exception('Cannot organize enough test data')
-        if self.args.normtype == 0:
+        if self.args.normtype == 0: # we follow StemGNN and other related works for somewhat fair comparison (orz..), but we strongly suggest use self.args.normtype==2!!!
             train_mean = np.mean(train_data, axis=0)
             train_std = np.std(train_data, axis=0)
             train_normalize_statistic = {"mean": train_mean.tolist(), "std": train_std.tolist()}
@@ -104,12 +112,10 @@ class Exp_pems(Exp_Basic):
                 forecast_steps = np.zeros([inputs.size()[0], horizon, node_cnt], dtype=np.float)
                 Mid_steps = np.zeros([inputs.size()[0], horizon, node_cnt], dtype=np.float)
                 while step < horizon:
-                    # print(i, inputs.shape[0])
-                    # input_save = inputs.detach().cpu().numpy()
-                    # np.save('F:\\school\\Papers\\timeseriesNew\\TS-Net\\output\\PEMS08\\' + 'inputNPEbt1.npy', input_save)
-                    # target_save = target.detach().cpu().numpy()
-                    # np.save('F:\\school\\Papers\\timeseriesNew\\TS-Net\\output\\PEMS08\\' + 'targetNPEbt1.npy', target_save)
-                    forecast_result, Mid_result = self.model(inputs)
+                    if self.args.stacks == 1:
+                        forecast_result = self.model(inputs)
+                    elif self.args.stacks == 2:
+                        forecast_result, Mid_result = self.model(inputs)
 
                     len_model_output = forecast_result.size()[1]
                     if len_model_output == 0:
@@ -119,79 +125,91 @@ class Exp_pems(Exp_Basic):
                     inputs[:, window_size - len_model_output:, :] = forecast_result.clone()
                     forecast_steps[:, step:min(horizon - step, len_model_output) + step, :] = \
                         forecast_result[:, :min(horizon - step, len_model_output), :].detach().cpu().numpy()
-
-                    Mid_steps[:, step:min(horizon - step, len_model_output) + step, :] = \
-                        Mid_result[:, :min(horizon - step, len_model_output), :].detach().cpu().numpy()
+                    if self.args.stacks == 2:
+                        Mid_steps[:, step:min(horizon - step, len_model_output) + step, :] = \
+                            Mid_result[:, :min(horizon - step, len_model_output), :].detach().cpu().numpy()
 
                     step += min(horizon - step, len_model_output)
                 forecast_set.append(forecast_steps)
-                Mid_set.append(Mid_steps)
                 target_set.append(target.detach().cpu().numpy())
+                if self.args.stacks == 2:
+                    Mid_set.append(Mid_steps)
 
                 result_save = np.concatenate(forecast_set, axis=0)
-                #np.save('F:\\school\\Papers\\timeseriesNew\\TS-Net\\output\\PEMS08\\' + 'predNPEbt1.npy', result_save)
                 target_save = np.concatenate(target_set, axis=0)
-                #np.save('F:\\school\\Papers\\timeseriesNew\\TS-Net\\output\\PEMS08\\' + 'targetNPEbt1.npy', target_save)
 
-        return np.concatenate(forecast_set, axis=0), np.concatenate(target_set, axis=0),np.concatenate(Mid_set, axis=0), np.concatenate(input_set, axis=0)
+        if self.args.stacks == 1:
+            return np.concatenate(forecast_set, axis=0), np.concatenate(target_set, axis=0), np.concatenate(input_set, axis=0)
+
+        elif self.args.stacks == 2:
+            return np.concatenate(forecast_set, axis=0), np.concatenate(target_set, axis=0),np.concatenate(Mid_set, axis=0), np.concatenate(input_set, axis=0)
 
     def validate(self, model, epoch, forecast_loss, dataloader, device, normalize_method, statistic,
                 node_cnt, window_size, horizon, writer,
                 result_file=None,test=False):
         #start = datetime.now()
         print("===================Validate Normal=========================")
-        forecast_norm, target_norm, mid_norm, input_norm = self.inference(model, dataloader, device,
+        if self.args.stacks == 1:
+            forecast_norm, target_norm, input_norm = self.inference(model, dataloader, device,
+                                    node_cnt, window_size, horizon)
+        elif self.args.stacks == 2:
+            forecast_norm, target_norm, mid_norm, input_norm = self.inference(model, dataloader, device,
                                             node_cnt, window_size, horizon)
         if normalize_method and statistic:
             forecast = de_normalized(forecast_norm, normalize_method, statistic)
             target = de_normalized(target_norm, normalize_method, statistic)
-            mid = de_normalized(mid_norm, normalize_method, statistic)
             input = de_normalized(input_norm, normalize_method, statistic)
+            if self.args.stacks == 2:
+                mid = de_normalized(mid_norm, normalize_method, statistic)
         else:
-            forecast, target = forecast_norm, target_norm
-            forecast, target, mid = forecast_norm, target_norm, mid_norm
-            forecast, target, mid, input = forecast_norm, target_norm, mid_norm, input_norm
+            forecast, target, input = forecast_norm, target_norm, input_norm
+            if self.args.stacks == 2:
+                mid = mid_norm
 
         beta = 0.1
         forecast_norm = torch.from_numpy(forecast_norm).float()
-        mid_norm = torch.from_numpy(mid_norm).float()
         target_norm = torch.from_numpy(target_norm).float()
+        if self.args.stacks == 1:
+            loss = forecast_loss(forecast_norm, target_norm)
 
-        loss = forecast_loss(forecast_norm, target_norm) + forecast_loss(mid_norm, target_norm)
-        loss_F = forecast_loss(forecast_norm, target_norm)
-        loss_M = forecast_loss(mid_norm, target_norm)
+        elif self.args.stacks == 2:
+            mid_norm = torch.from_numpy(mid_norm).float()
+
+            loss = forecast_loss(forecast_norm, target_norm) + forecast_loss(mid_norm, target_norm)
+            loss_F = forecast_loss(forecast_norm, target_norm)
+            loss_M = forecast_loss(mid_norm, target_norm)
 
         # score = evaluate(target, forecast)
         score = evaluate(target, forecast)
-        score1 = evaluate(target, mid)
         score_final_detail = evaluate(target, forecast,by_step=True)
         print('by step:MAPE&MAE&RMSE',score_final_detail)
+        if self.args.stacks == 2:
+            score1 = evaluate(target, mid)
         #end = datetime.now()
 
         if writer:
             if test:
                 print(f'TEST: RAW : MAE {score[1]:7.2f};MAPE {score[0]:7.2f}; RMSE {score[2]:7.2f}.')
-                print(f'TEST: RAW-Mid : MAE {score1[1]:7.2f}; MAPE {score[0]:7.2f}; RMSE {score1[2]:7.2f}.')
-
                 writer.add_scalar('Test MAE_final', score[1], global_step=epoch)
-                writer.add_scalar('Test MAE_Mid', score1[1], global_step=epoch)
                 writer.add_scalar('Test RMSE_final', score[2], global_step=epoch)
-                writer.add_scalar('Test RMSE_Mid', score1[2], global_step=epoch)
-
-                writer.add_scalar('Test Loss_final', loss_F, global_step=epoch)
-                writer.add_scalar('Test Loss_Mid', loss_M, global_step=epoch)
-
+                if self.args.stacks == 2:
+                    print(f'TEST: RAW-Mid : MAE {score1[1]:7.2f}; MAPE {score[0]:7.2f}; RMSE {score1[2]:7.2f}.')
+                    writer.add_scalar('Test MAE_Mid', score1[1], global_step=epoch)
+                    writer.add_scalar('Test RMSE_Mid', score1[2], global_step=epoch)
+                    writer.add_scalar('Test Loss_final', loss_F, global_step=epoch)
+                    writer.add_scalar('Test Loss_Mid', loss_M, global_step=epoch)
 
             else:
                 print(f'VAL: RAW : MAE {score[1]:7.2f}; RMSE {score[2]:7.2f}.')
-                print(f'VAL: RAW-Mid : MAE {score1[1]:7.2f}; RMSE {score1[2]:7.2f}.')
                 writer.add_scalar('VAL MAE_final', score[1], global_step=epoch)
-                writer.add_scalar('VAL MAE_Mid', score1[1], global_step=epoch)
                 writer.add_scalar('VAL RMSE_final', score[2], global_step=epoch)
-                writer.add_scalar('VAL RMSE_Mid', score1[2], global_step=epoch)
 
-                writer.add_scalar('VAL Loss_final', loss_F, global_step=epoch)
-                writer.add_scalar('VAL Loss_Mid', loss_M, global_step=epoch)
+                if self.args.stacks == 2:
+                    print(f'VAL: RAW-Mid : MAE {score1[1]:7.2f}; RMSE {score1[2]:7.2f}.')
+                    writer.add_scalar('VAL MAE_Mid', score1[1], global_step=epoch)
+                    writer.add_scalar('VAL RMSE_Mid', score1[2], global_step=epoch)
+                    writer.add_scalar('VAL Loss_final', loss_F, global_step=epoch)
+                    writer.add_scalar('VAL Loss_Mid', loss_M, global_step=epoch)
 
         if result_file:
             if not os.path.exists(result_file):
@@ -209,27 +227,7 @@ class Exp_pems(Exp_Basic):
 
         return dict(mae=score[1], mape=score[0], rmse=score[2])
 
-    def save_model(self, model, model_dir, epoch=None):
-        if model_dir is None:
-            return
-        if not os.path.exists(model_dir):
-            os.makedirs(model_dir)
-        epoch = str(epoch) if epoch else ''
-        file_name = os.path.join(model_dir, epoch + 'pems_best.pt')
-        with open(file_name, 'wb') as f:
-            torch.save(model, f)
-    def load_model(self, model_dir, epoch=None):
-        if not model_dir:
-            return
-        epoch = str(epoch) if epoch else ''
-        file_name = os.path.join(model_dir, epoch + 'pems_best.pt')
-        if not os.path.exists(model_dir):
-            os.makedirs(model_dir)
-        if not os.path.exists(file_name):
-            return
-        with open(file_name, 'rb') as f:
-            model = torch.load(f)
-        return model
+
     def train(self):
         my_optim=self._select_optimizer()
         my_lr_scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer=my_optim, gamma=self.args.decay_rate)
@@ -238,12 +236,10 @@ class Exp_pems(Exp_Basic):
         best_validate_mae = np.inf
         best_test_mae = np.inf
         validate_score_non_decrease_count = 0
-        writer = SummaryWriter('./run_PEMS/{}_Atten_cat'.format(self.args.model_name))
+        writer = SummaryWriter('./run_PEMS/{}_scinet'.format(self.args.model_name))
         
-
         performance_metrics = {}
         for epoch in range(self.args.epoch):
-
             adjust_learning_rate(my_optim, epoch, self.args)
             epoch_start_time = time.time()
             self.model.train()
@@ -255,37 +251,44 @@ class Exp_pems(Exp_Basic):
                 inputs = inputs.to(self.args.device)  # torch.Size([32, 12, 228])
                 target = target.to(self.args.device)  # torch.Size([32, 3, 228])
                 self.model.zero_grad()
-                forecast, res = self.model(inputs)
-                loss = forecast_loss(forecast, target) + forecast_loss(res, target)
-                loss_F = forecast_loss(forecast, target)
-                loss_M = forecast_loss(res, target)
+                if self.args.stacks == 1:
+                    forecast = self.model(inputs)
+                    loss = forecast_loss(forecast, target)
+                elif self.args.stacks == 2:
+                    forecast, res = self.model(inputs)
+                    loss = forecast_loss(forecast, target) + forecast_loss(res, target)
+                    loss_M = forecast_loss(res, target)
+                    loss_F = forecast_loss(forecast, target)
+                
                 cnt += 1
                 loss.backward()
                 my_optim.step()
                 loss_total += float(loss)
-                loss_total_F  += float(loss_F)
-                loss_total_M  += float(loss_M)
-
-
-            print('| end of epoch {:3d} | time: {:5.2f}s | train_total_loss {:5.4f}, loss_F {:5.4f}, loss_M {:5.4f}  '.format(epoch, (
+                if self.args.stacks == 2:
+                    loss_total_F  += float(loss_F)
+                    loss_total_M  += float(loss_M)
+            if self.args.stacks == 1:
+                print('| end of epoch {:3d} | time: {:5.2f}s | train_total_loss {:5.4f} '.format(epoch, (
+                    time.time() - epoch_start_time), loss_total / cnt))
+            elif self.args.stacks == 2:
+                print('| end of epoch {:3d} | time: {:5.2f}s | train_total_loss {:5.4f}, loss_F {:5.4f}, loss_M {:5.4f}  '.format(epoch, (
                     time.time() - epoch_start_time), loss_total / cnt, loss_total_F / cnt, loss_total_M / cnt))
 
             writer.add_scalar('Train_loss_tatal', loss_total / cnt, global_step=epoch)
-            writer.add_scalar('Train_loss_Mid', loss_total_F / cnt, global_step=epoch)
-            writer.add_scalar('Train_loss_Final', loss_total_M / cnt, global_step=epoch)
+            if self.args.stacks == 2:
+                writer.add_scalar('Train_loss_Mid', loss_total_F / cnt, global_step=epoch)
+                writer.add_scalar('Train_loss_Final', loss_total_M / cnt, global_step=epoch)
 
-            # save_model(model, result_file, epoch)
+            # save_model(model, result_file, epoch, model_name=self.args.dataset)
             if (epoch+1) % self.args.exponential_decay_step == 0:
                 my_lr_scheduler.step()
             if (epoch + 1) % self.args.validate_freq == 0:
-                
                 is_best_for_now = False
                 print('------ validate on data: VALIDATE ------')
-                performance_metrics = \
-                    self.validate(self.model, epoch, forecast_loss, valid_loader, self.args.device, self.args.norm_method, val_normalize_statistic,
+                performance_metrics = self.validate(self.model, epoch, forecast_loss, valid_loader, self.args.device, self.args.norm_method, val_normalize_statistic,
                             node_cnt, self.args.window_size, self.args.horizon,
                             writer, result_file=None, test=False)
-                test_metrics=self.validate(self.model, epoch,  forecast_loss, test_loader, self.args.device, self.args.norm_method, test_normalize_statistic,
+                test_metrics = self.validate(self.model, epoch,  forecast_loss, test_loader, self.args.device, self.args.norm_method, test_normalize_statistic,
                             node_cnt, self.args.window_size, self.args.horizon,
                             writer, result_file=None, test=True)
                 if best_validate_mae > performance_metrics['mae']:
@@ -301,9 +304,10 @@ class Exp_pems(Exp_Basic):
                     
                 # save model
                 if is_best_for_now:
-                    self.save_model(self.model, self.result_file)
+                    save_model(self.model, self.result_file, epoch=epoch, model_name=self.args.dataset)
+                    print('saved model!')
                 # if epoch%4==0:
-                #     save_model(model, result_file,epoch=epoch)
+                #     save_model(model, result_file, epoch=epoch)
             # early stop
             if self.args.early_stop and validate_score_non_decrease_count >= self.args.early_stop_step:
                 break
@@ -325,7 +329,7 @@ class Exp_pems(Exp_Basic):
 
 
         forecast_loss = nn.L1Loss().to(self.args.device) #smooth_l1_loss #nn.MSELoss(reduction='mean').to(args.device)
-        model = self.load_model(result_train_file,epoch=epoch)
+        model = self.load_model(result_train_file, epoch=epoch, model_name=self.args.dataset)
         node_cnt = test_data.shape[1]
         test_set = ForecastTestDataset(test_data, window_size=self.args.window_size, horizon=self.args.horizon,
                                 normalize_method=self.args.norm_method, norm_statistic=normalize_statistic)
