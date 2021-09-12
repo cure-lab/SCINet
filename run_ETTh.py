@@ -17,7 +17,7 @@ parser.add_argument('--features', type=str, default='M', choices=['S', 'M'], hel
 parser.add_argument('--target', type=str, default='OT', help='target feature')
 parser.add_argument('--freq', type=str, default='h', help='freq for time features encoding, options:[s:secondly, t:minutely, h:hourly, d:daily, b:business days, w:weekly, m:monthly], you can also use more detailed freq like 15min or 3h')
 parser.add_argument('--checkpoints', type=str, default='./checkpoints/', help='location of model checkpoints')
-parser.add_argument('--embed', type=str, default='timeF', help='time features encoding, options:[timeF, fixed, learned]')
+parser.add_argument('--inverse', type=bool, default =False, help='inverse output data')
 
 ### -------  device settings --------------
 parser.add_argument('--use_gpu', type=bool, default=True, help='use gpu')
@@ -35,8 +35,7 @@ parser.add_argument('--single_step_output_One', type=int, default=0)
 parser.add_argument('--lastWeight', type=float, default=1.0)
                                                               
 ### -------  training settings --------------  
-parser.add_argument('--do_predict', action='store_true', help='whether to predict unseen future data')
-parser.add_argument('--mix', action='store_false', help='use mix attention in generative decoder', default=True)
+# parser.add_argument('--do_predict', action='store_true', help='whether to predict unseen future data')
 parser.add_argument('--cols', type=str, nargs='+', help='file list')
 parser.add_argument('--num_workers', type=int, default=0, help='data loader num workers')
 parser.add_argument('--itr', type=int, default=0, help='experiments times')
@@ -44,11 +43,10 @@ parser.add_argument('--train_epochs', type=int, default=100, help='train epochs'
 parser.add_argument('--batch_size', type=int, default=32, help='batch size of train input data')
 parser.add_argument('--patience', type=int, default=10, help='early stopping patience')
 parser.add_argument('--lr', type=float, default=0.0001, help='optimizer learning rate')
-parser.add_argument('--des', type=str, default='test',help='exp description')
 parser.add_argument('--loss', type=str, default='mae',help='loss function')
 parser.add_argument('--lradj', type=str, default='type1',help='adjust learning rate')
 parser.add_argument('--use_amp', action='store_true', help='use automatic mixed precision training', default=False)
-parser.add_argument('--inverse', type=bool, default =False, help='inverse output data')
+parser.add_argument('--save', type=bool, default =False, help='save the output results')
 
 ### -------  model settings --------------  
 parser.add_argument('--share-weight', default=0, type=int, help='share weight or not in attention q,k,v')
@@ -63,9 +61,6 @@ parser.add_argument('--positionalEcoding', type=bool, default=False)
 parser.add_argument('--groups', type=int, default=1)
 parser.add_argument('--layers', type=int, default=3)
 parser.add_argument('--stacks', type=int, default=1, help='1 stack or 2 stacks')
-
-parser.add_argument('--levels', type=int, default=4,
-                    help='# of levels (default: 8)')
 parser.add_argument('--nhid', type=int, default=32,
                     help='number of hidden units per layer (default: 30)')
 parser.add_argument('--model_name', type=str, default='EncoDeco')
@@ -119,7 +114,7 @@ mses_ = []
 if args.itr:
     for ii in range(args.itr):
         # setting record of experiments
-        setting = '{}_{}_ft{}_sl{}_ll{}_pl{}_mx{}_{}_lr{}_bs{}_hid{}_s{}_l{}_dp{}_inv{}_itr{}'.format(args.model,args.data, args.features, args.seq_len, args.label_len, args.pred_len,args.mix,args.des,args.learning_rate,args.batch_size,args.hidden_size,args.stacks, args.layers,args.dropout,args.inverse,ii)
+        setting = '{}_{}_ft{}_sl{}_ll{}_pl{}_lr{}_bs{}_hid{}_s{}_l{}_dp{}_inv{}_itr{}'.format(args.model,args.data, args.features, args.seq_len, args.label_len, args.pred_len,args.lr,args.batch_size,args.hidden_size,args.stacks, args.layers,args.dropout,args.inverse,ii)
 
         exp = Exp(args)  # set experiments
         print('>>>>>>>start training : {}>>>>>>>>>>>>>>>>>>>>>>>>>>'.format(setting))
@@ -132,9 +127,9 @@ if args.itr:
         maes_.append(maes)
         mses_.append(mses)
 
-        if args.do_predict:
-            print('>>>>>>>predicting : {}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'.format(setting))
-            exp.predict(setting, True)
+        # if args.do_predict:
+        #     print('>>>>>>>predicting : {}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'.format(setting))
+        #     exp.predict(setting, True)
 
         torch.cuda.empty_cache()
     print('Final mean normed mse:{:.4f}, std mse:{:.4f}, mae:{:.4f}, std mae:{:.4f}'.format(np.mean(mse_), np.std(mse_), np.mean(mae_),np.std(mae_)))
@@ -142,7 +137,7 @@ if args.itr:
     print('Final min normed mse:{:.4f}, mae:{:.4f}'.format(min(mse_), min(mae_)))
     print('Final min denormed mse:{:.4f}, mae:{:.4f}'.format(min(mses_), min(maes_)))
 else:
-    setting = 'VIS_{}_Levels{}_hid{}_{}_ft{}_sl{}_ll{}_pl{}_mx{}_{}_lr{}_bs{}_hid{}_s{}_l{}_dp{}_inv{}_itr{}'.format(args.model, args.levels, args.nhid, args.data, args.features, args.seq_len, args.label_len, args.pred_len,args.mix,args.des,args.lr,args.batch_size,args.hidden_size,args.stacks, args.layers,args.dropout,args.inverse,args.itr)
+    setting = '{}_{}_ft{}_sl{}_ll{}_pl{}_lr{}_bs{}_hid{}_s{}_l{}_dp{}_inv{}_itr{}'.format(args.model,args.data, args.features, args.seq_len, args.label_len, args.pred_len,args.lr,args.batch_size,args.hidden_size,args.stacks, args.layers,args.dropout,args.inverse,ii)
     exp = Exp(args)  # set experiments
     print('>>>>>>>start training : {}>>>>>>>>>>>>>>>>>>>>>>>>>>'.format(setting))
     exp.train(setting)
