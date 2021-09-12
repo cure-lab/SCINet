@@ -3,6 +3,7 @@
 [![state-of-the-art](https://img.shields.io/badge/-STATE--OF--THE--ART-blue?logo=Accenture&labelColor=lightgrey)]()
 ![pytorch](https://img.shields.io/badge/-PyTorch-%23EE4C2C?logo=PyTorch&labelColor=lightgrey)
 
+
 ## Some preface
 This is the original pytorch implementation for the following paper: [Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction](https://arxiv.org/pdf/2106.09305.pdf). If you find this repository useful for your research work, please consider citing it as follows:
 
@@ -43,28 +44,6 @@ We conduct the experiments on 11 popular time-series datasets, namely Electricit
 | Electricity   | 321      | 26,304    | 1hour       | 1/1/2012   | Single-step |
 | Exchange-Rate | 8        | 7,588     | 1hour       | 1/1/1990   | Single-step |
 
-### Rank in Paper with Code
-
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/univariate-time-series-forecasting-on)](https://paperswithcode.com/sota/univariate-time-series-forecasting-on?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth1-168)](https://paperswithcode.com/sota/time-series-forecasting-on-etth1-168?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth1-24)](https://paperswithcode.com/sota/time-series-forecasting-on-etth1-24?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth1-336)](https://paperswithcode.com/sota/time-series-forecasting-on-etth1-336?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth1-48)](https://paperswithcode.com/sota/time-series-forecasting-on-etth1-48?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth1-720)](https://paperswithcode.com/sota/time-series-forecasting-on-etth1-720?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth2-168)](https://paperswithcode.com/sota/time-series-forecasting-on-etth2-168?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth2-24)](https://paperswithcode.com/sota/time-series-forecasting-on-etth2-24?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth2-336)](https://paperswithcode.com/sota/time-series-forecasting-on-etth2-336?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth2-48)](https://paperswithcode.com/sota/time-series-forecasting-on-etth2-48?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth2-720)](https://paperswithcode.com/sota/time-series-forecasting-on-etth2-720?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/traffic-prediction-on-pems04)](https://paperswithcode.com/sota/traffic-prediction-on-pems04?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-pemsd4)](https://paperswithcode.com/sota/time-series-forecasting-on-pemsd4?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-pemsd7)](https://paperswithcode.com/sota/time-series-forecasting-on-pemsd7?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-pemsd8)](https://paperswithcode.com/sota/time-series-forecasting-on-pemsd8?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/univariate-time-series-forecasting-on-solar)](https://paperswithcode.com/sota/univariate-time-series-forecasting-on-solar?p=time-series-is-a-special-sequence-forecasting)
-
-
-The following ranking data are retrieved from the [Paper with Code](https://paperswithcode.com/paper/time-series-is-a-special-sequence-forecasting) page on 2021 Sep 11th.  
-
 
 ## Get start
 
@@ -82,6 +61,11 @@ pip install -r requirements.txt
 ### Dataset preparation
 
 All datasets can be downloaded [here](https://drive.google.com/drive/folders/1Gv1MXjLo5bLGep4bsqDyaNMI2oQC9GH2?usp=sharing). You can put the data you need into  the **dataset/** file.
+
+[![ett](https://img.shields.io/badge/Download-ETT_Dataset-%234285F4?logo=GoogleDrive&labelColor=lightgrey)](https://drive.google.com/drive/folders/1NU85EuopJNkptFroPtQVXMZE70zaBznZ)
+[![pems](https://img.shields.io/badge/Download-PeMS_Dataset-%234285F4?logo=GoogleDrive&labelColor=lightgrey)](https://drive.google.com/drive/folders/17fwxGyQ3Qb0TLOalI-Y9wfgTPuXSYgiI)
+[![financial](https://img.shields.io/badge/Download-financial_Dataset-%234285F4?logo=GoogleDrive&labelColor=lightgrey)](https://drive.google.com/drive/folders/12ffxwxVAGM_MQiYpIk9aBLQrb2xQupT-)
+
 **To download the data from terminal, we suggest using the toolbox gdown.**
 ```
 # put the id for the link of each file, like 1ttSg9i3bzTI77oVoUU-odi67_NVbzFBx to download solar_AL.txt
@@ -94,16 +78,19 @@ To facilitate reproduction, we provide the logs on the above datasets [here](htt
 
 We follow the same settings of [StemGNN](https://github.com/microsoft/StemGNN) for PEMS 03, 04, 07, 08 datasets, [MTGNN](https://github.com/nnzhan/MTGNN) for Solar, electricity, traffic, financial datasets, [Informer](https://github.com/zhouhaoyi/Informer2020) for ETTH1, ETTH2, ETTM1 datasets. The detailed training commands are given as follows.
 
-For PEMS dataset:
+For PEMS dataset (All datasets follow Input 12, Output 12):
 ```
 # pems03
-
+python run_pems.py --dataset PEMS03 --hidden-size 0.0625 --dropout 0.25 --model_name pems03_h0.0625_dp0.25
 
 # pems04
+python run_pems.py --dataset PEMS04 --hidden-size 0.0625 --dropout 0 --model_name pems04_h0.0625_dp0
 
 # pems07
+python run_pems.py --dataset PEMS07 --hidden-size 0.03125 --dropout 0.25 --model_name pems07_h0.03125_dp0.25
 
 # pems08
+python run_pems.py --dataset PEMS08 --hidden-size 1 --dropout 0.5 --model_name pems08_h1_dp0.5
 
 ```
 
@@ -111,7 +98,7 @@ For PEMS dataset:
 
 | Parameter Name | Description             | Parameter in paper | Default |
 | -------------- | ----------------------- | ------------------ | ------- |
-| dataset        | Name of subdataset      | N/A                | PEMS08  |
+| dataset        | Name of dataset      | N/A                | PEMS08  |
 | horizon        | Horizon                 | Horizon            | 12      |
 | window_size    | Look-back window        | Look-back window   | 12      |
 | batch_size     | Batch size              | batch size         | 8       |
@@ -124,25 +111,65 @@ For PEMS dataset:
 
 For Solar dataset:
 ```
+# predict 3 
+python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 3 -hidden-size 2 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 4 --num_concat 0 --lradj 6 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o3_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5 --save_path so_I160_o3_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5
 
+# predict 6
+python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 6 -hidden-size 2 --single_step 0 --lastWeight 0.5 --stacks 2 --layers 4 --num_concat 0 --lradj 6 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o6_lr1e-4_bs1024_dp0.25_h2_s2l4_w0.5 --save_path so_I160_o6_lr1e-4_bs1024_dp0.25_h2_s2l4_w0.5
+
+# predict 12
+python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 12 -hidden-size 2 --single_step 0 --lastWeight 0.5 --stacks 2 --layers 4 --num_concat 0 --lradj 6 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o12_lr1e-4_bs1024_dp0.25_h2_s2l4_w0.5 --save_path so_I160_o12_lr1e-4_bs1024_dp0.25_h2_s2l4_w0.5
+
+# predict 24
+python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 24 -hidden-size 2 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 4 --num_concat 0 --lradj 6 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o24_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5 --save_path so_I160_o24_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5
 ```
 
 For Electricity dataset:
 
 ```
+# predict 3 
+python run_financial.py --dataset_name electricity --window_size 168 --horizon 3 --hidden-size 8 --single_step 1 --lastWeight 0.5 --stacks 2 --layers 3 --num_concat 0 --lradj 1 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o3_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --save_path ele_I168_o3_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
 
+# predict 6
+python run_financial.py --dataset_name electricity --window_size 168 --horizon 6 --hidden-size 8 --single_step 1 --lastWeight 0.5 --stacks 2 --layers 3 --num_concat 0 --lradj 1 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o6_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --save_path ele_I168_o6_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
+
+# predict 12
+python run_financial.py --dataset_name electricity --window_size 168 --horizon 12 --hidden-size 8 --single_step 1 --lastWeight 0.5 --stacks 2 --layers 3 --num_concat 0 --lradj 1 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o12_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --save_path ele_I168_o12_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
+
+# predict 24
+python run_financial.py --dataset_name electricity --window_size 168 --horizon 24 --hidden-size 8 --single_step 1 --lastWeight 0.5 --stacks 2 --layers 3 --num_concat 0 --lradj 1 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o24_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --save_path ele_I168_o24_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
 ```
 
 For Traffic dataset:
 
 ```
+# predict 3 
+python run_financial.py --dataset_name traffic --window_size 168 --horizon 3 --hidden-size 2 --single_step 1 --lastWeight 1.0 --stacks 2 --layers 3 --num_concat 0 --lradj 1 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I168_o3_lr5e-4_bs16_dp0.25_h2_s2l3_w1.0 --save_path traf_I168_o3_lr5e-4_bs16_dp0.25_h2_s2l3_w1.0
 
+# predict 6
+python run_financial.py --dataset_name traffic --window_size 168 --horizon 6 --hidden-size 2 --single_step 1 --lastWeight 1.0 --stacks 2 --layers 2 --num_concat 0 --lradj 1 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I168_o6_lr5e-4_bs16_dp0.25_h2_s2l2_w1.0 --save_path traf_I168_o6_lr5e-4_bs16_dp0.25_h2_s2l2_w1.0
+
+# predict 12
+python run_financial.py --dataset_name traffic --window_size 168 --horizon 12 --hidden-size 1 --single_step 1 --lastWeight 1.0 --stacks 2 --layers 3 --num_concat 0 --lradj 1 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I168_o12_lr5e-4_bs16_dp0.25_h1_s2l3_w1.0 --save_path traf_I168_o12_lr5e-4_bs16_dp0.25_h1_s2l3_w1.0
+
+# predict 24
+python run_financial.py --dataset_name traffic --window_size 168 --horizon 24 --hidden-size 2 --single_step 1 --lastWeight 1.0 --stacks 2 --layers 2 --num_concat 0 --lradj 1 --lr 5e-4 --dropout 0.5 --batch_size 16 --model_name traf_I168_o24_lr5e-4_bs16_dp0.5_h2_s2l2_w1.0 --save_path traf_I168_o24_lr5e-4_bs16_dp0.5_h2_s2l2_w1.0
 ```
 
 For Exchange rate dataset:
 
 ```
+# predict 3 
+python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 3 --hidden-size 0.125 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 3 --num_concat 0 --lradj 1 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o3_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --save_path ex_I168_o3_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
 
+# predict 6
+python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 6 --hidden-size 0.125 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 3 --num_concat 0 --lradj 1 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o6_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --save_path ex_I168_o6_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
+
+# predict 12
+python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 12 --hidden-size 0.125 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 3 --num_concat 0 --lradj 1 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o12_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --save_path ex_I168_o12_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
+
+# predict 24
+python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 24 --hidden-size 0.125 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 3 --num_concat 0 --lradj 1 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o24_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --save_path ex_I168_o24_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
 ```
 
 
@@ -150,7 +177,7 @@ For Exchange rate dataset:
 
 | Parameter Name | Description               | Parameter in paper      | Default                                |
 | -------------- | ------------------------- | ----------------------- | -------------------------------------- |
-| data           | loaction of the data file | N/A                     | ./datasets/financial/exchange_rate.txt |
+| dataset_name           | Data name | N/A     | exchange_rate |
 | horizon        | Horizon                   | Horizon                 | 3                                      |
 | window_size    | Look-back window          | Look-back window        | 168                                    |
 | batch_size     | Batch size                | batch size              | 8                                      |
@@ -268,8 +295,6 @@ Zhijian Xu: zjxu21@cse.cuhk.edu.hk
 ```
 
 ## Acknowledgements
-This code uses ([Informer](https://github.com/zhouhaoyi/Informer2020), [MTGNN](https://github.com/nnzhan/MTGNN), [StemGNN](https://github.com/microsoft/StemGNN)) as  baseline methods for comparison. We gratefully appreciate their impact on this work.  
+Thank you all for your attention to our work!
 
-We welcome all contributions to this work from the growing research community in time series analysis, and we sincerely hope you could provide some valuable feedbacks so that we could further improve this library. 
-
-
+This code uses ([Informer](https://github.com/zhouhaoyi/Informer2020), [MTGNN](https://github.com/nnzhan/MTGNN), [StemGNN](https://github.com/microsoft/StemGNN)) as baseline methods for comparison. 

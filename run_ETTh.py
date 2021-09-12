@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser(description='[Informer] Long Sequences Forecast
 
 parser.add_argument('--model', type=str, required=False, default='SCINet', help='model of the experiment')
 ### -------  dataset settings --------------
-parser.add_argument('--data', type=str, required=False, default='ETTh1', choices=['ETTh1', 'ETTh2', 'ETTm1', help='name of dataset')
+parser.add_argument('--data', type=str, required=False, default='ETTh1', choices=['ETTh1', 'ETTh2', 'ETTm1'], help='name of dataset')
 parser.add_argument('--root_path', type=str, default='./datasets/ETT-data/ETT/', help='root path of the data file')
 parser.add_argument('--data_path', type=str, default='ETTh1.csv', help='location of the data file')
 parser.add_argument('--features', type=str, default='M', choices=['S', 'M'], help='features S is univariate, M is multivariate')
