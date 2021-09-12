@@ -44,28 +44,6 @@ We conduct the experiments on 11 popular time-series datasets, namely Electricit
 | Electricity   | 321      | 26,304    | 1hour       | 1/1/2012   | Single-step |
 | Exchange-Rate | 8        | 7,588     | 1hour       | 1/1/1990   | Single-step |
 
-### Rank in Paper with Code
-
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/univariate-time-series-forecasting-on)](https://paperswithcode.com/sota/univariate-time-series-forecasting-on?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth1-168)](https://paperswithcode.com/sota/time-series-forecasting-on-etth1-168?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth1-24)](https://paperswithcode.com/sota/time-series-forecasting-on-etth1-24?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth1-336)](https://paperswithcode.com/sota/time-series-forecasting-on-etth1-336?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth1-48)](https://paperswithcode.com/sota/time-series-forecasting-on-etth1-48?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth1-720)](https://paperswithcode.com/sota/time-series-forecasting-on-etth1-720?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth2-168)](https://paperswithcode.com/sota/time-series-forecasting-on-etth2-168?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth2-24)](https://paperswithcode.com/sota/time-series-forecasting-on-etth2-24?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth2-336)](https://paperswithcode.com/sota/time-series-forecasting-on-etth2-336?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth2-48)](https://paperswithcode.com/sota/time-series-forecasting-on-etth2-48?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-etth2-720)](https://paperswithcode.com/sota/time-series-forecasting-on-etth2-720?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/traffic-prediction-on-pems04)](https://paperswithcode.com/sota/traffic-prediction-on-pems04?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-pemsd4)](https://paperswithcode.com/sota/time-series-forecasting-on-pemsd4?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-pemsd7)](https://paperswithcode.com/sota/time-series-forecasting-on-pemsd7?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/time-series-forecasting-on-pemsd8)](https://paperswithcode.com/sota/time-series-forecasting-on-pemsd8?p=time-series-is-a-special-sequence-forecasting)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/time-series-is-a-special-sequence-forecasting/univariate-time-series-forecasting-on-solar)](https://paperswithcode.com/sota/univariate-time-series-forecasting-on-solar?p=time-series-is-a-special-sequence-forecasting)
-
-
-The following ranking data are retrieved from the [Paper with Code](https://paperswithcode.com/paper/time-series-is-a-special-sequence-forecasting) page on 2021 Sep 11th.  
-
 
 ## Get start
 
