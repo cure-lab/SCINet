@@ -86,7 +86,7 @@ All datasets can be downloaded [here](https://drive.google.com/drive/folders/1Gv
 
 ### Run training code
 
-To facility the reproduction, we provide the logs on the above datasets [here](https://drive.google.com/drive/folders/1MBK5MOShD4ygLIinNBo2F8EPRM5y9qIQ?usp=sharing) in details. You can check **the hyperparameters, training loss and test results for each epoch** in these logs as well.
+To facilitate reproduction, we provide the logs on the above datasets [here](https://drive.google.com/drive/folders/1MBK5MOShD4ygLIinNBo2F8EPRM5y9qIQ?usp=sharing) in details. You can check **the hyperparameters, training loss and test results for each epoch** in these logs as well.
 
 We follow the same settings of [StemGNN](https://github.com/microsoft/StemGNN) for PEMS 03, 04, 07, 08 datasets, [MTGNN](https://github.com/nnzhan/MTGNN) for Solar, electricity, traffic, financial datasets, [Informer](https://github.com/zhouhaoyi/Informer2020) for ETTH1, ETTH2, ETTM1 datasets. The detailed training commands are given as follows.
 
@@ -264,8 +264,8 @@ Zhijian Xu: zjxu21@cse.cuhk.edu.hk
 ```
 
 ## Acknowledgements
-This code uses ([Informer](https://github.com/zhouhaoyi/Informer2020), [MTGNN](https://github.com/nnzhan/MTGNN), [StemGNN](https://github.com/microsoft/StemGNN) as  baseline methods for comparison. We gratefully appreciate their impact on this work.  
+This code uses ([Informer](https://github.com/zhouhaoyi/Informer2020), [MTGNN](https://github.com/nnzhan/MTGNN), [StemGNN](https://github.com/microsoft/StemGNN)) as  baseline methods for comparison. We gratefully appreciate their impact on this work.  
 
-We welcome all contributions to this work from the growing research community in time series analysis, and plesae provide your valuable feedbacks so that we could further improve this library. 
+We welcome all contributions to this work from the growing research community in time series analysis, and we sincerely hope you could provide some valuable feedbacks so that we could further improve this library. 
 
 
