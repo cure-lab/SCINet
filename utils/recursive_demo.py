@@ -13,6 +13,7 @@ class Splitting(nn.Module):
         # Deciding the stride base on the direction
         # self.conv_even = lambda x: x[:, ::2, :]
         # self.conv_odd = lambda x: x[:, 1::2, :]
+        # To simplify, we removed the dimensions except for the length dimension. 
 
     def even(self, x):
         return x[::2]
@@ -28,7 +29,7 @@ class SCINet_Tree(nn.Module):
     def __init__(self, args, in_planes, current_layer):
         super().__init__()
         self.current_layer=current_layer
-        self.workingblock=Splitting()
+        self.workingblock=Splitting() # To simplyfy, we replaced the actual SCINetblock with a splitting block. 
         if current_layer!=0:
             self.SCINet_Tree_odd=SCINet_Tree(args, in_planes, current_layer-1)
             self.SCINet_Tree_even=SCINet_Tree(args, in_planes, current_layer-1)
@@ -41,7 +42,7 @@ class SCINet_Tree(nn.Module):
         for i in range(mlen):
             _.append(even[i].unsqueeze(0))
             _.append(odd[i].unsqueeze(0))
-        if odd_len<even_len: # 偶数项多一项
+        if odd_len<even_len: 
             _.append(even[-1].unsqueeze(0))
         #print(torch.cat(_,0).shape)
         return torch.cat(_,0)
@@ -62,6 +63,6 @@ if __name__ == '__main__':
     args=None
     in_planes=None
     model=SCINet_Tree(args, in_planes, 2)
-    x=[12,435,765,2323,45,234,456,567]
+    x=[12,435,765,2323,45,234,456,567] #input your random time series
     x=torch.tensor(x)
     print(model(x))
