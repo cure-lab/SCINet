@@ -74,7 +74,7 @@ To facilitate reproduction, we provide the logs on the above datasets [here](htt
 
 We follow the same settings of [StemGNN](https://github.com/microsoft/StemGNN) for PEMS 03, 04, 07, 08 datasets, [MTGNN](https://github.com/nnzhan/MTGNN) for Solar, electricity, traffic, financial datasets, [Informer](https://github.com/zhouhaoyi/Informer2020) for ETTH1, ETTH2, ETTM1 datasets. The detailed training commands are given as follows.
 
-For PEMS dataset (All datasets follow Input 12, Output 12):
+#### For PEMS dataset (All datasets follow Input 12, Output 12):
 ```
 # pems03
 python run_pems.py --dataset PEMS03 --hidden-size 0.0625 --dropout 0.25 --model_name pems03_h0.0625_dp0.25
@@ -90,7 +90,7 @@ python run_pems.py --dataset PEMS08 --hidden-size 1 --dropout 0.5 --model_name p
 
 ```
 
-### PEMS Parameter highlights
+##### PEMS Parameter highlights
 
 | Parameter Name | Description             | Parameter in paper | Default |
 | -------------- | ----------------------- | ------------------ | ------- |
@@ -102,7 +102,7 @@ python run_pems.py --dataset PEMS08 --hidden-size 1 --dropout 0.5 --model_name p
 | stacks         | The number of SCINet block| K                | 1       |
 
 
-For Solar dataset:
+#### For Solar dataset:
 ```
 # predict 3 
 python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 3 -hidden-size 2 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 4 --num_concat 0 --lradj 6 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o3_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5 --save_path so_I160_o3_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5
@@ -117,7 +117,7 @@ python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 12 -
 python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 24 -hidden-size 2 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 4 --num_concat 0 --lradj 6 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o24_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5 --save_path so_I160_o24_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5
 ```
 
-For Electricity dataset:
+#### For Electricity dataset:
 
 ```
 # predict 3 
@@ -133,7 +133,7 @@ python run_financial.py --dataset_name electricity --window_size 168 --horizon 1
 python run_financial.py --dataset_name electricity --window_size 168 --horizon 24 --hidden-size 8 --single_step 1 --lastWeight 0.5 --stacks 2 --layers 3 --num_concat 0 --lradj 1 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o24_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --save_path ele_I168_o24_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
 ```
 
-For Traffic dataset:
+#### For Traffic dataset:
 
 ```
 # predict 3 
@@ -149,7 +149,7 @@ python run_financial.py --dataset_name traffic --window_size 168 --horizon 12 --
 python run_financial.py --dataset_name traffic --window_size 168 --horizon 24 --hidden-size 2 --single_step 1 --lastWeight 1.0 --stacks 2 --layers 2 --num_concat 0 --lradj 1 --lr 5e-4 --dropout 0.5 --batch_size 16 --model_name traf_I168_o24_lr5e-4_bs16_dp0.5_h2_s2l2_w1.0 --save_path traf_I168_o24_lr5e-4_bs16_dp0.5_h2_s2l2_w1.0
 ```
 
-For Exchange rate dataset:
+#### For Exchange rate dataset:
 
 ```
 # predict 3 
@@ -166,7 +166,7 @@ python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon
 ```
 
 
-### Financial Parameter highlights
+##### Financial Parameter highlights
 
 | Parameter Name | Description               | Parameter in paper      | Default                                |
 | -------------- | ------------------------- | ----------------------- | -------------------------------------- |
@@ -181,7 +181,7 @@ python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon
 | lastweight     | Loss weight of the last frame| Loss weight ($\lambda$) | 1.0                                 |
 
 
-For ETTH1 dataset:
+#### For ETTH1 dataset:
 
 ```
 # multivariate, out 24
@@ -215,7 +215,7 @@ python run_ETTh.py --data ETTh1 --features S  --seq_len 336 --label_len 336 --pr
 python run_ETTh.py --data ETTh1 --features S  --seq_len 736 --label_len 720 --pred_len 720 --hidden-size 4 --stacks 1 --layers 5 --learning_rate 1e-5 --batch_size 32 --dropout 0.5 --model_name etth1_S_I736_O720_lr1e-5_bs32_dp0.5_h4_s1l5
 ```
 
-For ETTH2 dataset:
+#### For ETTH2 dataset:
 ```
 # multivariate, out 24
 python run_ETTh.py --data ETTh2 --features M  --seq_len 48 --label_len 24 --pred_len 24 --hidden-size 8 --stacks 1 --layers 3 --learning_rate 0.007 --batch_size 16 --dropout 0.25 --model_name etth2_M_I48_O24_lr7e-3_bs16_dp0.25_h8_s1l3
@@ -248,7 +248,7 @@ python run_ETTh.py --data ETTh2 --features S  --seq_len 336 --label_len 336 --pr
 python run_ETTh.py --data ETTh2 --features S  --seq_len 720 --label_len 720 --pred_len 720 --hidden-size 8 --stacks 1 --layers 3 --learning_rate 5e-5 --batch_size 16 --dropout 0.6 --model_name etth2_S_I720_O720_lr5e-5_bs16_dp0.6_h8_s1l3
 ```
 
-For ETTM1 dataset:
+#### For ETTM1 dataset:
 ```
 # multivariate, out 24
 python run_ETTh.py --data ETTm1 --features M  --seq_len 48 --label_len 24 --pred_len 24 --hidden-size 4 --stacks 1 --layers 3 --learning_rate 0.005 --batch_size 32 --dropout 0.5 --model_name ettm1_M_I48_O24_lr7e-3_bs16_dp0.25_h8_s1l3
@@ -282,7 +282,7 @@ python run_ETTh.py --data ETTm1 --features S  --seq_len 672 --label_len 672 --pr
 ```
 
 
-### ETT Parameter highlights
+##### ETT Parameter highlights
 
 | Parameter Name | Description                  | Parameter in paper | Default                    |
 | -------------- | ---------------------------- | ------------------ | -------------------------- |

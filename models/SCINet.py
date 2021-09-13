@@ -238,8 +238,6 @@ class SCINet_Tree(nn.Module):
             return self.zip_up_the_pants(x_even_update, x_odd_update)
         else:
             return self.zip_up_the_pants(self.SCINet_Tree_even(x_even_update), self.SCINet_Tree_odd(x_odd_update))
-        # This part is remastered by Xu Zhijian (zjxu21@cse.cuhk.hk). We have carefully reviewed the code to ensure this part behaves the same as the original one. And we have performed tests on all the 11 datasets and it shows the similar performance. 
-
 
 class EncoderTree(nn.Module):
     def __init__(self, args, in_planes, num_layers=3):
