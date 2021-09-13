@@ -184,7 +184,7 @@ class LevelSCINet(nn.Module):
         self.interact = InteractorLevel(args, in_planes,
                                         simple_lifting=simple_lifting)
         self.no_bottleneck = no_bottleneck
-        print('bbb',self.no_bottleneck)
+        # print('bbb',self.no_bottleneck)
         if not no_bottleneck:
             # We still want to do a BN and RELU, but we will not perform a conv
             # as the input_plane and output_plare are the same
