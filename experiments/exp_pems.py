@@ -36,7 +36,6 @@ class Exp_pems(Exp_Basic):
             self.input_dim = 170
         model = SCINet(self.args, output_len=self.args.horizon, input_len=self.args.window_size, input_dim=self.input_dim, num_stacks=self.args.stacks, num_layers=self.args.layers)
         print(model)
-        #model.to(self.args.device)
         return model
 
     def _get_data(self):
@@ -236,7 +235,7 @@ class Exp_pems(Exp_Basic):
         best_validate_mae = np.inf
         best_test_mae = np.inf
         validate_score_non_decrease_count = 0
-        writer = SummaryWriter('./exp/run_PEMS/{}'.format(self.args.model_name))
+        writer = SummaryWriter('exp/run_PEMS/{}_scinet'.format(self.args.model_name))
         
         performance_metrics = {}
         for epoch in range(self.args.epoch):

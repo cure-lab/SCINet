@@ -25,7 +25,6 @@ class Exp_financial(Exp_Basic):
         super(Exp_financial, self).__init__(args)
         if self.args.L1Loss:
             self.criterion = smooth_l1_loss
-        #    self.criterion =  nn.L1Loss().to(args.device)
         else:
             self.criterion = nn.MSELoss(size_average=False).to(self.args.device)
         self.evaluateL2 = nn.MSELoss(size_average=False).to(self.args.device)
@@ -48,7 +47,6 @@ class Exp_financial(Exp_Basic):
         model = SCINet(self.args, output_len = self.args.horizon, input_len=self.args.window_size, input_dim = self.input_dim,
                 num_stacks=self.args.stacks, num_layers = self.args.layers, concat_len= self.args.concat_len)
         print(model)
-        #model = model.to(device)
         return model
     
     def _get_data(self):
@@ -96,7 +94,6 @@ class Exp_financial(Exp_Basic):
                     forecast = self.model(tx)
                 elif self.args.stacks == 2:
                     forecast, res = self.model(tx)
-                # forecast = torch.squeeze(forecast)
                 scale = data.scale.expand(forecast.size(0), self.args.horizon, data.m)
                 bias = data.bias.expand(forecast.size(0), self.args.horizon, data.m)
                 weight = torch.tensor(self.args.lastWeight).to(self.args.device)
@@ -301,7 +298,6 @@ class Exp_financial(Exp_Basic):
             mean_p = mid_pred.mean(axis=0)
             correlation_mid = ((mid_pred - mean_p) * (Ytest - mean_g)).mean(axis=0) / (sigma_p * sigma_g)
             correlation_mid = (correlation_mid[index]).mean()
-
 
         print(
             '|valid_final rse {:5.4f} | valid_final rae {:5.4f} | valid_final corr  {:5.4f}'.format(

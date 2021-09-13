@@ -125,7 +125,6 @@ class InteractorLevel(nn.Module):
 
     def forward(self, x):
         (x_even_update, x_odd_update) = self.level(x)
-
         return (x_even_update, x_odd_update)
 
 
@@ -134,7 +133,6 @@ class BottleneckBlock(nn.Module):
         super(BottleneckBlock, self).__init__()
         self.bn1 = nn.BatchNorm1d(in_planes)
         self.relu = nn.ReLU(inplace=True)
-        # self.relu = nn.LeakyReLU(negative_slope=0.01, inplace=True)
 
         self.disable_conv = disable_conv  # in_planes == out_planes
         if not self.disable_conv:
@@ -158,7 +156,6 @@ class LevelSCINet(nn.Module):
         if not no_bottleneck:
             self.bottleneck_even = BottleneckBlock(in_planes, in_planes, disable_conv=True)
             self.bottleneck_odd = BottleneckBlock(in_planes, in_planes, disable_conv=True)
-        # else:
         #     self.bottleneck_even = BottleneckBlock(in_planes, in_planes, disable_conv=False)
         #     self.bottleneck_odd = BottleneckBlock(in_planes, in_planes, disable_conv=False)
 
@@ -168,8 +165,7 @@ class LevelSCINet(nn.Module):
         if self.no_bottleneck:
             return x_even_update.permute(0, 2, 1), x_odd_update.permute(0, 2, 1) #even: B, T, D odd: B, T, D
         else:
-            # return self.bottleneck_even(x_even_update).permute(0, 2, 1), x_odd_update.permute(0,2,1)
-            return self.bottleneck_even(x_even_update).permute(0, 2, 1), self.bottleneck_odd(x_odd_update).permute(0, 2, 1)
+            return self.bottleneck_even(x_even_update).permute(0, 2, 1), x_odd_update.permute(0, 2, 1)
 
 class SCINet_Tree(nn.Module):
     def __init__(self, args, in_planes, current_layer):
@@ -184,7 +180,6 @@ class SCINet_Tree(nn.Module):
     def zip_up_the_pants(self, even, odd):
         even = even.permute(1, 0, 2)
         odd = odd.permute(1, 0, 2) #L, B, D
-        #print(odd.shape)
         even_len = even.shape[0]
         odd_len = odd.shape[0]
         mlen = min((odd_len, even_len))
@@ -241,8 +236,6 @@ class SCINet(nn.Module):
                 m.weight.data.fill_(1)
                 m.bias.data.zero_()
             elif isinstance(m, nn.Linear):
-                # nn.init.xavier_uniform_(m.weight.data)
-                # if m.bias is not None:
                 m.bias.data.zero_()
 
         if args.single_step_output_One: # only output the N_th timestep.
@@ -284,13 +277,11 @@ class SCINet(nn.Module):
     
     def get_position_encoding(self, x):
         max_length = x.size()[1]
-        position = torch.arange(max_length, dtype=torch.float32,
-                                device=x.device)  # tensor([0., 1., 2., 3., 4.], device='cuda:0')
+        position = torch.arange(max_length, dtype=torch.float32, device=x.device)  # tensor([0., 1., 2., 3., 4.], device='cuda:0')
         temp1 = position.unsqueeze(1)  # 5 1
         temp2 = self.inv_timescales.unsqueeze(0)  # 1 256
         scaled_time = position.unsqueeze(1) * self.inv_timescales.unsqueeze(0)  # 5 256
-        signal = torch.cat([torch.sin(scaled_time), torch.cos(scaled_time)],
-                           dim=1)  #[T, C]
+        signal = torch.cat([torch.sin(scaled_time), torch.cos(scaled_time)], dim=1)  #[T, C]
         signal = F.pad(signal, (0, 0, 0, self.hidden_size % 2))
         signal = signal.view(1, max_length, self.hidden_size)
     

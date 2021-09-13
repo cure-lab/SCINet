@@ -7,18 +7,14 @@ import torch
 import torch.nn as nn
 from torch import optim
 from torch.utils.data import DataLoader
-
+from torch.utils.tensorboard import SummaryWriter
+import warnings
+warnings.filterwarnings('ignore')
 from data_process.etth_data_loader import Dataset_ETT_hour, Dataset_ETT_minute, Dataset_Custom, Dataset_Pred
 from experiments.exp_basic import Exp_Basic
 from utils.tools import EarlyStopping, adjust_learning_rate, save_model, load_model
 from metrics.ETTh_metrics import metric
-from torch.utils.tensorboard import SummaryWriter
-
-import warnings
-warnings.filterwarnings('ignore')
-
 from models.SCINet import SCINet
-# from models.TCN import TCN
 
 class Exp_ETTh(Exp_Basic):
     def __init__(self, args):
@@ -317,7 +313,7 @@ class Exp_ETTh(Exp_Basic):
 
             # result save
             if self.args.save:
-                folder_path = '.exp/ett_results/' + setting + '/'
+                folder_path = 'exp/ett_results/' + setting + '/'
                 if not os.path.exists(folder_path):
                     os.makedirs(folder_path)
 
