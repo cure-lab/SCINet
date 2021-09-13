@@ -33,7 +33,19 @@ class Exp_financial(Exp_Basic):
         self.writer = SummaryWriter('./run_financial/{}'.format(args.model_name))
     
     def _build_model(self):
-        model = SCINet(self.args, output_len = self.args.horizon, input_len=self.args.window_size, input_dim = self.args.input_dim,
+        if self.args.dataset_name == 'electricity':
+            self.input_dim = 321
+            
+        if self.args.dataset_name == 'solar_AL':
+            self.input_dim = 137
+            
+        if self.args.dataset_name == 'exchange_rate':
+            self.input_dim = 8
+            
+        if self.args.dataset_name == 'traffic':
+            self.input_dim = 862
+            
+        model = SCINet(self.args, output_len = self.args.horizon, input_len=self.args.window_size, input_dim = self.input_dim,
                 num_stacks=self.args.stacks, num_layers = self.args.layers, concat_len= self.args.concat_len)
         #model = model.to(device)
         return model
@@ -41,22 +53,15 @@ class Exp_financial(Exp_Basic):
     def _get_data(self):
         if self.args.dataset_name == 'electricity':
             self.args.data = './datasets/financial/electricity.txt'
-            self.args.input_dim = 321
             
         if self.args.dataset_name == 'solar_AL':
             self.args.data = './datasets/financial/solar_AL.txt'
-            self.args.input_dim = 137
             
         if self.args.dataset_name == 'exchange_rate':
             self.args.data = './datasets/financial/exchange_rate.txt'
-            self.args.input_dim = 8
             
         if self.args.dataset_name == 'traffic':
             self.args.data = './datasets/financial/traffic.txt'
-            self.args.input_dim = 862
-            
-        print('dataset {}, the channel size is {}'.format(self.args.data, self.args.input_dim))
-            
         return DataLoaderH(self.args.data, 0.6, 0.2, self.args.device, self.args.horizon, self.args.window_size, self.args.normalize)
 
     def _select_optimizer(self):
@@ -171,7 +176,7 @@ class Exp_financial(Exp_Basic):
                 ' test rse {:5.4f} | test rae {:5.4f} | test corr  {:5.4f}'.format(
                     epoch, (time.time() - epoch_start_time), total_loss / n_samples, val_loss, val_rae, val_corr, test_loss, test_rae, test_corr), flush=True)
             if val_loss < best_val:
-                save_model(self.model, self.args.save_path, epoch=epoch, model_name=self.args.dataset)
+                save_model(self.model, self.args.save_path, epoch=epoch, model_name=self.args.dataset_name)
                 print('--------------| Best Val loss |--------------')
         return total_loss / n_samples
 

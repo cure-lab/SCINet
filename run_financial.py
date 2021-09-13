@@ -24,6 +24,7 @@ parser.add_argument('--gpu', type=int, default=0, help='gpu')
 ### -------  input/output length settings --------------                                                                            
 parser.add_argument('--window_size', type=int, default=168) # input size
 parser.add_argument('--horizon', type=int, default=3)  # predication
+parser.add_argument('--concat_len', type=int, default=165)
 parser.add_argument('--single_step', type=int, default=0)
 parser.add_argument('--single_step_output_One', type=int, default=0)
 parser.add_argument('--lastWeight', type=float, default=1.0,help='Loss weight lambda')
@@ -49,12 +50,13 @@ parser.add_argument('--hidden-size', default=1.0, type=float, help='hidden chann
 parser.add_argument('--INN', default=1, type=int, help='use INN or basic strategy')
 parser.add_argument('--kernel', default=5, type=int, help='kernel size')#k kernel size
 parser.add_argument('--dilation', default=1, type=int, help='dilation')
-parser.add_argument('--model_name', type=str, default='SCINET')
 parser.add_argument('--positionalEcoding', type = bool , default=False)
 parser.add_argument('--dropout', type=float, default=0.5)
-parser.add_argument('--concat_len', type=int, default=165)
 parser.add_argument('--groups', type=int, default=1)
 parser.add_argument('--layers', type=int, default=3)
+parser.add_argument('--stacks', type=int, default=1)
+parser.add_argument('--model_name', type=str, default='SCINET')
+
 
 args = parser.parse_args()
 
