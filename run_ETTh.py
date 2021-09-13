@@ -17,7 +17,7 @@ parser.add_argument('--features', type=str, default='M', choices=['S', 'M'], hel
 parser.add_argument('--target', type=str, default='OT', help='target feature')
 parser.add_argument('--freq', type=str, default='h', help='freq for time features encoding, options:[s:secondly, t:minutely, h:hourly, d:daily, b:business days, w:weekly, m:monthly], you can also use more detailed freq like 15min or 3h')
 parser.add_argument('--checkpoints', type=str, default='./checkpoints/', help='location of model checkpoints')
-parser.add_argument('--inverse', type=bool, default =False, help='inverse output data')
+parser.add_argument('--inverse', type=bool, default =False, help='denorm the output data')
 
 ### -------  device settings --------------
 parser.add_argument('--use_gpu', type=bool, default=True, help='use gpu')
@@ -41,7 +41,7 @@ parser.add_argument('--num_workers', type=int, default=0, help='data loader num 
 parser.add_argument('--itr', type=int, default=0, help='experiments times')
 parser.add_argument('--train_epochs', type=int, default=100, help='train epochs')
 parser.add_argument('--batch_size', type=int, default=32, help='batch size of train input data')
-parser.add_argument('--patience', type=int, default=10, help='early stopping patience')
+parser.add_argument('--patience', type=int, default=15, help='early stopping patience')
 parser.add_argument('--lr', type=float, default=0.0001, help='optimizer learning rate')
 parser.add_argument('--loss', type=str, default='mae',help='loss function')
 parser.add_argument('--lradj', type=str, default='type1',help='adjust learning rate')
@@ -63,8 +63,7 @@ parser.add_argument('--layers', type=int, default=3)
 parser.add_argument('--stacks', type=int, default=1, help='1 stack or 2 stacks')
 parser.add_argument('--nhid', type=int, default=32,
                     help='number of hidden units per layer (default: 30)')
-parser.add_argument('--model_name', type=str, default='EncoDeco')
-# parser.add_argument('--model_mode', type=str, default='EncoDeco')
+parser.add_argument('--model_name', type=str, default='SCINet')
 
 args = parser.parse_args()
 
