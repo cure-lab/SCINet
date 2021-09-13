@@ -220,7 +220,7 @@ class SCINet_Tree(nn.Module):
         #print(odd.shape)
         even_len = even.shape[0]
         odd_len = odd.shape[0]
-        mlen = min((odd_len,even_len))
+        mlen = min((odd_len, even_len))
         _ = []
         for i in range(mlen):
             _.append(even[i].unsqueeze(0))
