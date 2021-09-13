@@ -21,9 +21,9 @@ from models.SCINet import SCINet
 class Exp_pems(Exp_Basic):
     def __init__(self, args):
         super(Exp_pems, self).__init__(args)
-        self.result_file = os.path.join('pems_checkpoint', self.args.dataset, 'checkpoints')
-        self.result_test_file = os.path.join('pems_checkpoint', args.dataset, 'test')
-        self.result_train_file = os.path.join('pems_checkpoint', args.dataset, 'train')
+        self.result_file = os.path.join('exp/pems_checkpoint', self.args.dataset, 'checkpoints')
+        self.result_test_file = os.path.join('exp/pems_checkpoint', args.dataset, 'test')
+        self.result_train_file = os.path.join('exp/pems_checkpoint', args.dataset, 'train')
 
     def _build_model(self):
         if self.args.dataset == 'PEMS03':
@@ -35,6 +35,7 @@ class Exp_pems(Exp_Basic):
         elif self.args.dataset == 'PEMS08':
             self.input_dim = 170
         model = SCINet(self.args, output_len=self.args.horizon, input_len=self.args.window_size, input_dim=self.input_dim, num_stacks=self.args.stacks, num_layers=self.args.layers)
+        print(model)
         #model.to(self.args.device)
         return model
 

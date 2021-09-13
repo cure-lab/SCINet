@@ -44,7 +44,7 @@ parser.add_argument('--early_stop', type=bool, default=False)
 parser.add_argument('--exponential_decay_step', type=int, default=5)
 parser.add_argument('--decay_rate', type=float, default=0.5)
 
-parser.add_argument('--lradj', type=int, default=6,help='adjust learning rate')
+parser.add_argument('--lradj', type=int, default=1,help='adjust learning rate')
 parser.add_argument('--weight_decay', type=float, default=1e-5)
 parser.add_argument('--model_name', type=str, default='SCINet')
 

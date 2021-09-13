@@ -260,7 +260,7 @@ class Exp_ETTh(Exp_Basic):
                 break
 
             adjust_learning_rate(model_optim, epoch+1, self.args)
-        save_model((self.model, path, model_name=self.args.data, horizon=self.args.pred_len))
+        save_model(self.model, path, model_name=self.args.data, horizon=self.args.pred_len)
         best_model_path = path+'/'+'checkpoint.pth'
         self.model.load_state_dict(torch.load(best_model_path))
         
@@ -317,7 +317,7 @@ class Exp_ETTh(Exp_Basic):
 
             # result save
             if self.args.save:
-                folder_path = './results/' + setting + '/'
+                folder_path = '.exp/ett_results/' + setting + '/'
                 if not os.path.exists(folder_path):
                     os.makedirs(folder_path)
 
@@ -363,66 +363,6 @@ class Exp_ETTh(Exp_Basic):
         else:
             print('Error!')
         return mae, maes, mse, mses
-
-    # def predict(self, setting, load=False):
-    #     pred_data, pred_loader = self._get_data(flag='pred')
-        
-    #     if load:
-    #         path = os.path.join(self.args.checkpoints, setting)
-    #         best_model_path = path+'/'+'checkpoint.pth'
-    #         self.model.load_state_dict(torch.load(best_model_path))
-
-    #     self.model.eval()
-        
-    #     preds = []
-        
-    #     for i, (batch_x,batch_y,batch_x_mark,batch_y_mark) in enumerate(pred_loader):
-    #         pred, true = self._process_one_batch(
-    #             pred_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
-    #         preds.append(pred.detach().cpu().numpy())
-
-    #     preds = np.array(preds)
-    #     preds = preds.reshape(-1, preds.shape[-2], preds.shape[-1])
-        
-        # result save
-        # folder_path = './results/' + setting +'/'
-        # if not os.path.exists(folder_path):
-        #     os.makedirs(folder_path)
-        
-        # np.save(folder_path+'real_prediction.npy', preds)
-        # return
-
-    # def _process_one_batch(self, dataset_object, batch_x, batch_y, batch_x_mark, batch_y_mark):
-    #     batch_x = batch_x.float().to(self.device)
-    #     batch_y = batch_y.float()
-
-    #     batch_x_mark = batch_x_mark.float().to(self.device)
-    #     batch_y_mark = batch_y_mark.float().to(self.device)
-
-    #     # decoder input
-    #     if self.args.padding==0:
-    #         dec_inp = torch.zeros([batch_y.shape[0], self.args.pred_len, batch_y.shape[-1]]).float()
-    #     elif self.args.padding==1:
-    #         dec_inp = torch.ones([batch_y.shape[0], self.args.pred_len, batch_y.shape[-1]]).float()
-    #     dec_inp = torch.cat([batch_y[:,:self.args.label_len,:], dec_inp], dim=1).float().to(self.device)
-    #     # encoder - decoder
-    #     if self.args.use_amp:
-    #         with torch.cuda.amp.autocast():
-    #             if self.args.output_attention:
-    #                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]
-    #             else:
-    #                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
-    #     else:
-    #         if self.args.output_attention:
-    #             outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]
-    #         else:
-    #             outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
-    #     if self.args.inverse:
-    #         outputs = dataset_object.inverse_transform(outputs)
-    #     f_dim = -1 if self.args.features=='MS' else 0
-    #     batch_y = batch_y[:,-self.args.pred_len:,f_dim:].to(self.device)
-    #     print('xxxx',outputs.shape,batch_y.shape,batch_x.shape,batch_y.shape)
-    #     return outputs, batch_y
 
     def _process_one_batch_SCINet(self, dataset_object, batch_x, batch_y):
         batch_x = batch_x.double().to(self.device)

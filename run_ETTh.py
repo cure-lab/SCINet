@@ -18,6 +18,7 @@ parser.add_argument('--target', type=str, default='OT', help='target feature')
 parser.add_argument('--freq', type=str, default='h', help='freq for time features encoding, options:[s:secondly, t:minutely, h:hourly, d:daily, b:business days, w:weekly, m:monthly], you can also use more detailed freq like 15min or 3h')
 parser.add_argument('--checkpoints', type=str, default='./ETT_checkpoints/', help='location of model checkpoints')
 parser.add_argument('--inverse', type=bool, default =False, help='denorm the output data')
+parser.add_argument('--embed', type=str, default='timeF', help='time features encoding, options:[timeF, fixed, learned]')
 
 ### -------  device settings --------------
 parser.add_argument('--use_gpu', type=bool, default=True, help='use gpu')
@@ -35,7 +36,6 @@ parser.add_argument('--single_step_output_One', type=int, default=0)
 parser.add_argument('--lastWeight', type=float, default=1.0)
                                                               
 ### -------  training settings --------------  
-# parser.add_argument('--do_predict', action='store_true', help='whether to predict unseen future data')
 parser.add_argument('--cols', type=str, nargs='+', help='file list')
 parser.add_argument('--num_workers', type=int, default=0, help='data loader num workers')
 parser.add_argument('--itr', type=int, default=0, help='experiments times')
@@ -44,7 +44,7 @@ parser.add_argument('--batch_size', type=int, default=32, help='batch size of tr
 parser.add_argument('--patience', type=int, default=15, help='early stopping patience')
 parser.add_argument('--lr', type=float, default=0.0001, help='optimizer learning rate')
 parser.add_argument('--loss', type=str, default='mae',help='loss function')
-parser.add_argument('--lradj', type=str, default='type1',help='adjust learning rate')
+parser.add_argument('--lradj', type=int, default=1,help='adjust learning rate')
 parser.add_argument('--use_amp', action='store_true', help='use automatic mixed precision training', default=False)
 parser.add_argument('--save', type=bool, default =False, help='save the output results')
 parser.add_argument('--model_name', type=str, default='SCINet')
@@ -87,7 +87,6 @@ if args.data in data_parser.keys():
     args.target = data_info['T']
     args.enc_in, args.dec_in, args.c_out = data_info[args.features]
 
-# args.s_layers = [int(s_l) for s_l in args.s_layers.replace(' ', '').split(',')]
 args.detail_freq = args.freq
 args.freq = args.freq[-1:]
 
@@ -122,10 +121,6 @@ if args.itr:
         mse_.append(mse)
         maes_.append(maes)
         mses_.append(mses)
-
-        # if args.do_predict:
-        #     print('>>>>>>>predicting : {}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'.format(setting))
-        #     exp.predict(setting, True)
 
         torch.cuda.empty_cache()
     print('Final mean normed mse:{:.4f}, std mse:{:.4f}, mae:{:.4f}, std mae:{:.4f}'.format(np.mean(mse_), np.std(mse_), np.mean(mae_),np.std(mae_)))

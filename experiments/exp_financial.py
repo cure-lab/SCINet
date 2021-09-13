@@ -30,7 +30,7 @@ class Exp_financial(Exp_Basic):
             self.criterion = nn.MSELoss(size_average=False).to(self.args.device)
         self.evaluateL2 = nn.MSELoss(size_average=False).to(self.args.device)
         self.evaluateL1 = nn.L1Loss(size_average=False).to(self.args.device)
-        self.writer = SummaryWriter('./run_financial/{}'.format(args.model_name))
+        self.writer = SummaryWriter('.exp/run_financial/{}'.format(args.model_name))
     
     def _build_model(self):
         if self.args.dataset_name == 'electricity':
@@ -47,6 +47,7 @@ class Exp_financial(Exp_Basic):
             
         model = SCINet(self.args, output_len = self.args.horizon, input_len=self.args.window_size, input_dim = self.input_dim,
                 num_stacks=self.args.stacks, num_layers = self.args.layers, concat_len= self.args.concat_len)
+        print(model)
         #model = model.to(device)
         return model
     
@@ -182,128 +183,6 @@ class Exp_financial(Exp_Basic):
                 print('--------------| Best Val loss |--------------')
         return total_loss / n_samples
 
-    # def test(self, data, X, Y):
-    #     # data=self._get_data()
-    #     # X=data.test[0]
-    #     # Y=data.test[1]
-    #     self.model.eval()
-    #     total_loss = 0
-    #     total_loss_l1 = 0
-
-    #     total_loss_mid = 0
-    #     total_loss_l1_mid = 0
-    #     n_samples = 0
-    #     predict = None
-    #     res_mid = None
-    #     test = None
-
-    #     forecast_set = []
-    #     Mid_set = []
-    #     target_set = []
-
-    #     for X, Y in data.get_batches(X, Y, self.args.batch_size*10, False):
-    #         with torch.no_grad():
-    #             if self.args.stacks == 1:
-    #                 forecast = self.model(X)
-    #             elif self.args.stacks == 2:
-    #                 forecast, res = self.model(X) #torch.Size([32, 3, 137])
-
-    #         true = Y[:, -1, :].squeeze()
-
-    #         forecast_set.append(forecast)
-    #         target_set.append(Y)
-    #         if self.args.stacks == 2:
-    #             Mid_set.append(res)
-
-    #         if len(forecast.shape)==1:
-    #             forecast = forecast.unsqueeze(dim=0)
-    #             if self.args.stacks == 2:
-    #                 res = res.unsqueeze(dim=0)
-    #         if predict is None:
-    #             predict = forecast[:, -1, :].squeeze()
-    #             res_mid = res[:, -1, :].squeeze()
-    #             test = Y[:, -1, :].squeeze()  # torch.Size([32, 3, 137])
-
-    #         else:
-    #             predict = torch.cat((predict, forecast[:, -1, :].squeeze()))
-    #             res_mid = torch.cat((res_mid, res[:, -1, :].squeeze()))
-    #             test = torch.cat((test, Y[:, -1, :].squeeze()))
-    #         output = forecast[:, -1, :].squeeze()
-    #         output_res = res[:, -1, :].squeeze()
-    #         scale = data.scale.expand(output.size(0), data.m)
-    #         bias = data.bias.expand(output.size(0), data.m)
-
-    #         total_loss += self.evaluateL2(output * scale + bias, true * scale+ bias).item()
-    #         total_loss_l1 += self.evaluateL1(output * scale + bias, true * scale+ bias).item()
-    #         total_loss_mid += self.evaluateL2(output_res * scale + bias, true * scale+ bias).item()
-    #         total_loss_l1_mid += self.evaluateL1(output_res * scale + bias, true * scale+ bias).item()
-
-    #         n_samples += (output.size(0) * data.m)
-
-    #     forecast_Norm = torch.cat(forecast_set, axis=0)
-    #     target_Norm = torch.cat(target_set, axis=0)
-    #     Mid_Norm = torch.cat(Mid_set, axis=0)
-
-    #     rse_final_each = []
-    #     rae_final_each = []
-    #     corr_final_each = []
-    #     Scale = data.scale.expand(forecast_Norm.size(0), data.m)
-    #     bias = data.bias.expand(forecast_Norm.size(0), data.m)
-    #     for i in range(forecast_Norm.shape[1]):
-    #         lossL2_F = self.evaluateL2(forecast_Norm[:, i, :] * Scale + bias, target_Norm[:, i, :] * Scale + bias).item()
-    #         lossL1_F = self.evaluateL1(forecast_Norm[:, i, :] * Scale+ bias, target_Norm[:, i, :] * Scale+ bias).item()
-    #         lossL2_M = self.evaluateL2(Mid_Norm[:, i, :] * Scale + bias, target_Norm[:, i, :] * Scale+ bias).item()
-    #         lossL1_M = self.evaluateL1(Mid_Norm[:, i, :] * Scale + bias, target_Norm[:, i, :] * Scale+ bias).item()
-    #         rse_F = math.sqrt(lossL2_F / forecast_Norm.shape[0] / data.m) / data.rse
-    #         rae_F = (lossL1_F / forecast_Norm.shape[0] / data.m) / data.rae
-    #         rse_final_each.append(rse_F.item())
-    #         rae_final_each.append(rae_F.item())
-
-    #         pred = forecast_Norm[:, i, :].data.cpu().numpy()
-    #         y_true = target_Norm[:, i, :].data.cpu().numpy()
-
-    #         sig_p = (pred).std(axis=0)
-    #         sig_g = (y_true).std(axis=0)
-    #         m_p = pred.mean(axis=0)
-    #         m_g = y_true.mean(axis=0)
-    #         ind = (sig_g != 0)
-    #         corr = ((pred - m_p) * (y_true - m_g)).mean(axis=0) / (sig_p * sig_g)
-    #         corr = (corr[ind]).mean()
-    #         corr_final_each.append(corr)
-
-    #     rse = math.sqrt(total_loss / n_samples) / data.rse
-    #     rae = (total_loss_l1 / n_samples) / data.rae
-
-    #     rse_mid = math.sqrt(total_loss_mid / n_samples) / data.rse
-    #     rae_mid = (total_loss_l1_mid / n_samples) / data.rae
-
-    #     predict = forecast_Norm.cpu().numpy()
-    #     Ytest = target_Norm.cpu().numpy()
-
-    #     sigma_p = (predict).std(axis=0)
-    #     sigma_g = (Ytest).std(axis=0)
-    #     mean_p = predict.mean(axis=0)
-    #     mean_g = Ytest.mean(axis=0)
-    #     index = (sigma_g != 0)
-    #     correlation = ((predict - mean_p) * (Ytest - mean_g)).mean(axis=0) / (sigma_p * sigma_g)
-    #     correlation = (correlation[index]).mean()
-
-    #     mid_pred = Mid_Norm.cpu().numpy()
-    #     sigma_p = (mid_pred).std(axis=0)
-    #     mean_p = mid_pred.mean(axis=0)
-    #     correlation_mid = ((mid_pred - mean_p) * (Ytest - mean_g)).mean(axis=0) / (sigma_p * sigma_g)
-    #     correlation_mid = (correlation_mid[index]).mean()
-
-    #     print(
-    #         '|Test_final rse {:5.4f} | Test_final rae {:5.4f} | Test_final corr   {:5.4f}'.format(
-    #             rse, rae, correlation), flush=True)
-
-    #     print(
-    #         '|Test_mid rse {:5.4f} | Test_mid rae {:5.4f} | Test_mid corr  {:5.4f}'.format(
-    #             rse_mid, rae_mid, correlation_mid), flush=True)
-    #     # if epoch%4==0:
-    #     #     save_model(model, result_file,epoch=epoch)
-    #     return rse, rae, correlation, rse_mid, rae_mid, correlation_mid
 
     def validate(self, data, X, Y):
         self.model.eval()
