@@ -56,7 +56,7 @@ parser.add_argument('--kernel', default=5, type=int, help='kernel size for the f
 parser.add_argument('--dilation', default=1, type=int, help='dilation')
 parser.add_argument('--positionalEcoding', type=bool , default = True)
 parser.add_argument('--groups', type=int, default=1)
-parser.add_argument('--layers', type=int, default=3)
+parser.add_argument('--layers', type=int, default=2)
 parser.add_argument('--stacks', type=int, default=1)
 parser.add_argument('--dropout', type=float, default=0.5)
 

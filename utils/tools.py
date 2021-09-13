@@ -3,7 +3,7 @@ import os
 import numpy as np
 import torch
 
-def save_model(self, model, model_dir, epoch=1, model_name='best_pems08'):
+def save_model(model, model_dir, epoch=1, model_name='best_pems08'):
     if model_dir is None:
         return
     if not os.path.exists(model_dir):
@@ -14,7 +14,7 @@ def save_model(self, model, model_dir, epoch=1, model_name='best_pems08'):
         torch.save(model, f)
         print('save model in ',file_name)
 
-def load_model(self, model_dir, epoch=1, model_name='best_pems08'):
+def load_model(model_dir, epoch=1, model_name='best_pems08'):
     if not model_dir:
         return
     epoch = str(epoch) if epoch else ''
