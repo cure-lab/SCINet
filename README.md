@@ -67,7 +67,6 @@ source prepare_data.sh
 [![pems](https://img.shields.io/badge/Download-PeMS_Dataset-%234285F4?logo=GoogleDrive&labelColor=lightgrey)](https://drive.google.com/drive/folders/17fwxGyQ3Qb0TLOalI-Y9wfgTPuXSYgiI)
 [![financial](https://img.shields.io/badge/Download-financial_Dataset-%234285F4?logo=GoogleDrive&labelColor=lightgrey)](https://drive.google.com/drive/folders/12ffxwxVAGM_MQiYpIk9aBLQrb2xQupT-)
 
-
 ### Run training code
 
 To facilitate reproduction, we provide the logs on the above datasets [here](https://drive.google.com/drive/folders/1MBK5MOShD4ygLIinNBo2F8EPRM5y9qIQ?usp=sharing) in details. You can check **the hyperparameters, training loss and test results for each epoch** in these logs as well.

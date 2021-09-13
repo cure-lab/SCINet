@@ -56,7 +56,7 @@ class Exp_financial(Exp_Basic):
             self.args.input_dim = 862
             
         print('dataset {}, the channel size is {}'.format(self.args.data, self.args.input_dim))
-
+            
         return DataLoaderH(self.args.data, 0.6, 0.2, self.args.device, self.args.horizon, self.args.window_size, self.args.normalize)
 
     def _select_optimizer(self):
