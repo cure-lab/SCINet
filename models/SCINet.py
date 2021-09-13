@@ -198,7 +198,6 @@ class LevelSCINet(nn.Module):
         (x_even_update, x_odd_update) = self.interact(x)
 
         if self.no_bottleneck:
-            print(x_even_update.shape, x_odd_update.shape)
             return x_even_update.permute(0, 2, 1), x_odd_update.permute(0, 2, 1) #even: B, T, D odd: B, T, D
         else:
             # return self.bottleneck_even(x_even_update).permute(0, 2, 1), x_odd_update.permute(0,2,1)
@@ -227,12 +226,10 @@ class SCINet_Tree(nn.Module):
             _.append(odd[i].unsqueeze(0))
         if odd_len < even_len: 
             _.append(even[-1].unsqueeze(0))
-        print(torch.cat(_,0).shape,even_len,odd_len,odd.shape,even.shape)
         return torch.cat(_,0).permute(1,0,2) #B, L, D
         
     def forward(self, x):
         x_even_update, x_odd_update= self.workingblock(x)
-        print('mmm',self.current_layer)
         # We recursively reordered these sub-series. You can run the ./utils/recursive_demo.py to emulate this procedure. 
         if self.current_layer ==0:
             return self.zip_up_the_pants(x_even_update, x_odd_update)
@@ -345,11 +342,9 @@ class SCINet(nn.Module):
                 x += pe[:, :, :-1]
             else:
                 x += self.get_position_encoding(x)
-        print('x111',x.shape)
         # the first stack
         res1 = x
         x = self.blocks1(x)
-        print('x222',x.shape)
         x += res1
         x = self.projection1(x)
 

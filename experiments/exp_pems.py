@@ -179,10 +179,9 @@ class Exp_pems(Exp_Basic):
             loss_F = forecast_loss(forecast_norm, target_norm)
             loss_M = forecast_loss(mid_norm, target_norm)
 
-        # score = evaluate(target, forecast)
         score = evaluate(target, forecast)
         score_final_detail = evaluate(target, forecast,by_step=True)
-        print('by step:MAPE&MAE&RMSE',score_final_detail)
+        print('by each step: MAPE & MAE & RMSE',score_final_detail)
         if self.args.stacks == 2:
             score1 = evaluate(target, mid)
         #end = datetime.now()
@@ -304,7 +303,7 @@ class Exp_pems(Exp_Basic):
                     
                 # save model
                 if is_best_for_now:
-                    save_model(self.model, self.result_file, epoch=epoch, model_name=self.args.dataset)
+                    save_model(model=self.model, model_dir=self.result_file, epoch=epoch, model_name=self.args.dataset)
                     print('saved model!')
                 # if epoch%4==0:
                 #     save_model(model, result_file, epoch=epoch)
