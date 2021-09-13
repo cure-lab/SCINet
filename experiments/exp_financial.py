@@ -176,7 +176,7 @@ class Exp_financial(Exp_Basic):
                 ' test rse {:5.4f} | test rae {:5.4f} | test corr  {:5.4f}'.format(
                     epoch, (time.time() - epoch_start_time), total_loss / n_samples, val_loss, val_rae, val_corr, test_loss, test_rae, test_corr), flush=True)
             if val_loss < best_val:
-                save_model(self.model, self.args.save_path, epoch=epoch, model_name=self.args.dataset_name)
+                save_model(self.model, self.args.save_path, epoch=epoch, model_name=self.args.dataset_name, horizon=self.args.horizon)
                 print('--------------| Best Val loss |--------------')
         return total_loss / n_samples
 

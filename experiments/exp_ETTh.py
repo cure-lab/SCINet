@@ -268,7 +268,7 @@ class Exp_ETTh(Exp_Basic):
                 break
 
             adjust_learning_rate(model_optim, epoch+1, self.args)
-        save_model((self.model, path, epoch=epoch, model_name=self.args.data))
+        save_model((self.model, path, epoch=epoch, model_name=self.args.data, horizon=self.args.pred_len))
         best_model_path = path+'/'+'checkpoint.pth'
         self.model.load_state_dict(torch.load(best_model_path))
         

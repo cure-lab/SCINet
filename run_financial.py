@@ -78,7 +78,7 @@ if __name__ == '__main__':
         print("===================Normal-Start=========================")
         normalize_statistic = exp.train()
         after_train = datetime.now().timestamp()
-        #print(f'Training took {(after_train - before_train) / 60} minutes')
+        print(f'Training took {(after_train - before_train) / 60} minutes')
         print("===================Normal-End=========================")
     
     else:
@@ -93,7 +93,7 @@ if __name__ == '__main__':
         print(
         '|Test_mid rse {:5.4f} | Test_mid rae {:5.4f} | Test_mid corr  {:5.4f}'.format(
             rse_mid, rae_mid, correlation_mid), flush=True)
-        #print(f'Evaluation took {(after_evaluation - before_evaluation) / 60} minutes')
+        print(f'Evaluation took {(after_evaluation - before_evaluation) / 60} minutes')
 
 
 

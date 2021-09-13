@@ -3,22 +3,20 @@ import os
 import numpy as np
 import torch
 
-def save_model(model, model_dir, epoch=1, model_name='best_pems08'):
+def save_model(model, model_dir, model_name='pems08', horizon=12):
     if model_dir is None:
         return
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)
-    epoch = str(epoch) if epoch else ''
-    file_name = os.path.join(model_dir, epoch + model_name)
+    file_name = os.path.join(model_dir, model_name+str(horizon))
     with open(file_name, 'wb') as f:
         torch.save(model, f)
         print('save model in ',file_name)
 
-def load_model(model_dir, epoch=1, model_name='best_pems08'):
+def load_model(model_dir, model_name='pems08',horizon=12):
     if not model_dir:
         return
-    epoch = str(epoch) if epoch else ''
-    file_name = os.path.join(model_dir, epoch + model_name) 
+    file_name = os.path.join(model_dir, model_name+str(horizon)) 
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)
     if not os.path.exists(file_name):
@@ -29,7 +27,6 @@ def load_model(model_dir, epoch=1, model_name='best_pems08'):
     return model
 
 def adjust_learning_rate(optimizer, epoch, args):
-    # lr = args.learning_rate * (0.2 ** (epoch // 2))
     if args.lradj=='type1':
         lr_adjust = {epoch: args.lr * (0.95 ** (epoch // 1))}
     elif args.lradj=='type2':
@@ -43,74 +40,42 @@ def adjust_learning_rate(optimizer, epoch, args):
 
         }
     elif args.lradj==3:
-        # lr_adjust = {
-        #     2: 5e-5, 4: 1e-5, 6: 5e-6, 8: 1e-6,
-        #     10: 5e-7, 15: 1e-7, 20: 5e-8
-        # }
         lr_adjust = {
             20: 0.0005, 25: 0.0001, 35: 0.00005, 55: 0.00001
             , 70: 0.000001
         }
     elif args.lradj==4:
-        # lr_adjust = {
-        #     2: 5e-5, 4: 1e-5, 6: 5e-6, 8: 1e-6,
-        #     10: 5e-7, 15: 1e-7, 20: 5e-8
-        # }
         lr_adjust = {
             30: 0.0005, 40: 0.0003, 50: 0.0001, 65: 0.00001
             , 80: 0.000001
         }
     elif args.lradj==5:
-        # lr_adjust = {
-        #     2: 5e-5, 4: 1e-5, 6: 5e-6, 8: 1e-6,
-        #     10: 5e-7, 15: 1e-7, 20: 5e-8
-        # }
         lr_adjust = {
             40: 0.0001, 60: 0.00005
         }
     elif args.lradj==6:
-        # lr_adjust = {
-        #     2: 5e-5, 4: 1e-5, 6: 5e-6, 8: 1e-6,
-        #     10: 5e-7, 15: 1e-7, 20: 5e-8
-        # }
         lr_adjust = {
             0: 0.0001, 5: 0.0005, 10:0.001, 20: 0.0001, 30: 0.00005, 40: 0.00001
             , 70: 0.000001
         }
     elif args.lradj==61:
-        # lr_adjust = {
-        #     2: 5e-5, 4: 1e-5, 6: 5e-6, 8: 1e-6,
-        #     10: 5e-7, 15: 1e-7, 20: 5e-8
-        # }
         lr_adjust = {
             0: 0.0001, 5: 0.0005, 10:0.001, 25: 0.0005, 35: 0.0001, 50: 0.00001
             , 70: 0.000001
         }
 
     elif args.lradj==7:
-        # lr_adjust = {
-        #     2: 5e-5, 4: 1e-5, 6: 5e-6, 8: 1e-6,
-        #     10: 5e-7, 15: 1e-7, 20: 5e-8
-        # }
         lr_adjust = {
             10: 0.0001, 30: 0.00005, 50: 0.00001
             , 70: 0.000001
         }
 
     elif args.lradj==8:
-        # lr_adjust = {
-        #     2: 5e-5, 4: 1e-5, 6: 5e-6, 8: 1e-6,
-        #     10: 5e-7, 15: 1e-7, 20: 5e-8
-        # }
         lr_adjust = {
             0: 0.0005, 5: 0.0008, 10:0.001, 20: 0.0001, 30: 0.00005, 40: 0.00001
             , 70: 0.000001
         }
     elif args.lradj==9:
-        # lr_adjust = {
-        #     2: 5e-5, 4: 1e-5, 6: 5e-6, 8: 1e-6,
-        #     10: 5e-7, 15: 1e-7, 20: 5e-8
-        # }
         lr_adjust = {
             0: 0.0001, 10: 0.0005, 20:0.001, 40: 0.0001, 45: 0.00005, 50: 0.00001
             , 70: 0.000001

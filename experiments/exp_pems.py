@@ -303,7 +303,7 @@ class Exp_pems(Exp_Basic):
                     
                 # save model
                 if is_best_for_now:
-                    save_model(model=self.model, model_dir=self.result_file, epoch=epoch, model_name=self.args.dataset)
+                    save_model(model=self.model, model_dir=self.result_file, epoch=epoch, model_name=self.args.dataset, horizon=self.args.horizon)
                     print('saved model!')
                 # if epoch%4==0:
                 #     save_model(model, result_file, epoch=epoch)
@@ -328,7 +328,7 @@ class Exp_pems(Exp_Basic):
 
 
         forecast_loss = nn.L1Loss().to(self.args.device) #smooth_l1_loss #nn.MSELoss(reduction='mean').to(args.device)
-        model = self.load_model(result_train_file, epoch=epoch, model_name=self.args.dataset)
+        model = self.load_model(result_train_file, epoch=epoch, model_name=self.args.dataset, horizon=self.args.horizon)
         node_cnt = test_data.shape[1]
         test_set = ForecastTestDataset(test_data, window_size=self.args.window_size, horizon=self.args.horizon,
                                 normalize_method=self.args.norm_method, norm_statistic=normalize_statistic)
