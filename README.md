@@ -100,10 +100,7 @@ python run_pems.py --dataset PEMS08 --hidden-size 1 --dropout 0.5 --model_name p
 | dataset        | Name of dataset      | N/A                | PEMS08  |
 | horizon        | Horizon                 | Horizon            | 12      |
 | window_size    | Look-back window        | Look-back window   | 12      |
-| batch_size     | Batch size              | batch size         | 8       |
-| lr             | Learning rate           | learning rate      | 0.001   |
 | hidden-size    | hidden expansion        | h                  | 1       |
-| kernel         | convolution kernel size | k                  | 5       |
 | layers         | SCINet block layers     | L                  | 3       |
 | stacks         | The number of SCINet block| K                | 1       |
 
@@ -182,7 +179,6 @@ python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon
 | batch_size     | Batch size                | batch size              | 8                                      |
 | lr             | Learning rate             | learning rate           | 5e-3                                   |
 | hidden-size    | hidden expansion          | h                       | 1                                      |
-| kernel         | convolution kernel size   | k                       | 5                                      |
 | layers         | SCINet block layers       | L                       | 3                                      |
 | stacks         | The number of SCINet block| K                       | 1                                      |
 | lastweight     | Loss weight of the last frame| Loss weight ($\lambda$) | 1.0                                 |
@@ -192,72 +188,100 @@ For ETTH1 dataset:
 
 ```
 # multivariate, out 24
-python run_ETTh.py --data ETTh1 --features S  --hidden-size 4 --layers 3 --stacks 1 --seq_len 48 --label_len 24 --pred_len 24 --num_concat 0 --learning_rate 0.005 --kernel 5 --batch_size 32 --dropout 0.5 --model_name etth1_I48_out24_type1_lr0.005_bs32_dp0.5_h4_s1l3_e100 
+python run_ETTh.py --data ETTh1 --features M  --seq_len 48 --label_len 24 --pred_len 24 --hidden-size 4 --stacks 1 --layers 3 --learning_rate 0.009 --batch_size 4 --dropout 0.5 --model_name etth1_M_I48_O24_lr0.009_bs4_dp0.5_h4_s1l3
 
 # multivariate, out 48
+python run_ETTh.py --data ETTh1 --features M  --seq_len 96 --label_len 48 --pred_len 48 --hidden-size 4 --stacks 1 --layers 3 --learning_rate 0.009 --batch_size 16 --dropout 0.25 --model_name etth1_M_I96_O48_lr0.009_bs16_dp0.25_h4_s1l3
 
 # multivariate, out 168
+python run_ETTh.py --data ETTh1 --features M  --seq_len 336 --label_len 168 --pred_len 168 --hidden-size 4 --stacks 1 --layers 3 --learning_rate 5e-4 --batch_size 32 --dropout 0.5 --model_name etth1_M_I336_O168_lr5e-4_bs32_dp0.5_h4_s1l3
 
 # multivariate, out 336
+python run_ETTh.py --data ETTh1 --features M  --seq_len 336 --label_len 336 --pred_len 336 --hidden-size 1 --stacks 1 --layers 4 --learning_rate 1e-4 --batch_size 512 --dropout 0.5 --model_name etth1_M_I336_O336_lr1e-4_bs512_dp0.5_h1_s1l4
 
 # multivariate, out 720
+python run_ETTh.py --data ETTh1 --features M  --seq_len 736 --label_len 720 --pred_len 720 --hidden-size 1 --stacks 1 --layers 5 --learning_rate 1e-5 --batch_size 128 --dropout 0.5 --model_name etth1_M_I736_O720_lr1e-5_bs128_dp0.5_h1_s1l5
 
 # Univariate, out 24
+python run_ETTh.py --data ETTh1 --features S  --seq_len 48 --label_len 24 --pred_len 24 --hidden-size 8 --stacks 1 --layers 3 --learning_rate 0.007 --batch_size 16 --dropout 0.25 --model_name etth1_S_I48_O24_lr0.007_bs16_dp0.25_h8_s1l3
 
 # Univariate, out 48
+python run_ETTh.py --data ETTh1 --features S  --seq_len 96 --label_len 48 --pred_len 48 --hidden-size 4 --stacks 1 --layers 4 --learning_rate 0.007 --batch_size 4 --dropout 0.5 --model_name etth1_S_I96_O48_lr0.007_bs4_dp0.5_h4_s1l4
 
 # Univariate, out 168
+python run_ETTh.py --data ETTh1 --features S  --seq_len 336 --label_len 168 --pred_len 168 --hidden-size 0.5 --stacks 1 --layers 4 --learning_rate 5e-5 --batch_size 8 --dropout 0.5 --model_name etth1_S_I336_O168_lr5e-5_bs8_dp0.5_h0.5_s1l4
 
 # Univariate, out 336
+python run_ETTh.py --data ETTh1 --features S  --seq_len 336 --label_len 336 --pred_len 336 --hidden-size 1 --stacks 1 --layers 4 --learning_rate 5e-5 --batch_size 128 --dropout 0.5 --model_name etth1_S_I336_O336_lr5e-5_bs128_dp0.5_h1_s1l4
 
 # Univariate, out 720
-
+python run_ETTh.py --data ETTh1 --features S  --seq_len 736 --label_len 720 --pred_len 720 --hidden-size 4 --stacks 1 --layers 5 --learning_rate 1e-5 --batch_size 32 --dropout 0.5 --model_name etth1_S_I736_O720_lr1e-5_bs32_dp0.5_h4_s1l5
 ```
+
 For ETTH2 dataset:
 ```
-python run_ETTh.py --data ETTh2 --features S  --hidden-size 4 --layers 3 --stacks 1 --seq_len 48 --label_len 24 --pred_len 24 --num_concat 0 --learning_rate 0.005 --kernel 5 --batch_size 32 --dropout 0.5 --model_name etth2_I48_out24_type1_lr0.005_bs32_dp0.5_h4_s1l3_e100
+# multivariate, out 24
+python run_ETTh.py --data ETTh2 --features M  --seq_len 48 --label_len 24 --pred_len 24 --hidden-size 8 --stacks 1 --layers 3 --learning_rate 0.007 --batch_size 16 --dropout 0.25 --model_name etth2_M_I48_O24_lr7e-3_bs16_dp0.25_h8_s1l3
 
 # multivariate, out 48
+python run_ETTh.py --data ETTh2 --features M  --seq_len 96 --label_len 48 --pred_len 48 --hidden-size 4 --stacks 1 --layers 4 --learning_rate 0.007 --batch_size 4 --dropout 0.5 --model_name etth2_M_I96_O48_lr7e-3_bs4_dp0.5_h4_s1l4
 
 # multivariate, out 168
+python run_ETTh.py --data ETTh2 --features M  --seq_len 336 --label_len 168 --pred_len 168 --hidden-size 0.5 --stacks 1 --layers 4 --learning_rate 5e-5 --batch_size 8 --dropout 0.5 --model_name etth2_M_I336_O168_lr5e-5_bs8_dp0.5_h0.5_s1l4
 
 # multivariate, out 336
+python run_ETTh.py --data ETTh2 --features M  --seq_len 336 --label_len 336 --pred_len 336 --hidden-size 1 --stacks 1 --layers 4 --learning_rate 5e-5 --batch_size 128 --dropout 0.5 --model_name etth2_M_I336_O336_lr5e-5_bs128_dp0.5_h1_s1l4
 
 # multivariate, out 720
+python run_ETTh.py --data ETTh2 --features M  --seq_len 736 --label_len 720 --pred_len 720 --hidden-size 4 --stacks 1 --layers 5 --learning_rate 1e-5 --batch_size 32 --dropout 0.5 --model_name etth2_M_I736_O720_lr1e-5_bs32_dp0.5_h4_s1l5
 
 # Univariate, out 24
+python run_ETTh.py --data ETTh2 --features S  --seq_len 48 --label_len 24 --pred_len 24 --hidden-size 4 --stacks 1 --layers 3 --learning_rate 0.001 --batch_size 16 --dropout 0 --model_name etth2_S_I48_O24_lr1e-3_bs16_dp0_h4_s1l3
 
 # Univariate, out 48
+python run_ETTh.py --data ETTh2 --features S  --seq_len 96 --label_len 48 --pred_len 48 --hidden-size 4 --stacks 2 --layers 4 --learning_rate 0.001 --batch_size 32 --dropout 0.5 --model_name etth2_S_I96_O48_lr1e-3_bs32_dp0.5_h4_s2l4
 
 # Univariate, out 168
+python run_ETTh.py --data ETTh2 --features S  --seq_len 336 --label_len 168 --pred_len 168 --hidden-size 4 --stacks 1 --layers 3 --learning_rate 1e-4 --batch_size 8 --dropout 0 --model_name etth2_S_I336_O168_lr1e-4_bs8_dp0_h4_s1l3
 
 # Univariate, out 336
+python run_ETTh.py --data ETTh2 --features S  --seq_len 336 --label_len 336 --pred_len 336 --hidden-size 8 --stacks 1 --layers 3 --learning_rate 5e-4 --batch_size 512 --dropout 0.5 --model_name etth2_S_I336_O336_lr5e-4_bs512_dp0.5_h8_s1l3
 
 # Univariate, out 720
+python run_ETTh.py --data ETTh2 --features S  --seq_len 720 --label_len 720 --pred_len 720 --hidden-size 8 --stacks 1 --layers 3 --learning_rate 5e-5 --batch_size 16 --dropout 0.6 --model_name etth2_S_I720_O720_lr5e-5_bs16_dp0.6_h8_s1l3
 ```
 
 For ETTM1 dataset:
 ```
-python run_ETTh.py --data ETTm1 --features S  --hidden-size 4 --layers 3 --stacks 1 --seq_len 48 --label_len 24 --pred_len 24 --num_concat 0 --learning_rate 0.005 --kernel 5 --batch_size 32 --dropout 0.5 --model_name etth2_I48_out24_type1_lr0.005_bs32_dp0.5_h4_s1l3_e100
+# multivariate, out 24
+python run_ETTh.py --data ETTm1 --features M  --seq_len 48 --label_len 24 --pred_len 24 --hidden-size 4 --stacks 1 --layers 3 --learning_rate 0.005 --batch_size 32 --dropout 0.5 --model_name ettm1_M_I48_O24_lr7e-3_bs16_dp0.25_h8_s1l3
 
 # multivariate, out 48
+python run_ETTh.py --data ETTm1 --features M  --seq_len 96 --label_len 48 --pred_len 48 --hidden-size 4 --stacks 2 --layers 4 --learning_rate 0.001 --batch_size 16 --dropout 0.5 --model_name ettm1_M_I96_O48_lr1e-3_bs16_dp0.5_h4_s2l4
 
-# multivariate, out 168
+# multivariate, out 96
+python run_ETTh.py --data ETTm1 --features M  --seq_len 384 --label_len 96 --pred_len 96 --hidden-size 0.5 --stacks 2 --layers 4 --learning_rate 5e-5 --batch_size 32 --dropout 0.5 --model_name ettm1_M_I384_O96_lr5e-5_bs32_dp0.5_h0.5_s2l4
 
-# multivariate, out 336
+# multivariate, out 288
+python run_ETTh.py --data ETTm1 --features M  --seq_len 672 --label_len 288 --pred_len 288 --hidden-size 4 --stacks 1 --layers 5 --learning_rate 1e-5 --batch_size 32 --dropout 0.5 --model_name ettm1_M_I672_O288_lr1e-5_bs32_dp0.5_h0.5_s1l5
 
-# multivariate, out 720
+# multivariate, out 672
+python run_ETTh.py --data ETTm1 --features M  --seq_len 672 --label_len 672 --pred_len 672 --hidden-size 4 --stacks 2 --layers 5 --learning_rate 1e-5 --batch_size 32 --dropout 0.5 --model_name ettm1_M_I672_O672_lr1e-5_bs32_dp0.5_h4_s2l5
 
 # Univariate, out 24
+python run_ETTh.py --data ETTm1 --features S  --seq_len 96 --label_len 24 --pred_len 24 --hidden-size 4 --stacks 1 --layers 4 --learning_rate 0.001 --batch_size 8 --dropout 0 --model_name ettm1_S_I96_O24_lr1e-3_bs8_dp0_h4_s1l4
 
 # Univariate, out 48
+python run_ETTh.py --data ETTm1 --features S  --seq_len 96 --label_len 48 --pred_len 48 --hidden-size 4 --stacks 1 --layers 3 --learning_rate 0.005 --batch_size 16 --dropout 0 --model_name ettm1_S_I96_O48_lr5e-3_bs16_dp0_h4_s1l3
 
-# Univariate, out 168
+# Univariate, out 96
+python run_ETTh.py --data ETTm1 --features S  --seq_len 384 --label_len 96 --pred_len 96 --hidden-size 2 --stacks 1 --layers 4 --learning_rate 1e-4 --batch_size 8 --dropout 0 --model_name ettm1_S_I384_O96_lr1e-4_bs8_dp0_h2_s1l4
 
-# Univariate, out 336
+# Univariate, out 288
+python run_ETTh.py --data ETTm1 --features S  --seq_len 384 --label_len 288 --pred_len 288 --hidden-size 4 --stacks 1 --layers 4 --learning_rate 5e-5 --batch_size 64 --dropout 0 --model_name ettm1_S_I384_O288_lr5e-5_bs64_dp0_h4_s1l4
 
-# Univariate, out 720
-
+# Univariate, out 672
+python run_ETTh.py --data ETTm1 --features S  --seq_len 672 --label_len 672 --pred_len 672 --hidden-size 1 --stacks 1 --layers 5 --learning_rate 1e-4 --batch_size 32 --model_name ettm1_S_I672_O672_lr1e-4_bs32_dp0.5_h1_s1l5
 ```
 
 
@@ -267,19 +291,13 @@ python run_ETTh.py --data ETTm1 --features S  --hidden-size 4 --layers 3 --stack
 | -------------- | ---------------------------- | ------------------ | -------------------------- |
 | root_path      | The root path of subdatasets | N/A                | './datasets/ETT-data/ETT/' |
 | data           | Subdataset                   | N/A                | ETTh1                      |
-| data_path      | Location of the data file    | N/A                | 'ETTh1.csv'                |
 | pred_len       | Horizon                      | Horizon            | 48                         |
 | seq_len        | Look-back window             | Look-back window   | 96                         |
 | batch_size     | Batch size                   | batch size         | 32                         |
 | lr             | Learning rate                | learning rate      | 0.0001                     |
 | hidden-size    | hidden expansion             | h                  | 1                          |
-| kernel         | convolution kernel size      | k                  | 5                          |
 | layers         | SCINet block layers          | L                  | 3                          |
 | stacks         | The number of SCINet blocks  | K                  | 1                          |
-
-
-
-
 
 
 
