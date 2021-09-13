@@ -161,7 +161,7 @@ class LevelSCINet(nn.Module):
         self.interact = InteractorLevel(args, in_planes,
                                         simple_lifting=simple_lifting)
         self.no_bottleneck = no_bottleneck
-        # print('bbb',self.no_bottleneck)
+
         if not no_bottleneck:
             # We still want to do a BN and RELU, but we will not perform a conv
             # as the input_plane and output_plare are the same
@@ -175,8 +175,6 @@ class LevelSCINet(nn.Module):
         (x_even_update, x_odd_update) = self.interact(x)
 
         if self.no_bottleneck:
-
-            # print(x_even_update.shape, x_odd_update.shape)
 
             return x_even_update.permute(0, 2, 1), x_odd_update.permute(0, 2, 1) #even: B, T, D odd: B, T, D
         else:
@@ -196,7 +194,7 @@ class SCINet_Tree(nn.Module):
     def zip_up_the_pants(self, even, odd):
         even = even.permute(1, 0, 2)
         odd = odd.permute(1, 0, 2) #L, B, D
-        #print(odd.shape)
+
         even_len = even.shape[0]
         odd_len = odd.shape[0]
         mlen = min((odd_len, even_len))
@@ -207,14 +205,14 @@ class SCINet_Tree(nn.Module):
         if odd_len < even_len: 
             _.append(even[-1].unsqueeze(0))
 
-        # print(torch.cat(_,0).shape,even_len,odd_len,odd.shape,even.shape)
+
 
         return torch.cat(_,0).permute(1,0,2) #B, L, D
         
     def forward(self, x):
         x_even_update, x_odd_update= self.workingblock(x)
 
-        # print('mmm',self.current_layer)
+
 
         # We recursively reordered these sub-series. You can run the ./utils/recursive_demo.py to emulate this procedure. 
         if self.current_layer ==0:
@@ -329,11 +327,6 @@ class SCINet(nn.Module):
             else:
                 x += self.get_position_encoding(x)
 
-        # print('x111',x.shape)
-        # the first stack
-        res1 = x
-        x = self.blocks1(x)
-        # print('x222',x.shape)
 
         # the first stack
         res1 = x
