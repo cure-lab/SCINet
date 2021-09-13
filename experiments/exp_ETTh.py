@@ -26,20 +26,25 @@ class Exp_ETTh(Exp_Basic):
     
     def _build_model(self):
 
-        if self.args.model =='SCINet':
-            if self.args.features == 'S':
-                in_dim = 1
-            elif self.args.features == 'M':
-                in_dim = 7
-            model = SCINet(self.args, output_len=self.args.pred_len, input_len=self.args.seq_len, input_dim=in_dim,
-                        num_stacks=self.args.stacks, num_layers=self.args.layers, concat_len=self.args.concat_len)
-            else:
-                print('Error!')
+        # if self.args.model =='SCINet':
+        in_dim = 7 # default
+        if self.args.features == 'S':
+            in_dim = 1
+        elif self.args.features == 'M':
+            in_dim = 7
+
+        else:
+            print('Error!')
+
+        model = SCINet(self.args, output_len=self.args.pred_len, input_len=self.args.seq_len, input_dim=in_dim,
+                       num_stacks=self.args.stacks, num_layers=self.args.layers, concat_len=self.args.concat_len)
+        print(model)
         # else:
+        #     print('Please add customized model !')
         #     channel_sizes = [self.args.nhid] * self.args.layers
         #     model = TCN(7, output_len= self.args.pred_len, num_channels=channel_sizes, kernel_size=self.args.kernel, dropout=self.args.dropout)
 
-        print(model)
+
         #        if self.args.use_multi_gpu and self.args.use_gpu:
         #            model = nn.DataParallel(model, device_ids=self.args.device_ids)
         return model.double()
@@ -268,7 +273,7 @@ class Exp_ETTh(Exp_Basic):
                 break
 
             adjust_learning_rate(model_optim, epoch+1, self.args)
-        save_model((self.model, path, epoch=epoch, model_name=self.args.data))
+        save_model(self.model, path, epoch=epoch, model_name=self.args.data)
         best_model_path = path+'/'+'checkpoint.pth'
         self.model.load_state_dict(torch.load(best_model_path))
         

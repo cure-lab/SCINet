@@ -148,30 +148,7 @@ class BottleneckBlock(nn.Module):
             return self.conv1(self.relu(self.bn1(x)))
 
 
-# class LevelSCINet(nn.Module):
-#     def __init__(self, args, in_planes, lifting_size, kernel_size, no_bottleneck,
-#                  share_weights, simple_lifting, regu_details, regu_approx):
-#         super(LevelSCINet, self).__init__()
-#         # self.regu_details = regu_details
-#         # self.regu_approx = regu_approx
-#         # if self.regu_approx + self.regu_details > 0.0:
-#         #     self.loss_details = nn.SmoothL1Loss()
 
-#         self.interact = InteractorLevel(args, in_planes,
-#                                           simple_lifting=simple_lifting)
-#         self.share_weights = share_weights
-#         if no_bottleneck:
-#             self.bootleneck = BottleneckBlock(in_planes, in_planes, disable_conv=True)
-#         else: # go through another conv. layer
-#             self.bootleneck = BottleneckBlock(in_planes, in_planes, disable_conv=False)
-
-#     def forward(self, x):
-#         (x_even_update, x_odd_update) = self.interact(x)
-
-#         if self.bootleneck:
-#             return self.bootleneck(x_even_update).permute(0, 2, 1), x_odd_update
-#         else:
-#             return x_even_update.permute(0, 2, 1),x_odd_update
 
 class LevelSCINet(nn.Module):
     def __init__(self, args, in_planes, kernel_size, no_bottleneck, simple_lifting):
@@ -198,7 +175,7 @@ class LevelSCINet(nn.Module):
         (x_even_update, x_odd_update) = self.interact(x)
 
         if self.no_bottleneck:
-            print(x_even_update.shape, x_odd_update.shape)
+            # print(x_even_update.shape, x_odd_update.shape)
             return x_even_update.permute(0, 2, 1), x_odd_update.permute(0, 2, 1) #even: B, T, D odd: B, T, D
         else:
             # return self.bottleneck_even(x_even_update).permute(0, 2, 1), x_odd_update.permute(0,2,1)
@@ -227,12 +204,12 @@ class SCINet_Tree(nn.Module):
             _.append(odd[i].unsqueeze(0))
         if odd_len < even_len: 
             _.append(even[-1].unsqueeze(0))
-        print(torch.cat(_,0).shape,even_len,odd_len,odd.shape,even.shape)
+        # print(torch.cat(_,0).shape,even_len,odd_len,odd.shape,even.shape)
         return torch.cat(_,0).permute(1,0,2) #B, L, D
         
     def forward(self, x):
         x_even_update, x_odd_update= self.workingblock(x)
-        print('mmm',self.current_layer)
+        # print('mmm',self.current_layer)
         # We recursively reordered these sub-series. You can run the ./utils/recursive_demo.py to emulate this procedure. 
         if self.current_layer ==0:
             return self.zip_up_the_pants(x_even_update, x_odd_update)
@@ -255,7 +232,7 @@ class EncoderTree(nn.Module):
 
 class SCINet(nn.Module):
     def __init__(self, args, output_len, input_len, input_dim = 9, num_stacks = 1,
-                num_layers = 3, concat_len = 0, no_bootleneck = True):
+                num_layers = 3, concat_len = 0, no_bottleneck = True):
         super(SCINet, self).__init__()
 
         self.horizon = output_len
@@ -270,7 +247,7 @@ class SCINet(nn.Module):
         self.stacks = num_stacks
         self.concat_len = concat_len
 
-        if no_bootleneck:
+        if no_bottleneck:
             in_planes *= 1
 
         for m in self.modules():
@@ -345,11 +322,11 @@ class SCINet(nn.Module):
                 x += pe[:, :, :-1]
             else:
                 x += self.get_position_encoding(x)
-        print('x111',x.shape)
+        # print('x111',x.shape)
         # the first stack
         res1 = x
         x = self.blocks1(x)
-        print('x222',x.shape)
+        # print('x222',x.shape)
         x += res1
         x = self.projection1(x)
 
@@ -374,7 +351,7 @@ class SCINet(nn.Module):
 # class SCINetEncoder(nn.Module):
 #     def __init__(self, args, output_len, input_len, input_dim=9,
 #                 num_layers = 3,
-#                 concat_len = None, no_bootleneck=True):
+#                 concat_len = None, no_bottleneck=True):
 #         super(SCINetEncoder, self).__init__()
 #         in_planes = input_dim
 #         #out_planes = input_dim * (number_levels + 1)
@@ -383,7 +360,7 @@ class SCINet(nn.Module):
 
 #         self.concat_len = concat_len
 
-#         if no_bootleneck:
+#         if no_bottleneck:
 #             in_planes *= 1
 
 #         for m in self.modules():
@@ -475,6 +452,7 @@ if __name__ == '__main__':
     parser.add_argument('--positionalEcoding', type=bool, default=True)
 
     parser.add_argument('--single_step_output_One', type=int, default=0)
+    parser.add_argument('--stacks', type=int, default=2)
 
     args = parser.parse_args()
 
