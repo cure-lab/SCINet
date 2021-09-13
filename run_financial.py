@@ -51,14 +51,14 @@ parser.add_argument('--INN', default=1, type=int, help='use INN or basic strateg
 parser.add_argument('--kernel', default=5, type=int, help='kernel size')#k kernel size
 parser.add_argument('--dilation', default=1, type=int, help='dilation')
 
-parser.add_argument('--model_name', type=str, default='SCINet')
 
 parser.add_argument('--positionalEcoding', type = bool , default=False)
 parser.add_argument('--dropout', type=float, default=0.5)
 parser.add_argument('--groups', type=int, default=1)
 parser.add_argument('--layers', type=int, default=3)
 parser.add_argument('--stacks', type=int, default=1)
-parser.add_argument('--model_name', type=str, default='SCINET')
+parser.add_argument('--model_name', type=str, default='SCINet')
+
 
 
 args = parser.parse_args()
