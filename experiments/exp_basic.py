@@ -25,7 +25,7 @@ class Exp_Basic(object):
     def _get_data(self):
         pass
 
-    def vali(self):
+    def valid(self):
         pass
 
     def train(self):

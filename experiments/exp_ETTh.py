@@ -32,7 +32,7 @@ class Exp_ETTh(Exp_Basic):
             elif self.args.features == 'M':
                 in_dim = 7
             model = SCINet(self.args, output_len=self.args.pred_len, input_len=self.args.seq_len, input_dim=in_dim,
-                            num_layers=self.args.layers, concat_len=self.args.concat_len)
+                        num_stacks=self.args.stacks, num_layers=self.args.layers, concat_len=self.args.concat_len)
             else:
                 print('Error!')
         # else:

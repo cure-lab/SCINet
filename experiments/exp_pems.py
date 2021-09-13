@@ -24,17 +24,17 @@ class Exp_pems(Exp_Basic):
         self.result_file = os.path.join('output', self.args.dataset, 'train')
         self.result_test_file = os.path.join('output', args.dataset, 'test')
         self.result_train_file = os.path.join('output', args.dataset, 'train')
-        if self.args.dataset = 'PEMS03'
-            self.input_dim = 358
-        elif self.args.dataset = 'PEMS04'
-            self.input_dim = 307
-        elif self.args.dataset = 'PEMS07'
-            self.input_dim = 883
-        elif self.args.dataset = 'PEMS08'
-            self.input_dim = 170
 
     def _build_model(self):
-        model = SCINet(self.args, output_len=self.args.horizon, input_len=self.args.window_size, input_dim=self.input_dim, num_layers=self.args.layers)
+        if self.args.dataset == 'PEMS03':
+            self.input_dim = 358
+        elif self.args.dataset == 'PEMS04':
+            self.input_dim = 307
+        elif self.args.dataset == 'PEMS07':
+            self.input_dim = 883
+        elif self.args.dataset == 'PEMS08':
+            self.input_dim = 170
+        model = SCINet(self.args, output_len=self.args.horizon, input_len=self.args.window_size, input_dim=self.input_dim, num_stacks=self.args.stacks, num_layers=self.args.layers)
         #model.to(self.args.device)
         return model
 

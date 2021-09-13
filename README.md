@@ -59,19 +59,14 @@ pip install -r requirements.txt
 
 ### Dataset preparation
 
-All datasets can be downloaded [here](https://drive.google.com/drive/folders/1Gv1MXjLo5bLGep4bsqDyaNMI2oQC9GH2?usp=sharing). You can put the data you need into  the **dataset/** file.
+All datasets can be downloaded [here](https://drive.google.com/drive/folders/1Gv1MXjLo5bLGep4bsqDyaNMI2oQC9GH2?usp=sharing). To prepare all dataset at one time, you can just run:
 ```
-mkdir dataset
+source prepare_data.sh
 ```
 [![ett](https://img.shields.io/badge/Download-ETT_Dataset-%234285F4?logo=GoogleDrive&labelColor=lightgrey)](https://drive.google.com/drive/folders/1NU85EuopJNkptFroPtQVXMZE70zaBznZ)
 [![pems](https://img.shields.io/badge/Download-PeMS_Dataset-%234285F4?logo=GoogleDrive&labelColor=lightgrey)](https://drive.google.com/drive/folders/17fwxGyQ3Qb0TLOalI-Y9wfgTPuXSYgiI)
 [![financial](https://img.shields.io/badge/Download-financial_Dataset-%234285F4?logo=GoogleDrive&labelColor=lightgrey)](https://drive.google.com/drive/folders/12ffxwxVAGM_MQiYpIk9aBLQrb2xQupT-)
 
-**To download the data from terminal, we suggest using the toolbox gdown.** Put the id for the link of each file, like 1ttSg9i3bzTI77oVoUU-odi67_NVbzFBx to download solar_AL.txt
-```
-cd dataset
-gdown https://drive.google.com/uc?id=
-```
 
 ### Run training code
 
