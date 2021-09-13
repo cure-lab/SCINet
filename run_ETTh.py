@@ -16,7 +16,7 @@ parser.add_argument('--data_path', type=str, default='ETTh1.csv', help='location
 parser.add_argument('--features', type=str, default='M', choices=['S', 'M'], help='features S is univariate, M is multivariate')
 parser.add_argument('--target', type=str, default='OT', help='target feature')
 parser.add_argument('--freq', type=str, default='h', help='freq for time features encoding, options:[s:secondly, t:minutely, h:hourly, d:daily, b:business days, w:weekly, m:monthly], you can also use more detailed freq like 15min or 3h')
-parser.add_argument('--checkpoints', type=str, default='./ETT_checkpoints/', help='location of model checkpoints')
+parser.add_argument('--checkpoints', type=str, default='exp/ETT_checkpoints/', help='location of model checkpoints')
 parser.add_argument('--inverse', type=bool, default =False, help='denorm the output data')
 parser.add_argument('--embed', type=str, default='timeF', help='time features encoding, options:[timeF, fixed, learned]')
 

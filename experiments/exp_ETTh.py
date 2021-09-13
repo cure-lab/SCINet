@@ -188,7 +188,7 @@ class Exp_ETTh(Exp_Basic):
         path = os.path.join(self.args.checkpoints, setting)
         if not os.path.exists(path):
             os.makedirs(path)
-        writer = SummaryWriter('{}/run_ETTh/{}'.format(self.args.checkpoints, self.args.model_name))
+        writer = SummaryWriter('exp/{}/run_ETTh/{}'.format(self.args.checkpoints, self.args.model_name))
 
         time_now = time.time()
         

@@ -236,7 +236,7 @@ class Exp_pems(Exp_Basic):
         best_validate_mae = np.inf
         best_test_mae = np.inf
         validate_score_non_decrease_count = 0
-        writer = SummaryWriter('./run_PEMS/{}_scinet'.format(self.args.model_name))
+        writer = SummaryWriter('./exp/run_PEMS/{}'.format(self.args.model_name))
         
         performance_metrics = {}
         for epoch in range(self.args.epoch):
@@ -324,9 +324,8 @@ class Exp_pems(Exp_Basic):
         test_std = np.std(test_data, axis=0)
         normalize_statistic = {"mean": test_mean.tolist(), "std": test_std.tolist()}
 
-
         forecast_loss = nn.L1Loss().to(self.args.device) #smooth_l1_loss #nn.MSELoss(reduction='mean').to(args.device)
-        model = self.load_model(result_train_file, model_name=self.args.dataset, horizon=self.args.horizon)
+        model = load_model(result_train_file, model_name=self.args.dataset, horizon=self.args.horizon)
         node_cnt = test_data.shape[1]
         test_set = ForecastTestDataset(test_data, window_size=self.args.window_size, horizon=self.args.horizon,
                                 normalize_method=self.args.norm_method, norm_statistic=normalize_statistic)

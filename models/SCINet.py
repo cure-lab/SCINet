@@ -148,46 +148,14 @@ class BottleneckBlock(nn.Module):
             return self.conv1(self.relu(self.bn1(x)))
 
 
-# class LevelSCINet(nn.Module):
-#     def __init__(self, args, in_planes, lifting_size, kernel_size, no_bottleneck,
-#                  share_weights, simple_lifting, regu_details, regu_approx):
-#         super(LevelSCINet, self).__init__()
-#         # self.regu_details = regu_details
-#         # self.regu_approx = regu_approx
-#         # if self.regu_approx + self.regu_details > 0.0:
-#         #     self.loss_details = nn.SmoothL1Loss()
-
-#         self.interact = InteractorLevel(args, in_planes,
-#                                           simple_lifting=simple_lifting)
-#         self.share_weights = share_weights
-#         if no_bottleneck:
-#             self.bootleneck = BottleneckBlock(in_planes, in_planes, disable_conv=True)
-#         else: # go through another conv. layer
-#             self.bootleneck = BottleneckBlock(in_planes, in_planes, disable_conv=False)
-
-#     def forward(self, x):
-#         (x_even_update, x_odd_update) = self.interact(x)
-
-#         if self.bootleneck:
-#             return self.bootleneck(x_even_update).permute(0, 2, 1), x_odd_update
-#         else:
-#             return x_even_update.permute(0, 2, 1),x_odd_update
-
 class LevelSCINet(nn.Module):
     def __init__(self, args, in_planes, kernel_size, no_bottleneck, simple_lifting):
         super(LevelSCINet, self).__init__()
-        # self.regu_details = regu_details
-        # self.regu_approx = regu_approx
-        # if self.regu_approx + self.regu_details > 0.0:
-        #     self.loss_details = nn.SmoothL1Loss()
 
         self.interact = InteractorLevel(args, in_planes,
                                         simple_lifting=simple_lifting)
         self.no_bottleneck = no_bottleneck
-        # print('bbb',self.no_bottleneck)
         if not no_bottleneck:
-            # We still want to do a BN and RELU, but we will not perform a conv
-            # as the input_plane and output_plare are the same
             self.bottleneck_even = BottleneckBlock(in_planes, in_planes, disable_conv=True)
             self.bottleneck_odd = BottleneckBlock(in_planes, in_planes, disable_conv=True)
         # else:
@@ -201,7 +169,7 @@ class LevelSCINet(nn.Module):
             return x_even_update.permute(0, 2, 1), x_odd_update.permute(0, 2, 1) #even: B, T, D odd: B, T, D
         else:
             # return self.bottleneck_even(x_even_update).permute(0, 2, 1), x_odd_update.permute(0,2,1)
-            return self.bottleneck_even(x_even_update).permute(0, 2, 1), self.bottleneck_odd(x_odd_update.permute(0, 2, 1))
+            return self.bottleneck_even(x_even_update).permute(0, 2, 1), self.bottleneck_odd(x_odd_update).permute(0, 2, 1)
 
 class SCINet_Tree(nn.Module):
     def __init__(self, args, in_planes, current_layer):
@@ -238,16 +206,13 @@ class SCINet_Tree(nn.Module):
 
 class EncoderTree(nn.Module):
     def __init__(self, args, in_planes, num_layers=3):
-    # def __init__(self, args, in_planes, num_layers=3, Encoder=True, norm_layer=None):
         super().__init__()
-        # self.norm = norm_layer
         self.layers=num_layers
         self.SCINet_Tree = SCINet_Tree(args, in_planes, num_layers-1)
         
     def forward(self, x):
         x= self.SCINet_Tree(x)
-        # if self.norm is not None:
-        #     x = self.norm(x)
+
         return x
 
 class SCINet(nn.Module):
@@ -259,11 +224,9 @@ class SCINet(nn.Module):
         in_planes = input_dim
         #out_planes = input_dim * (number_levels + 1)
         self.pe = args.positionalEcoding
-        # self.blocks1 = EncoderTree(args=args, in_planes=in_planes, num_layers=num_layers, Encoder=True)
         self.blocks1 = EncoderTree(args=args, in_planes=in_planes, num_layers=num_layers)
         if args.stacks == 2: # we only implement two stacks at most.
             self.blocks2 = EncoderTree(args=args, in_planes=in_planes, num_layers=num_layers)
-            # self.blocks2 = EncoderTree(args=args, in_planes=in_planes, num_layers=num_layers, Encoder=False)
         self.stacks = num_stacks
         self.concat_len = concat_len
 
@@ -363,90 +326,6 @@ class SCINet(nn.Module):
             x = self.projection2(x)
             return x, MidOutPut
 
-
-# class SCINetEncoder(nn.Module):
-#     def __init__(self, args, output_len, input_len, input_dim=9,
-#                 num_layers = 3,
-#                 concat_len = None, no_bootleneck=True):
-#         super(SCINetEncoder, self).__init__()
-#         in_planes = input_dim
-#         #out_planes = input_dim * (number_levels + 1)
-#         self.pe = args.positionalEcoding
-#         self.blocks1 = EncoderTree(args=args, in_planes=in_planes, num_layers=num_layers, Encoder=True)
-
-#         self.concat_len = concat_len
-
-#         if no_bootleneck:
-#             in_planes *= 1
-
-#         for m in self.modules():
-#             if isinstance(m, nn.Conv2d):
-#                 n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
-#                 m.weight.data.normal_(0, math.sqrt(2. / n))
-#             elif isinstance(m, nn.BatchNorm2d):
-#                 m.weight.data.fill_(1)
-#                 m.bias.data.zero_()
-#             elif isinstance(m, nn.Linear):
-#                 # nn.init.xavier_uniform_(m.weight.data)
-#                 # if m.bias is not None:
-#                 m.bias.data.zero_()
-#         if args.single_step_output_One:
-#             self.projection1 = nn.Conv1d(input_len, 1,
-#                                     kernel_size=1, stride=1, bias=False)
-#         else:
-#             self.projection1 = nn.Conv1d(input_len, output_len,
-#                                     kernel_size=1, stride=1, bias=False)
-
-#         self.hidden_size = in_planes
-#         # For positional encoding
-#         if self.hidden_size % 2 == 1:
-#             self.hidden_size += 1
-    
-#         num_timescales = self.hidden_size // 2 
-#         max_timescale = 10000.0
-#         min_timescale = 1.0
-
-#         log_timescale_increment = (
-#                 math.log(float(max_timescale) / float(min_timescale)) /
-#                 max(num_timescales - 1, 1)) 
-#         temp = torch.arange(num_timescales, dtype=torch.float32)
-#         inv_timescales = min_timescale * torch.exp(
-#             torch.arange(num_timescales, dtype=torch.float32) *
-#             -log_timescale_increment)
-#         self.register_buffer('inv_timescales', inv_timescales)
-    
-#     def get_position_encoding(self, x):
-#         max_length = x.size()[1]
-#         position = torch.arange(max_length, dtype=torch.float32,
-#                                 device=x.device)  # tensor([0., 1., 2., 3., 4.], device='cuda:0')
-#         temp1 = position.unsqueeze(1)  # 5 1
-#         temp2 = self.inv_timescales.unsqueeze(0)  # 1 256
-#         scaled_time = position.unsqueeze(1) * self.inv_timescales.unsqueeze(0)  # 5 256
-#         signal = torch.cat([torch.sin(scaled_time), torch.cos(scaled_time)],
-#                            dim=1)  # 5 512 [T, C]
-#         signal = F.pad(signal, (0, 0, 0, self.hidden_size % 2))
-#         signal = signal.view(1, max_length, self.hidden_size)
-
-#         return signal
-
-    # def forward(self, x):
-    #     if self.pe:
-    #         pe = self.get_position_encoding(x)
-    #         if pe.shape[2] > x.shape[2]:
-    #             x += pe[:, :, :-1]
-    #         else:
-    #             x += self.get_position_encoding(x)
-
-    #     res1 = x
-
-    #     x = self.blocks1(x)
-
-    #     hid = x
-    #     x += res1
-
-    #     x = self.projection1(x)
-
-    #     return x
 
 def get_variable(x):
     x = Variable(x)
