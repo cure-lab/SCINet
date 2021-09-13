@@ -51,7 +51,7 @@ We conduct the experiments on 11 popular time-series datasets, namely Electricit
 Install the required package first:
 
 ```
-cd SCINET
+cd SCINet
 conda create -n scinet python=3.8
 conda activate scinet
 pip install -r requirements.txt
