@@ -26,22 +26,16 @@ class Exp_ETTh(Exp_Basic):
     
     def _build_model(self):
 
-        if self.args.model =='SCINet':
-            if self.args.features == 'S':
-                in_dim = 1
-            elif self.args.features == 'M':
-                in_dim = 7
-            model = SCINet(self.args, output_len=self.args.pred_len, input_len=self.args.seq_len, input_dim=in_dim,
-                        num_stacks=self.args.stacks, num_layers=self.args.layers, concat_len=self.args.concat_len)
-            else:
-                print('Error!')
-        # else:
-        #     channel_sizes = [self.args.nhid] * self.args.layers
-        #     model = TCN(7, output_len= self.args.pred_len, num_channels=channel_sizes, kernel_size=self.args.kernel, dropout=self.args.dropout)
+        if self.args.features == 'S':
+            in_dim = 1
+        elif self.args.features == 'M':
+            in_dim = 7
+        else:
+            print('Error!')
 
+        model = SCINet(self.args, output_len=self.args.pred_len, input_len=self.args.seq_len, input_dim=in_dim,
+                       num_stacks=self.args.stacks, num_layers=self.args.layers, concat_len=self.args.concat_len)
         print(model)
-        #        if self.args.use_multi_gpu and self.args.use_gpu:
-        #            model = nn.DataParallel(model, device_ids=self.args.device_ids)
         return model.double()
 
     def _get_data(self, flag):
@@ -191,12 +185,10 @@ class Exp_ETTh(Exp_Basic):
         train_data, train_loader = self._get_data(flag = 'train')
         valid_data, valid_loader = self._get_data(flag = 'val')
         test_data, test_loader = self._get_data(flag = 'test')
-
-        writer = SummaryWriter('./run_ETTh/{}'.format(self.args.model_name))
-
         path = os.path.join(self.args.checkpoints, setting)
         if not os.path.exists(path):
             os.makedirs(path)
+        writer = SummaryWriter('{}/run_ETTh/{}'.format(self.args.checkpoints, self.args.model_name))
 
         time_now = time.time()
         
@@ -268,7 +260,7 @@ class Exp_ETTh(Exp_Basic):
                 break
 
             adjust_learning_rate(model_optim, epoch+1, self.args)
-        save_model((self.model, path, epoch=epoch, model_name=self.args.data, horizon=self.args.pred_len))
+        save_model((self.model, path, model_name=self.args.data, horizon=self.args.pred_len))
         best_model_path = path+'/'+'checkpoint.pth'
         self.model.load_state_dict(torch.load(best_model_path))
         

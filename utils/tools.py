@@ -13,7 +13,7 @@ def save_model(model, model_dir, model_name='pems08', horizon=12):
         torch.save(model, f)
         print('save model in ',file_name)
 
-def load_model(model_dir, model_name='pems08',horizon=12):
+def load_model(model, model_dir, model_name='pems08',horizon=12):
     if not model_dir:
         return
     file_name = os.path.join(model_dir, model_name+str(horizon)) 
@@ -22,7 +22,8 @@ def load_model(model_dir, model_name='pems08',horizon=12):
     if not os.path.exists(file_name):
         return
     with open(file_name, 'rb') as f:
-        model = torch.load(f)
+        model = torch.load(f, map_location=lambda storage, loc: storage)
+        # model.load_state_dict(checkpoint)
         print('loaded the model...', file_name)
     return model
 

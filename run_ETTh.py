@@ -16,7 +16,7 @@ parser.add_argument('--data_path', type=str, default='ETTh1.csv', help='location
 parser.add_argument('--features', type=str, default='M', choices=['S', 'M'], help='features S is univariate, M is multivariate')
 parser.add_argument('--target', type=str, default='OT', help='target feature')
 parser.add_argument('--freq', type=str, default='h', help='freq for time features encoding, options:[s:secondly, t:minutely, h:hourly, d:daily, b:business days, w:weekly, m:monthly], you can also use more detailed freq like 15min or 3h')
-parser.add_argument('--checkpoints', type=str, default='./checkpoints/', help='location of model checkpoints')
+parser.add_argument('--checkpoints', type=str, default='./ETT_checkpoints/', help='location of model checkpoints')
 parser.add_argument('--inverse', type=bool, default =False, help='denorm the output data')
 
 ### -------  device settings --------------
@@ -47,10 +47,9 @@ parser.add_argument('--loss', type=str, default='mae',help='loss function')
 parser.add_argument('--lradj', type=str, default='type1',help='adjust learning rate')
 parser.add_argument('--use_amp', action='store_true', help='use automatic mixed precision training', default=False)
 parser.add_argument('--save', type=bool, default =False, help='save the output results')
+parser.add_argument('--model_name', type=str, default='SCINet')
 
 ### -------  model settings --------------  
-parser.add_argument('--share-weight', default=0, type=int, help='share weight or not in attention q,k,v')
-parser.add_argument('--temp', default=0, type=int, help='Use temporature weights or not, if false, temp=1')
 parser.add_argument('--hidden-size', default=1, type=float, help='hidden channel of module')
 parser.add_argument('--INN', default=1, type=int, help='use INN or basic strategy')
 parser.add_argument('--kernel', default=5, type=int, help='kernel size, 3, 5, 7')
@@ -61,9 +60,7 @@ parser.add_argument('--positionalEcoding', type=bool, default=False)
 parser.add_argument('--groups', type=int, default=1)
 parser.add_argument('--layers', type=int, default=3)
 parser.add_argument('--stacks', type=int, default=1, help='1 stack or 2 stacks')
-parser.add_argument('--nhid', type=int, default=32,
-                    help='number of hidden units per layer (default: 30)')
-parser.add_argument('--model_name', type=str, default='SCINet')
+
 
 args = parser.parse_args()
 

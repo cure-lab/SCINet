@@ -21,9 +21,9 @@ from models.SCINet import SCINet
 class Exp_pems(Exp_Basic):
     def __init__(self, args):
         super(Exp_pems, self).__init__(args)
-        self.result_file = os.path.join('output', self.args.dataset, 'train')
-        self.result_test_file = os.path.join('output', args.dataset, 'test')
-        self.result_train_file = os.path.join('output', args.dataset, 'train')
+        self.result_file = os.path.join('pems_checkpoint', self.args.dataset, 'checkpoints')
+        self.result_test_file = os.path.join('pems_checkpoint', args.dataset, 'test')
+        self.result_train_file = os.path.join('pems_checkpoint', args.dataset, 'train')
 
     def _build_model(self):
         if self.args.dataset == 'PEMS03':
@@ -278,7 +278,6 @@ class Exp_pems(Exp_Basic):
                 writer.add_scalar('Train_loss_Mid', loss_total_F / cnt, global_step=epoch)
                 writer.add_scalar('Train_loss_Final', loss_total_M / cnt, global_step=epoch)
 
-            # save_model(model, result_file, epoch, model_name=self.args.dataset)
             if (epoch+1) % self.args.exponential_decay_step == 0:
                 my_lr_scheduler.step()
             if (epoch + 1) % self.args.validate_freq == 0:
@@ -303,10 +302,8 @@ class Exp_pems(Exp_Basic):
                     
                 # save model
                 if is_best_for_now:
-                    save_model(model=self.model, model_dir=self.result_file, epoch=epoch, model_name=self.args.dataset, horizon=self.args.horizon)
+                    save_model(model=self.model, model_dir=self.result_file, model_name=self.args.dataset, horizon=self.args.horizon)
                     print('saved model!')
-                # if epoch%4==0:
-                #     save_model(model, result_file, epoch=epoch)
             # early stop
             if self.args.early_stop and validate_score_non_decrease_count >= self.args.early_stop_step:
                 break
@@ -328,7 +325,7 @@ class Exp_pems(Exp_Basic):
 
 
         forecast_loss = nn.L1Loss().to(self.args.device) #smooth_l1_loss #nn.MSELoss(reduction='mean').to(args.device)
-        model = self.load_model(result_train_file, epoch=epoch, model_name=self.args.dataset, horizon=self.args.horizon)
+        model = self.load_model(result_train_file, model_name=self.args.dataset, horizon=self.args.horizon)
         node_cnt = test_data.shape[1]
         test_set = ForecastTestDataset(test_data, window_size=self.args.window_size, horizon=self.args.horizon,
                                 normalize_method=self.args.norm_method, norm_statistic=normalize_statistic)

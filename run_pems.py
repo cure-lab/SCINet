@@ -12,7 +12,6 @@ parser = argparse.ArgumentParser()
 ### -------  dataset settings --------------
 parser.add_argument('--dataset', type=str, default='PEMS08', choices=['PEMS03', 'PEMS04', 'PEMS07', 'PEMS08'])  #sometimes use: PeMS08
 parser.add_argument('--norm_method', type=str, default='z_score')
-# parser.add_argument('--input_dim', type=int, default=170, help='the variants of data')
 parser.add_argument('--normtype', type=int, default=0)
 
 ### -------  device settings --------------
@@ -82,6 +81,6 @@ if __name__ == '__main__':
         print("===================Normal-End=========================")
     if args.evaluate:
         before_evaluation = datetime.now().timestamp()
-        exp.test(epoch = args.epoch-1)
+        exp.test()
         after_evaluation = datetime.now().timestamp()
         print(f'Evaluation took {(after_evaluation - before_evaluation) / 60} minutes')

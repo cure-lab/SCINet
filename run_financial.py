@@ -43,7 +43,7 @@ parser.add_argument('--lr',type=float,default=5e-3,help='learning rate')
 parser.add_argument('--weight_decay',type=float,default=0.00001,help='weight decay rate')
 parser.add_argument('--epochs',type=int,default=100,help='')
 parser.add_argument('--lradj', type=int, default=6,help='adjust learning rate')
-parser.add_argument('--save_path', type=str, default='./SingleStepCheckpoint')
+parser.add_argument('--save_path', type=str, default='./financial_checkpoints/')
 
 ### -------  model settings --------------  
 parser.add_argument('--hidden-size', default=1.0, type=float, help='hidden channel of module')# H, EXPANSION RATE
@@ -55,7 +55,7 @@ parser.add_argument('--dropout', type=float, default=0.5)
 parser.add_argument('--groups', type=int, default=1)
 parser.add_argument('--layers', type=int, default=3)
 parser.add_argument('--stacks', type=int, default=1)
-parser.add_argument('--model_name', type=str, default='SCINET')
+parser.add_argument('--model_name', type=str, default='SCNet')
 
 
 args = parser.parse_args()

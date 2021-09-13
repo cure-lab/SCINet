@@ -76,7 +76,9 @@ class Exp_financial(Exp_Basic):
         data=self._get_data()
         X=data.train[0]
         Y=data.train[1]
-
+        save_path = os.path.join(self.args.save_path, self.args.model_name)
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
         for epoch in range(0, self.args.epochs):
             epoch_start_time = time.time()
             iter = 0
@@ -176,7 +178,7 @@ class Exp_financial(Exp_Basic):
                 ' test rse {:5.4f} | test rae {:5.4f} | test corr  {:5.4f}'.format(
                     epoch, (time.time() - epoch_start_time), total_loss / n_samples, val_loss, val_rae, val_corr, test_loss, test_rae, test_corr), flush=True)
             if val_loss < best_val:
-                save_model(self.model, self.args.save_path, epoch=epoch, model_name=self.args.dataset_name, horizon=self.args.horizon)
+                save_model(self.model, save_path, model_name=self.args.dataset_name, horizon=self.args.horizon)
                 print('--------------| Best Val loss |--------------')
         return total_loss / n_samples
 
