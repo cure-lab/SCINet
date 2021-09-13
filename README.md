@@ -5,7 +5,7 @@
 
 
 ## Some preface
-This is the original pytorch implementation for the following paper: [Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction](https://arxiv.org/pdf/2106.09305.pdf). If you find this repository useful for your research work, please consider citing it as follows:
+This is the original pytorch implementation for the following paper: [Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction](https://arxiv.org/pdf/2106.09305.pdf). If you find this repository useful for your work, please consider citing it as follows:
 
 ```
 @article{liu2021SCINet,
