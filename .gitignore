@@ -14,4 +14,6 @@ run_financial/
 checkpoints/
 output/
 run_PEMS/
-SingleStepCheckpoint/
+pems_checkpoint/
+financial_checkpoints/
+ETT_checkpoints/
