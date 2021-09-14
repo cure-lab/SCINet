@@ -34,7 +34,23 @@ class Exp_pems(Exp_Basic):
             self.input_dim = 883
         elif self.args.dataset == 'PEMS08':
             self.input_dim = 170
-        model = SCINet(self.args, output_len=self.args.horizon, input_len=self.args.window_size, input_dim=self.input_dim, num_stacks=self.args.stacks, num_layers=self.args.layers)
+        model = SCINet(
+            output_len=self.args.horizon,
+            input_len=self.args.window_size,
+            input_dim=self.input_dim,
+            hid_size = self.args.hidden_size,
+            num_stacks=self.args.stacks,
+            num_layers=self.args.layers,
+            concat_len = self.args.concat_len,
+            groups = self.args.groups,
+            kernel = self.args.kernel,
+            dropout = self.args.dropout,
+            single_step_output_One = self.args.single_step_output_One,
+            positionalE = self.args.positionalEcoding,
+            modified = True, no_bottleneck = True
+        )
+
+
         print(model)
         return model
 
