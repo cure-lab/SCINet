@@ -12,7 +12,7 @@ import warnings
 warnings.filterwarnings('ignore')
 from data_process.etth_data_loader import Dataset_ETT_hour, Dataset_ETT_minute, Dataset_Custom, Dataset_Pred
 from experiments.exp_basic import Exp_Basic
-from utils.tools import EarlyStopping, adjust_learning_rate, save_model, load_model
+from utils.tools import EarlyStopping, adjust_learning_rate, save_model
 from metrics.ETTh_metrics import metric
 from models.SCINet import SCINet
 
@@ -30,7 +30,7 @@ class Exp_ETTh(Exp_Basic):
             print('Error!')
 
         model = SCINet(
-            output_len=self.args.horizon,
+            output_len=self.args.pred_len,
             input_len=self.args.window_size,
             input_dim= in_dim,
             hid_size = self.args.hidden_size,
