@@ -67,11 +67,31 @@ source prepare_data.sh
 [![pems](https://img.shields.io/badge/Download-PeMS_Dataset-%234285F4?logo=GoogleDrive&labelColor=lightgrey)](https://drive.google.com/drive/folders/17fwxGyQ3Qb0TLOalI-Y9wfgTPuXSYgiI)
 [![financial](https://img.shields.io/badge/Download-financial_Dataset-%234285F4?logo=GoogleDrive&labelColor=lightgrey)](https://drive.google.com/drive/folders/12ffxwxVAGM_MQiYpIk9aBLQrb2xQupT-)
 
+The data directory structure is shown as follows. 
+```
+|-- datasets/
+`-- |-- ETT-data/
+    `-- |-- ETTh1.csv
+        |-- ETTh2.csv
+        |-- ETThm1.csv
+`-- |-- financial/
+    `-- |-- electricity.txt
+        |-- exchange_rate.txt
+        |-- solar_AL.txt
+        |-- traffic.txt
+`-- |-- PEMS/
+    `-- |-- PEMS03.npz
+        |-- PEMS04.npz
+        |-- PEMS07.npz
+        |-- PEMS08.npz
+```
+
 ### Run training code
 
 To facilitate reproduction, we provide the logs on the above datasets [here](https://drive.google.com/drive/folders/1MBK5MOShD4ygLIinNBo2F8EPRM5y9qIQ?usp=sharing) in details. You can check **the hyperparameters, training loss and test results for each epoch** in these logs as well.
 
 We follow the same settings of [StemGNN](https://github.com/microsoft/StemGNN) for PEMS 03, 04, 07, 08 datasets, [MTGNN](https://github.com/nnzhan/MTGNN) for Solar, electricity, traffic, financial datasets, [Informer](https://github.com/zhouhaoyi/Informer2020) for ETTH1, ETTH2, ETTM1 datasets. The detailed training commands are given as follows.
+
 
 #### For PEMS dataset (All datasets follow Input 12, Output 12):
 
@@ -239,7 +259,7 @@ python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 336 --pr
 ```
 Univariate, out 720
 ```
-python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 720 --pred_len 720 --hidden-size 4 --stacks 1 --layers 5 --lr 1e-5 --batch_size 32 --dropout 0.5 --model_name etth1_S_I736_O720_lr1e-5_bs32_dp0.5_h4_s1l5
+python run_ETTh.py --data ETTh1 --features S  --seq_len 736 --label_len 720 --pred_len 720 --hidden-size 4 --stacks 1 --layers 5 --lr 1e-5 --batch_size 32 --dropout 0.5 --model_name etth1_S_I736_O720_lr1e-5_bs32_dp0.5_h4_s1l5
 ```
 
 #### For ETTH2 dataset:
