@@ -34,23 +34,7 @@ class Exp_pems(Exp_Basic):
             self.input_dim = 883
         elif self.args.dataset == 'PEMS08':
             self.input_dim = 170
-        model = SCINet(
-            output_len=self.args.horizon,
-            input_len=self.args.window_size,
-            input_dim=self.input_dim,
-            hid_size = self.args.hidden_size,
-            num_stacks=self.args.stacks,
-            num_layers=self.args.layers,
-            concat_len = self.args.concat_len,
-            groups = self.args.groups,
-            kernel = self.args.kernel,
-            dropout = self.args.dropout,
-            single_step_output_One = self.args.single_step_output_One,
-            positionalE = self.args.positionalEcoding,
-            modified = True, no_bottleneck = True
-        )
-
-
+        model = SCINet(self.args, output_len=self.args.horizon, input_len=self.args.window_size, input_dim=self.input_dim, num_stacks=self.args.stacks, num_layers=self.args.layers)
         print(model)
         return model
 
@@ -247,7 +231,7 @@ class Exp_pems(Exp_Basic):
         my_optim=self._select_optimizer()
         my_lr_scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer=my_optim, gamma=self.args.decay_rate)
         test_loader, train_loader, valid_loader,node_cnt,test_normalize_statistic,val_normalize_statistic=self._get_data()
-        forecast_loss = nn.L1Loss().to(self.args.device)
+        forecast_loss = nn.L1Loss().to(self.device)
         best_validate_mae = np.inf
         best_test_mae = np.inf
         validate_score_non_decrease_count = 0
@@ -263,8 +247,8 @@ class Exp_pems(Exp_Basic):
             loss_total_M = 0
             cnt = 0
             for i, (inputs, target) in enumerate(train_loader):
-                inputs = inputs.to(self.args.device)  # torch.Size([32, 12, 228])
-                target = target.to(self.args.device)  # torch.Size([32, 3, 228])
+                inputs = inputs.to(self.device)  # torch.Size([32, 12, 228])
+                target = target.to(self.device)  # torch.Size([32, 3, 228])
                 self.model.zero_grad()
                 if self.args.stacks == 1:
                     forecast = self.model(inputs)
@@ -299,10 +283,10 @@ class Exp_pems(Exp_Basic):
             if (epoch + 1) % self.args.validate_freq == 0:
                 is_best_for_now = False
                 print('------ validate on data: VALIDATE ------')
-                performance_metrics = self.validate(self.model, epoch, forecast_loss, valid_loader, self.args.device, self.args.norm_method, val_normalize_statistic,
+                performance_metrics = self.validate(self.model, epoch, forecast_loss, valid_loader, self.device, self.args.norm_method, val_normalize_statistic,
                             node_cnt, self.args.window_size, self.args.horizon,
                             writer, result_file=None, test=False)
-                test_metrics = self.validate(self.model, epoch,  forecast_loss, test_loader, self.args.device, self.args.norm_method, test_normalize_statistic,
+                test_metrics = self.validate(self.model, epoch,  forecast_loss, test_loader, self.device, self.args.norm_method, test_normalize_statistic,
                             node_cnt, self.args.window_size, self.args.horizon,
                             writer, result_file=None, test=True)
                 if best_validate_mae > performance_metrics['mae']:
@@ -339,14 +323,14 @@ class Exp_pems(Exp_Basic):
         test_std = np.std(test_data, axis=0)
         normalize_statistic = {"mean": test_mean.tolist(), "std": test_std.tolist()}
 
-        forecast_loss = nn.L1Loss().to(self.args.device) #smooth_l1_loss #nn.MSELoss(reduction='mean').to(args.device)
+        forecast_loss = nn.L1Loss().to(self.device) #smooth_l1_loss #nn.MSELoss(reduction='mean').to(self.device)
         model = load_model(result_train_file, model_name=self.args.dataset, horizon=self.args.horizon)
         node_cnt = test_data.shape[1]
         test_set = ForecastTestDataset(test_data, window_size=self.args.window_size, horizon=self.args.horizon,
                                 normalize_method=self.args.norm_method, norm_statistic=normalize_statistic)
         test_loader = DataLoader(test_set, batch_size=self.args.batch_size*10, drop_last=False,
                                             shuffle=False, num_workers=0)
-        performance_metrics = self.validate(model = model, epoch = 100, forecast_loss = forecast_loss, dataloader = test_loader, device =self.args.device, normalize_method = self.args.norm_method, statistic = normalize_statistic,
+        performance_metrics = self.validate(model = model, epoch = 100, forecast_loss = forecast_loss, dataloader = test_loader, device =self.device, normalize_method = self.args.norm_method, statistic = normalize_statistic,
                         node_cnt = node_cnt, window_size = self.args.window_size, horizon =self.args.horizon,
                         result_file=result_test_file, writer = None, test=True)
         mae, rmse, mape = performance_metrics['mae'], performance_metrics['rmse'], performance_metrics['mape']

@@ -67,6 +67,25 @@ source prepare_data.sh
 [![pems](https://img.shields.io/badge/Download-PeMS_Dataset-%234285F4?logo=GoogleDrive&labelColor=lightgrey)](https://drive.google.com/drive/folders/17fwxGyQ3Qb0TLOalI-Y9wfgTPuXSYgiI)
 [![financial](https://img.shields.io/badge/Download-financial_Dataset-%234285F4?logo=GoogleDrive&labelColor=lightgrey)](https://drive.google.com/drive/folders/12ffxwxVAGM_MQiYpIk9aBLQrb2xQupT-)
 
+The data directory structure is shown as follows. 
+```
+|-- datasets/
+`-- |-- ETT-data/
+    `-- |-- ETTh1.csv
+        |-- ETTh2.csv
+        |-- ETThm1.csv
+`-- |-- financial/
+    `-- |-- electricity.txt
+        |-- exchange_rate.txt
+        |-- solar_AL.txt
+        |-- traffic.txt
+`-- |-- PEMS/
+    `-- |-- PEMS03.npz
+        |-- PEMS04.npz
+        |-- PEMS07.npz
+        |-- PEMS08.npz
+```
+
 ### Run training code
 
 To facilitate reproduction, we provide the logs on the above datasets [here](https://drive.google.com/drive/folders/1MBK5MOShD4ygLIinNBo2F8EPRM5y9qIQ?usp=sharing) in details. You can check **the hyperparameters, training loss and test results for each epoch** in these logs as well.
@@ -239,7 +258,7 @@ python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 336 --pr
 ```
 Univariate, out 720
 ```
-python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 720 --pred_len 720 --hidden-size 4 --stacks 1 --layers 5 --lr 1e-5 --batch_size 32 --dropout 0.5 --model_name etth1_S_I736_O720_lr1e-5_bs32_dp0.5_h4_s1l5
+python run_ETTh.py --data ETTh1 --features S  --seq_len 736 --label_len 720 --pred_len 720 --hidden-size 4 --stacks 1 --layers 5 --lr 1e-5 --batch_size 32 --dropout 0.5 --model_name etth1_S_I736_O720_lr1e-5_bs32_dp0.5_h4_s1l5
 ```
 
 #### For ETTH2 dataset:
@@ -277,11 +296,12 @@ Univariate, out 168
 python run_ETTh.py --data ETTh2 --features S  --seq_len 336 --label_len 168 --pred_len 168 --hidden-size 4 --stacks 1 --layers 3 --lr 1e-4 --batch_size 8 --dropout 0 --model_name etth2_S_I336_O168_lr1e-4_bs8_dp0_h4_s1l3
 ```
 Univariate, out 336
-```python run_ETTh.py --data ETTh2 --features S  --seq_len 336 --label_len 336 --pred_len 336 --hidden-size 8 --stacks 1 --layers 3 --lr 5e-4 --batch_size 512 --dropout 0.5 --model_name etth2_S_I336_O336_lr5e-4_bs512_dp0.5_h8_s1l3
+```
+python run_ETTh.py --data ETTh2 --features S  --seq_len 336 --label_len 336 --pred_len 336 --hidden-size 8 --stacks 1 --layers 3 --lr 5e-4 --batch_size 512 --dropout 0.5 --model_name etth2_S_I336_O336_lr5e-4_bs512_dp0.5_h8_s1l3
 ```
 Univariate, out 720
 ```
-python run_ETTh.py --data ETTh2 --features S  --seq_len 720 --label_len 720 --pred_len 720 --hidden-size 8 --stacks 1 --layers 3 --lr 5e-5 --batch_size 16 --dropout 0.6 --model_name etth2_S_I720_O720_lr5e-5_bs16_dp0.6_h8_s1l3
+python run_ETTh.py --data ETTh2 --features S  --seq_len 720 --label_len 720 --pred_len 720 --hidden-size 8 --stacks 1 --layers 3 --lr 5e-5 --batch_size 16 --dropout 0.6 --model_name etth2_S_I736_O720_lr5e-5_bs16_dp0.6_h8_s1l3
 ```
 
 #### For ETTM1 dataset:

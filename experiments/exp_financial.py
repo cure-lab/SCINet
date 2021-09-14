@@ -26,9 +26,9 @@ class Exp_financial(Exp_Basic):
         if self.args.L1Loss:
             self.criterion = smooth_l1_loss
         else:
-            self.criterion = nn.MSELoss(size_average=False).to(self.args.device)
-        self.evaluateL2 = nn.MSELoss(size_average=False).to(self.args.device)
-        self.evaluateL1 = nn.L1Loss(size_average=False).to(self.args.device)
+            self.criterion = nn.MSELoss(size_average=False).to(self.device)
+        self.evaluateL2 = nn.MSELoss(size_average=False).to(self.device)
+        self.evaluateL1 = nn.L1Loss(size_average=False).to(self.device)
         self.writer = SummaryWriter('.exp/run_financial/{}'.format(args.model_name))
     
     def _build_model(self):
@@ -74,7 +74,7 @@ class Exp_financial(Exp_Basic):
             
         if self.args.dataset_name == 'traffic':
             self.args.data = './datasets/financial/traffic.txt'
-        return DataLoaderH(self.args.data, 0.6, 0.2, self.args.device, self.args.horizon, self.args.window_size, self.args.normalize)
+        return DataLoaderH(self.args.data, 0.6, 0.2, self.device, self.args.horizon, self.args.window_size, self.args.normalize)
 
     def _select_optimizer(self):
         return torch.optim.Adam(params=self.model.parameters(), lr=self.args.lr, betas=(0.9, 0.999), weight_decay=1e-5)
@@ -109,7 +109,7 @@ class Exp_financial(Exp_Basic):
                     forecast, res = self.model(tx)
                 scale = data.scale.expand(forecast.size(0), self.args.horizon, data.m)
                 bias = data.bias.expand(forecast.size(0), self.args.horizon, data.m)
-                weight = torch.tensor(self.args.lastWeight).to(self.args.device)
+                weight = torch.tensor(self.args.lastWeight).to(self.device)
 
                 if self.args.normalize == 3:
                     if self.args.lastWeight == 1.0:
@@ -188,9 +188,11 @@ class Exp_financial(Exp_Basic):
                 '| EncoDeco: end of epoch {:3d} | time: {:5.2f}s | train_loss {:5.4f} | valid rse {:5.4f} | valid rae {:5.4f} | valid corr  {:5.4f}|'
                 ' test rse {:5.4f} | test rae {:5.4f} | test corr  {:5.4f}'.format(
                     epoch, (time.time() - epoch_start_time), total_loss / n_samples, val_loss, val_rae, val_corr, test_loss, test_rae, test_corr), flush=True)
+            
             if val_loss < best_val:
                 save_model(self.model, save_path, model_name=self.args.dataset_name, horizon=self.args.horizon)
                 print('--------------| Best Val loss |--------------')
+                best_val = val_loss
         return total_loss / n_samples
 
 
