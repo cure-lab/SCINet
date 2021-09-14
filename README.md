@@ -92,6 +92,7 @@ To facilitate reproduction, we provide the logs on the above datasets [here](htt
 
 We follow the same settings of [StemGNN](https://github.com/microsoft/StemGNN) for PEMS 03, 04, 07, 08 datasets, [MTGNN](https://github.com/nnzhan/MTGNN) for Solar, electricity, traffic, financial datasets, [Informer](https://github.com/zhouhaoyi/Informer2020) for ETTH1, ETTH2, ETTM1 datasets. The detailed training commands are given as follows.
 
+
 #### For PEMS dataset (All datasets follow Input 12, Output 12):
 
 pems03
