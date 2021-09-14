@@ -108,17 +108,22 @@ python run_pems.py --dataset PEMS08 --hidden-size 1 --dropout 0.5 --model_name p
 
 
 #### For Solar dataset:
+
+predict 3 
 ```
-# predict 3 
 python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 3 --hidden-size 2 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o3_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5
+```
 
-# predict 6
+predict 6
+```
 python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 6 --hidden-size 2 --single_step 0 --lastWeight 0.5 --stacks 2 --layers 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o6_lr1e-4_bs1024_dp0.25_h2_s2l4_w0.5 
-
-# predict 12
+```
+predict 12
+```
 python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 12 --hidden-size 2 --single_step 0 --lastWeight 0.5 --stacks 2 --layers 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o12_lr1e-4_bs1024_dp0.25_h2_s2l4_w0.5
-
-# predict 24
+```
+predict 24
+```
 python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 24 --hidden-size 2 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o24_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5
 ```
 
