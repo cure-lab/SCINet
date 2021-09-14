@@ -309,5 +309,3 @@ Zhijian Xu: zjxu21@cse.cuhk.edu.hk
 
 ## Acknowledgements
 Thank you all for your attention to our work!
-
-This code uses ([Informer](https://github.com/zhouhaoyi/Informer2020), [MTGNN](https://github.com/nnzhan/MTGNN), [StemGNN](https://github.com/microsoft/StemGNN)) as baseline methods for comparison. 
