@@ -277,7 +277,8 @@ Univariate, out 168
 python run_ETTh.py --data ETTh2 --features S  --seq_len 336 --label_len 168 --pred_len 168 --hidden-size 4 --stacks 1 --layers 3 --lr 1e-4 --batch_size 8 --dropout 0 --model_name etth2_S_I336_O168_lr1e-4_bs8_dp0_h4_s1l3
 ```
 Univariate, out 336
-```python run_ETTh.py --data ETTh2 --features S  --seq_len 336 --label_len 336 --pred_len 336 --hidden-size 8 --stacks 1 --layers 3 --lr 5e-4 --batch_size 512 --dropout 0.5 --model_name etth2_S_I336_O336_lr5e-4_bs512_dp0.5_h8_s1l3
+```
+python run_ETTh.py --data ETTh2 --features S  --seq_len 336 --label_len 336 --pred_len 336 --hidden-size 8 --stacks 1 --layers 3 --lr 5e-4 --batch_size 512 --dropout 0.5 --model_name etth2_S_I336_O336_lr5e-4_bs512_dp0.5_h8_s1l3
 ```
 Univariate, out 720
 ```
