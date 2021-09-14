@@ -93,7 +93,6 @@ python run_pems.py --dataset PEMS07 --hidden-size 0.03125 --dropout 0.25 --model
 pems08
 ```
 python run_pems.py --dataset PEMS08 --hidden-size 1 --dropout 0.5 --model_name pems08_h1_dp0.5
-
 ```
 
 ##### PEMS Parameter highlights
