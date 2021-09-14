@@ -47,7 +47,7 @@ class Interactor(nn.Module):
             nn.ReplicationPad1d(pad),
 
             nn.Conv1d(in_planes * prev_size, int(in_planes * size_hidden),
-                      kernel_size=self.kernel_size, dilation=self.dilation, stride=1, groups= args.groups),
+                      kernel_size=self.kernel_size, dilation=self.dilation, stride=1, groups= self.groups),
             nn.LeakyReLU(negative_slope=0.01, inplace=True),
 
             nn.Dropout(self.dropout),
