@@ -6,7 +6,7 @@ from torch.utils.tensorboard import SummaryWriter
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 from experiments.exp_ETTh import Exp_ETTh
 
-parser = argparse.ArgumentParser(description='[Informer] Long Sequences Forecasting')
+parser = argparse.ArgumentParser(description='SCINet on ETT dataset')
 
 parser.add_argument('--model', type=str, required=False, default='SCINet', help='model of the experiment')
 ### -------  dataset settings --------------
