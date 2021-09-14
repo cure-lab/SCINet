@@ -31,7 +31,7 @@ class Exp_ETTh(Exp_Basic):
 
         model = SCINet(
             output_len=self.args.pred_len,
-            input_len=self.args.window_size,
+            input_len=self.args.seq_len,
             input_dim= in_dim,
             hid_size = self.args.hidden_size,
             num_stacks=self.args.stacks,
