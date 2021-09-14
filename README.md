@@ -199,19 +199,19 @@ python run_ETTh.py --data ETTh1 --features M  --seq_len 336 --label_len 336 --pr
 python run_ETTh.py --data ETTh1 --features M  --seq_len 736 --label_len 720 --pred_len 720 --hidden-size 1 --stacks 1 --layers 5 --lr 1e-5 --batch_size 128 --dropout 0.5 --model_name etth1_M_I736_O720_lr1e-5_bs128_dp0.5_h1_s1l5
 
 # Univariate, out 24
-python run_ETTh.py --data ETTh1 --features S  --seq_len 48 --label_len 24 --pred_len 24 --hidden-size 8 --stacks 1 --layers 3 --lr 0.007 --batch_size 16 --dropout 0.25 --model_name etth1_S_I48_O24_lr0.007_bs16_dp0.25_h8_s1l3
+python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 24 --pred_len 24 --hidden-size 8 --stacks 1 --layers 3 --lr 0.007 --batch_size 16 --dropout 0.25 --model_name etth1_S_I48_O24_lr0.007_bs16_dp0.25_h8_s1l3
 
 # Univariate, out 48
-python run_ETTh.py --data ETTh1 --features S  --seq_len 96 --label_len 48 --pred_len 48 --hidden-size 4 --stacks 1 --layers 4 --lr 0.007 --batch_size 4 --dropout 0.5 --model_name etth1_S_I96_O48_lr0.007_bs4_dp0.5_h4_s1l4
+python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 48 --pred_len 48 --hidden-size 4 --stacks 1 --layers 4 --lr 0.007 --batch_size 4 --dropout 0.5 --model_name etth1_S_I96_O48_lr0.007_bs4_dp0.5_h4_s1l4
 
 # Univariate, out 168
-python run_ETTh.py --data ETTh1 --features S  --seq_len 336 --label_len 168 --pred_len 168 --hidden-size 0.5 --stacks 1 --layers 4 --lr 5e-5 --batch_size 8 --dropout 0.5 --model_name etth1_S_I336_O168_lr5e-5_bs8_dp0.5_h0.5_s1l4
+python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 168 --pred_len 168 --hidden-size 4 --stacks 1 --layers 4 --lr 5e-5 --batch_size 8 --dropout 0.5 --model_name etth1_S_I336_O168_lr5e-5_bs8_dp0.5_h4_s1l4
 
 # Univariate, out 336
-python run_ETTh.py --data ETTh1 --features S  --seq_len 336 --label_len 336 --pred_len 336 --hidden-size 1 --stacks 1 --layers 4 --lr 5e-5 --batch_size 128 --dropout 0.5 --model_name etth1_S_I336_O336_lr5e-5_bs128_dp0.5_h1_s1l4
+python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 336 --pred_len 336 --hidden-size 1 --stacks 1 --layers 4 --lr 5e-5 --batch_size 128 --dropout 0.5 --model_name etth1_S_I336_O336_lr5e-5_bs128_dp0.5_h1_s1l4
 
 # Univariate, out 720
-python run_ETTh.py --data ETTh1 --features S  --seq_len 736 --label_len 720 --pred_len 720 --hidden-size 4 --stacks 1 --layers 5 --lr 1e-5 --batch_size 32 --dropout 0.5 --model_name etth1_S_I736_O720_lr1e-5_bs32_dp0.5_h4_s1l5
+python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 720 --pred_len 720 --hidden-size 4 --stacks 1 --layers 5 --lr 1e-5 --batch_size 32 --dropout 0.5 --model_name etth1_S_I736_O720_lr1e-5_bs32_dp0.5_h4_s1l5
 ```
 
 #### For ETTH2 dataset:

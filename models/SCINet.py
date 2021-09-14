@@ -168,14 +168,14 @@ class LevelSCINet(nn.Module):
             return self.bottleneck_even(x_even_update).permute(0, 2, 1), x_odd_update.permute(0, 2, 1)
 
 class SCINet_Tree(nn.Module):
-    def __init__(self, args, in_planes, current_layer):
+    def __init__(self, args, in_planes, current_layer, no_bottleneck):
         super().__init__()
         self.current_layer = current_layer
         self.workingblock = LevelSCINet(args=args, in_planes=in_planes,
-                    kernel_size=args.kernel, no_bottleneck=True, simple_lifting=False)
+                    kernel_size=args.kernel, no_bottleneck=no_bottleneck, simple_lifting=False)
         if current_layer!=0:
-            self.SCINet_Tree_odd=SCINet_Tree(args, in_planes, current_layer-1)
-            self.SCINet_Tree_even=SCINet_Tree(args, in_planes, current_layer-1)
+            self.SCINet_Tree_odd=SCINet_Tree(args, in_planes, current_layer-1, no_bottleneck)
+            self.SCINet_Tree_even=SCINet_Tree(args, in_planes, current_layer-1, no_bottleneck)
     
     def zip_up_the_pants(self, even, odd):
         even = even.permute(1, 0, 2)
@@ -200,10 +200,10 @@ class SCINet_Tree(nn.Module):
             return self.zip_up_the_pants(self.SCINet_Tree_even(x_even_update), self.SCINet_Tree_odd(x_odd_update))
 
 class EncoderTree(nn.Module):
-    def __init__(self, args, in_planes, num_layers=3):
+    def __init__(self, args, in_planes, no_bottleneck, num_layers=3):
         super().__init__()
         self.layers=num_layers
-        self.SCINet_Tree = SCINet_Tree(args, in_planes, num_layers-1)
+        self.SCINet_Tree = SCINet_Tree(args, in_planes, num_layers-1, no_bottleneck)
         
     def forward(self, x):
         x= self.SCINet_Tree(x)
@@ -212,20 +212,20 @@ class EncoderTree(nn.Module):
 
 class SCINet(nn.Module):
     def __init__(self, args, output_len, input_len, input_dim = 9, num_stacks = 1,
-                num_layers = 3, concat_len = 0, no_bootleneck = True):
+                num_layers = 3, concat_len = 0, no_bottleneck = True):
         super(SCINet, self).__init__()
 
         self.horizon = output_len
         in_planes = input_dim
         #out_planes = input_dim * (number_levels + 1)
         self.pe = args.positionalEcoding
-        self.blocks1 = EncoderTree(args=args, in_planes=in_planes, num_layers=num_layers)
+        self.blocks1 = EncoderTree(args=args, in_planes=in_planes, no_bottleneck=no_bottleneck, num_layers=num_layers)
         if args.stacks == 2: # we only implement two stacks at most.
-            self.blocks2 = EncoderTree(args=args, in_planes=in_planes, num_layers=num_layers)
+            self.blocks2 = EncoderTree(args=args, in_planes=in_planes, no_bottleneck=no_bottleneck, num_layers=num_layers)
         self.stacks = num_stacks
         self.concat_len = concat_len
 
-        if no_bootleneck:
+        if no_bottleneck:
             in_planes *= 1
 
         for m in self.modules():
