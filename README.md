@@ -2,7 +2,7 @@
 [![Arxiv link](https://img.shields.io/badge/arXiv-Time%20Series%20is%20a%20Special%20Sequence%3A%20Forecasting%20with%20Sample%20Convolution%20and%20Interaction-%23B31B1B)](https://arxiv.org/pdf/2106.09305.pdf)
 [![state-of-the-art](https://img.shields.io/badge/-STATE--OF--THE--ART-blue?logo=Accenture&labelColor=lightgrey)]()
 ![pytorch](https://img.shields.io/badge/-PyTorch-%23EE4C2C?logo=PyTorch&labelColor=lightgrey)
-![cure](https://img.shields.io/badge/-CURE_Lab-%23B31B1B)
+[![cure](https://img.shields.io/badge/-CURE_Lab-%23B31B1B)](http://cure-lab.github.io/)
 
 This is the original pytorch implementation for the following paper: [Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction](https://arxiv.org/pdf/2106.09305.pdf). If you find this repository useful for your work, please consider citing it as follows:
 
@@ -74,19 +74,25 @@ To facilitate reproduction, we provide the logs on the above datasets [here](htt
 We follow the same settings of [StemGNN](https://github.com/microsoft/StemGNN) for PEMS 03, 04, 07, 08 datasets, [MTGNN](https://github.com/nnzhan/MTGNN) for Solar, electricity, traffic, financial datasets, [Informer](https://github.com/zhouhaoyi/Informer2020) for ETTH1, ETTH2, ETTM1 datasets. The detailed training commands are given as follows.
 
 #### For PEMS dataset (All datasets follow Input 12, Output 12):
+
+pems03
 ```
-# pems03
 python run_pems.py --dataset PEMS03 --hidden-size 0.0625 --dropout 0.25 --model_name pems03_h0.0625_dp0.25
+```
 
-# pems04
+pems04
+```
 python run_pems.py --dataset PEMS04 --hidden-size 0.0625 --dropout 0 --model_name pems04_h0.0625_dp0
+```
 
-# pems07
+pems07
+```
 python run_pems.py --dataset PEMS07 --hidden-size 0.03125 --dropout 0.25 --model_name pems07_h0.03125_dp0.25
+```
 
-# pems08
+pems08
+```
 python run_pems.py --dataset PEMS08 --hidden-size 1 --dropout 0.5 --model_name pems08_h1_dp0.5
-
 ```
 
 ##### PEMS Parameter highlights
@@ -102,65 +108,78 @@ python run_pems.py --dataset PEMS08 --hidden-size 1 --dropout 0.5 --model_name p
 
 
 #### For Solar dataset:
+
+predict 3 
 ```
-# predict 3 
 python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 3 --hidden-size 2 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o3_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5
-
-# predict 6
+```
+predict 6
+```
 python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 6 --hidden-size 2 --single_step 0 --lastWeight 0.5 --stacks 2 --layers 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o6_lr1e-4_bs1024_dp0.25_h2_s2l4_w0.5 
-
-# predict 12
+```
+predict 12
+```
 python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 12 --hidden-size 2 --single_step 0 --lastWeight 0.5 --stacks 2 --layers 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o12_lr1e-4_bs1024_dp0.25_h2_s2l4_w0.5
-
-# predict 24
+```
+predict 24
+```
 python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 24 --hidden-size 2 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o24_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5
 ```
 
 #### For Electricity dataset:
 
-```
-# predict 3 
+predict 3
+``` 
 python run_financial.py --dataset_name electricity --window_size 168 --horizon 3 --hidden-size 8 --single_step 1 --lastWeight 0.5 --stacks 2 --layers 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o3_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
-
-# predict 6
+```
+predict 6
+```
 python run_financial.py --dataset_name electricity --window_size 168 --horizon 6 --hidden-size 8 --single_step 1 --lastWeight 0.5 --stacks 2 --layers 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o6_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
-
-# predict 12
+```
+predict 12
+```
 python run_financial.py --dataset_name electricity --window_size 168 --horizon 12 --hidden-size 8 --single_step 1 --lastWeight 0.5 --stacks 2 --layers 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o12_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
-
-# predict 24
+```
+predict 24
+```
 python run_financial.py --dataset_name electricity --window_size 168 --horizon 24 --hidden-size 8 --single_step 1 --lastWeight 0.5 --stacks 2 --layers 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o24_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
 ```
 
 #### For Traffic dataset:
 
+predict 3 
 ```
-# predict 3 
 python run_financial.py --dataset_name traffic --window_size 168 --horizon 3 --hidden-size 2 --single_step 1 --lastWeight 1.0 --stacks 2 --layers 3 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I168_o3_lr5e-4_bs16_dp0.25_h2_s2l3_w1.0
-
-# predict 6
+```
+predict 6
+```
 python run_financial.py --dataset_name traffic --window_size 168 --horizon 6 --hidden-size 2 --single_step 1 --lastWeight 1.0 --stacks 2 --layers 2 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I168_o6_lr5e-4_bs16_dp0.25_h2_s2l2_w1.0
-
-# predict 12
+```
+predict 12
+```
 python run_financial.py --dataset_name traffic --window_size 168 --horizon 12 --hidden-size 1 --single_step 1 --lastWeight 1.0 --stacks 2 --layers 3 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I168_o12_lr5e-4_bs16_dp0.25_h1_s2l3_w1.0
-
-# predict 24
+```
+predict 24
+```
 python run_financial.py --dataset_name traffic --window_size 168 --horizon 24 --hidden-size 2 --single_step 1 --lastWeight 1.0 --stacks 2 --layers 2 --lr 5e-4 --dropout 0.5 --batch_size 16 --model_name traf_I168_o24_lr5e-4_bs16_dp0.5_h2_s2l2_w1.0
 ```
 
 #### For Exchange rate dataset:
 
+predict 3 
 ```
-# predict 3 
 python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 3 --hidden-size 0.125 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 3 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o3_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
-
-# predict 6
+```
+predict 6
+```
 python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 6 --hidden-size 0.125 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 3 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o6_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
-
-# predict 12
+```
+predict 12
+```
 python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 12 --hidden-size 0.125 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 3 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o12_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
-
-# predict 24
+```
+predict 24
+```
 python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 24 --hidden-size 0.125 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 3 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o24_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
 ```
 
@@ -182,101 +201,129 @@ python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon
 
 #### For ETTH1 dataset:
 
+multivariate, out 24
 ```
-# multivariate, out 24
 python run_ETTh.py --data ETTh1 --features M  --seq_len 48 --label_len 24 --pred_len 24 --hidden-size 4 --stacks 1 --layers 3 --lr 0.009 --batch_size 4 --dropout 0.5 --model_name etth1_M_I48_O24_lr0.009_bs4_dp0.5_h4_s1l3
-
-# multivariate, out 48
+```
+multivariate, out 48
+```
 python run_ETTh.py --data ETTh1 --features M  --seq_len 96 --label_len 48 --pred_len 48 --hidden-size 4 --stacks 1 --layers 3 --lr 0.009 --batch_size 16 --dropout 0.25 --model_name etth1_M_I96_O48_lr0.009_bs16_dp0.25_h4_s1l3
-
-# multivariate, out 168
+```
+multivariate, out 168
+```
 python run_ETTh.py --data ETTh1 --features M  --seq_len 336 --label_len 168 --pred_len 168 --hidden-size 4 --stacks 1 --layers 3 --lr 5e-4 --batch_size 32 --dropout 0.5 --model_name etth1_M_I336_O168_lr5e-4_bs32_dp0.5_h4_s1l3
-
-# multivariate, out 336
+```
+multivariate, out 336
+```
 python run_ETTh.py --data ETTh1 --features M  --seq_len 336 --label_len 336 --pred_len 336 --hidden-size 1 --stacks 1 --layers 4 --lr 1e-4 --batch_size 512 --dropout 0.5 --model_name etth1_M_I336_O336_lr1e-4_bs512_dp0.5_h1_s1l4
-
-# multivariate, out 720
+```
+multivariate, out 720
+```
 python run_ETTh.py --data ETTh1 --features M  --seq_len 736 --label_len 720 --pred_len 720 --hidden-size 1 --stacks 1 --layers 5 --lr 1e-5 --batch_size 128 --dropout 0.5 --model_name etth1_M_I736_O720_lr1e-5_bs128_dp0.5_h1_s1l5
-
-# Univariate, out 24
+```
+Univariate, out 24
+```
 python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 24 --pred_len 24 --hidden-size 8 --stacks 1 --layers 3 --lr 0.007 --batch_size 16 --dropout 0.25 --model_name etth1_S_I48_O24_lr0.007_bs16_dp0.25_h8_s1l3
-
-# Univariate, out 48
+```
+Univariate, out 48
+```
 python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 48 --pred_len 48 --hidden-size 4 --stacks 1 --layers 4 --lr 0.007 --batch_size 4 --dropout 0.5 --model_name etth1_S_I96_O48_lr0.007_bs4_dp0.5_h4_s1l4
-
-# Univariate, out 168
+```
+Univariate, out 168
+```
 python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 168 --pred_len 168 --hidden-size 4 --stacks 1 --layers 4 --lr 5e-5 --batch_size 8 --dropout 0.5 --model_name etth1_S_I336_O168_lr5e-5_bs8_dp0.5_h4_s1l4
-
-# Univariate, out 336
+```
+Univariate, out 336
+```
 python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 336 --pred_len 336 --hidden-size 1 --stacks 1 --layers 4 --lr 5e-5 --batch_size 128 --dropout 0.5 --model_name etth1_S_I336_O336_lr5e-5_bs128_dp0.5_h1_s1l4
-
-# Univariate, out 720
+```
+Univariate, out 720
+```
 python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 720 --pred_len 720 --hidden-size 4 --stacks 1 --layers 5 --lr 1e-5 --batch_size 32 --dropout 0.5 --model_name etth1_S_I736_O720_lr1e-5_bs32_dp0.5_h4_s1l5
 ```
 
 #### For ETTH2 dataset:
+
+multivariate, out 24
 ```
-# multivariate, out 24
 python run_ETTh.py --data ETTh2 --features M  --seq_len 48 --label_len 24 --pred_len 24 --hidden-size 8 --stacks 1 --layers 3 --lr 0.007 --batch_size 16 --dropout 0.25 --model_name etth2_M_I48_O24_lr7e-3_bs16_dp0.25_h8_s1l3
-
-# multivariate, out 48
+```
+multivariate, out 48
+```
 python run_ETTh.py --data ETTh2 --features M  --seq_len 96 --label_len 48 --pred_len 48 --hidden-size 4 --stacks 1 --layers 4 --lr 0.007 --batch_size 4 --dropout 0.5 --model_name etth2_M_I96_O48_lr7e-3_bs4_dp0.5_h4_s1l4
-
-# multivariate, out 168
+```
+multivariate, out 168
+```
 python run_ETTh.py --data ETTh2 --features M  --seq_len 336 --label_len 168 --pred_len 168 --hidden-size 0.5 --stacks 1 --layers 4 --lr 5e-5 --batch_size 8 --dropout 0.5 --model_name etth2_M_I336_O168_lr5e-5_bs8_dp0.5_h0.5_s1l4
-
-# multivariate, out 336
+```
+multivariate, out 336
+```
 python run_ETTh.py --data ETTh2 --features M  --seq_len 336 --label_len 336 --pred_len 336 --hidden-size 1 --stacks 1 --layers 4 --lr 5e-5 --batch_size 128 --dropout 0.5 --model_name etth2_M_I336_O336_lr5e-5_bs128_dp0.5_h1_s1l4
-
-# multivariate, out 720
+```
+multivariate, out 720
+```
 python run_ETTh.py --data ETTh2 --features M  --seq_len 736 --label_len 720 --pred_len 720 --hidden-size 4 --stacks 1 --layers 5 --lr 1e-5 --batch_size 32 --dropout 0.5 --model_name etth2_M_I736_O720_lr1e-5_bs32_dp0.5_h4_s1l5
-
-# Univariate, out 24
+```
+Univariate, out 24
+```
 python run_ETTh.py --data ETTh2 --features S  --seq_len 48 --label_len 24 --pred_len 24 --hidden-size 4 --stacks 1 --layers 3 --lr 0.001 --batch_size 16 --dropout 0 --model_name etth2_S_I48_O24_lr1e-3_bs16_dp0_h4_s1l3
-
-# Univariate, out 48
+```
+Univariate, out 48
+```
 python run_ETTh.py --data ETTh2 --features S  --seq_len 96 --label_len 48 --pred_len 48 --hidden-size 4 --stacks 2 --layers 4 --lr 0.001 --batch_size 32 --dropout 0.5 --model_name etth2_S_I96_O48_lr1e-3_bs32_dp0.5_h4_s2l4
-
-# Univariate, out 168
+```
+Univariate, out 168
+```
 python run_ETTh.py --data ETTh2 --features S  --seq_len 336 --label_len 168 --pred_len 168 --hidden-size 4 --stacks 1 --layers 3 --lr 1e-4 --batch_size 8 --dropout 0 --model_name etth2_S_I336_O168_lr1e-4_bs8_dp0_h4_s1l3
-
-# Univariate, out 336
-python run_ETTh.py --data ETTh2 --features S  --seq_len 336 --label_len 336 --pred_len 336 --hidden-size 8 --stacks 1 --layers 3 --lr 5e-4 --batch_size 512 --dropout 0.5 --model_name etth2_S_I336_O336_lr5e-4_bs512_dp0.5_h8_s1l3
-
-# Univariate, out 720
+```
+Univariate, out 336
+```python run_ETTh.py --data ETTh2 --features S  --seq_len 336 --label_len 336 --pred_len 336 --hidden-size 8 --stacks 1 --layers 3 --lr 5e-4 --batch_size 512 --dropout 0.5 --model_name etth2_S_I336_O336_lr5e-4_bs512_dp0.5_h8_s1l3
+```
+Univariate, out 720
+```
 python run_ETTh.py --data ETTh2 --features S  --seq_len 720 --label_len 720 --pred_len 720 --hidden-size 8 --stacks 1 --layers 3 --lr 5e-5 --batch_size 16 --dropout 0.6 --model_name etth2_S_I720_O720_lr5e-5_bs16_dp0.6_h8_s1l3
 ```
 
 #### For ETTM1 dataset:
+
+multivariate, out 24
 ```
-# multivariate, out 24
 python run_ETTh.py --data ETTm1 --features M  --seq_len 48 --label_len 24 --pred_len 24 --hidden-size 4 --stacks 1 --layers 3 --lr 0.005 --batch_size 32 --dropout 0.5 --model_name ettm1_M_I48_O24_lr7e-3_bs16_dp0.25_h8_s1l3
-
-# multivariate, out 48
+```
+multivariate, out 48
+```
 python run_ETTh.py --data ETTm1 --features M  --seq_len 96 --label_len 48 --pred_len 48 --hidden-size 4 --stacks 2 --layers 4 --lr 0.001 --batch_size 16 --dropout 0.5 --model_name ettm1_M_I96_O48_lr1e-3_bs16_dp0.5_h4_s2l4
-
-# multivariate, out 96
+```
+multivariate, out 96
+```
 python run_ETTh.py --data ETTm1 --features M  --seq_len 384 --label_len 96 --pred_len 96 --hidden-size 0.5 --stacks 2 --layers 4 --lr 5e-5 --batch_size 32 --dropout 0.5 --model_name ettm1_M_I384_O96_lr5e-5_bs32_dp0.5_h0.5_s2l4
-
-# multivariate, out 288
+```
+multivariate, out 288
+```
 python run_ETTh.py --data ETTm1 --features M  --seq_len 672 --label_len 288 --pred_len 288 --hidden-size 4 --stacks 1 --layers 5 --lr 1e-5 --batch_size 32 --dropout 0.5 --model_name ettm1_M_I672_O288_lr1e-5_bs32_dp0.5_h0.5_s1l5
-
-# multivariate, out 672
+```
+multivariate, out 672
+```
 python run_ETTh.py --data ETTm1 --features M  --seq_len 672 --label_len 672 --pred_len 672 --hidden-size 4 --stacks 2 --layers 5 --lr 1e-5 --batch_size 32 --dropout 0.5 --model_name ettm1_M_I672_O672_lr1e-5_bs32_dp0.5_h4_s2l5
-
-# Univariate, out 24
+```
+Univariate, out 24
+```
 python run_ETTh.py --data ETTm1 --features S  --seq_len 96 --label_len 24 --pred_len 24 --hidden-size 4 --stacks 1 --layers 4 --lr 0.001 --batch_size 8 --dropout 0 --model_name ettm1_S_I96_O24_lr1e-3_bs8_dp0_h4_s1l4
-
-# Univariate, out 48
+```
+Univariate, out 48
+```
 python run_ETTh.py --data ETTm1 --features S  --seq_len 96 --label_len 48 --pred_len 48 --hidden-size 4 --stacks 1 --layers 3 --lr 0.005 --batch_size 16 --dropout 0 --model_name ettm1_S_I96_O48_lr5e-3_bs16_dp0_h4_s1l3
-
-# Univariate, out 96
+```
+Univariate, out 96
+```
 python run_ETTh.py --data ETTm1 --features S  --seq_len 384 --label_len 96 --pred_len 96 --hidden-size 2 --stacks 1 --layers 4 --lr 1e-4 --batch_size 8 --dropout 0 --model_name ettm1_S_I384_O96_lr1e-4_bs8_dp0_h2_s1l4
-
-# Univariate, out 288
+```
+Univariate, out 288
+```
 python run_ETTh.py --data ETTm1 --features S  --seq_len 384 --label_len 288 --pred_len 288 --hidden-size 4 --stacks 1 --layers 4 --lr 5e-5 --batch_size 64 --dropout 0 --model_name ettm1_S_I384_O288_lr5e-5_bs64_dp0_h4_s1l4
-
-# Univariate, out 672
+```
+Univariate, out 672
+```
 python run_ETTh.py --data ETTm1 --features S  --seq_len 672 --label_len 672 --pred_len 672 --hidden-size 1 --stacks 1 --layers 5 --lr 1e-4 --batch_size 32 --model_name ettm1_S_I672_O672_lr1e-4_bs32_dp0.5_h1_s1l5
 ```
 

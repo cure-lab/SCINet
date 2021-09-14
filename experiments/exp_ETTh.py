@@ -29,8 +29,20 @@ class Exp_ETTh(Exp_Basic):
         else:
             print('Error!')
 
-        model = SCINet(self.args, output_len=self.args.pred_len, input_len=self.args.seq_len, input_dim=in_dim,
-                       num_stacks=self.args.stacks, num_layers=self.args.layers, concat_len=self.args.concat_len)
+        model = SCINet(
+            output_len=self.args.horizon,
+            input_len=self.args.window_size,
+            input_dim= in_dim,
+            hid_size = self.args.hidden_size,
+            num_stacks=self.args.stacks,
+            num_layers=self.args.layers,
+            concat_len = self.args.concat_len,
+            groups = self.args.groups,
+            kernel = self.args.kernel,
+            dropout = self.args.dropout,
+            single_step_output_One = self.args.single_step_output_One,
+            positionalE = self.args.positionalEcoding,
+            modified = True, no_bottleneck = True)
         print(model)
         return model.double()
 
