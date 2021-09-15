@@ -69,21 +69,21 @@ source prepare_data.sh
 
 The data directory structure is shown as follows. 
 ```
-|-- datasets/
-`-- |-- ETT-data/
-    `-- |-- ETTh1.csv
-        |-- ETTh2.csv
-        |-- ETThm1.csv
-`-- |-- financial/
-    `-- |-- electricity.txt
-        |-- exchange_rate.txt
-        |-- solar_AL.txt
-        |-- traffic.txt
-`-- |-- PEMS/
-    `-- |-- PEMS03.npz
-        |-- PEMS04.npz
-        |-- PEMS07.npz
-        |-- PEMS08.npz
+./datasets
+├── ETT-data
+│   ├── ETTh1.csv
+│   ├── ETTh2.csv
+│   └── ETTm1.csv
+├── financial
+│   ├── electricity.txt
+│   ├── exchange_rate.txt
+│   ├── solar_AL.txt
+│   └── traffic.txt
+└── PEMS
+    ├── PEMS03.npz
+    ├── PEMS04.npz
+    ├── PEMS07.npz
+    └── PEMS08.npz
 ```
 
 ### Run training code
