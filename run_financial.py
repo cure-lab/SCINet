@@ -25,7 +25,6 @@ parser.add_argument('--gpu', type=int, default=0, help='gpu')
 parser.add_argument('--window_size', type=int, default=168) # input size
 parser.add_argument('--horizon', type=int, default=3)  # predication
 parser.add_argument('--concat_len', type=int, default=165)
-parser.add_argument('--single_step', type=int, default=0)
 parser.add_argument('--single_step_output_One', type=int, default=0)
 parser.add_argument('--lastWeight', type=float, default=1.0,help='Loss weight lambda')
 

@@ -92,7 +92,6 @@ To facilitate reproduction, we provide the logs on the above datasets [here](htt
 
 We follow the same settings of [StemGNN](https://github.com/microsoft/StemGNN) for PEMS 03, 04, 07, 08 datasets, [MTGNN](https://github.com/nnzhan/MTGNN) for Solar, electricity, traffic, financial datasets, [Informer](https://github.com/zhouhaoyi/Informer2020) for ETTH1, ETTH2, ETTM1 datasets. The detailed training commands are given as follows.
 
-
 #### For PEMS dataset (All datasets follow Input 12, Output 12):
 
 pems03
@@ -131,76 +130,76 @@ python run_pems.py --dataset PEMS08 --hidden-size 1 --dropout 0.5 --model_name p
 
 predict 3 
 ```
-python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 3 --hidden-size 2 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o3_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5
+python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 3 --hidden-size 2  --lastWeight 0.5 --stacks 1 --layers 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o3_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5
 ```
 predict 6
 ```
-python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 6 --hidden-size 2 --single_step 0 --lastWeight 0.5 --stacks 2 --layers 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o6_lr1e-4_bs1024_dp0.25_h2_s2l4_w0.5 
+python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 6 --hidden-size 2 --lastWeight 0.5 --stacks 2 --layers 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o6_lr1e-4_bs1024_dp0.25_h2_s2l4_w0.5 
 ```
 predict 12
 ```
-python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 12 --hidden-size 2 --single_step 0 --lastWeight 0.5 --stacks 2 --layers 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o12_lr1e-4_bs1024_dp0.25_h2_s2l4_w0.5
+python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 12 --hidden-size 2 --lastWeight 0.5 --stacks 2 --layers 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o12_lr1e-4_bs1024_dp0.25_h2_s2l4_w0.5
 ```
 predict 24
 ```
-python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 24 --hidden-size 2 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o24_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5
+python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 24 --hidden-size 2 --lastWeight 0.5 --stacks 1 --layers 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o24_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5
 ```
 
 #### For Electricity dataset:
 
 predict 3
 ``` 
-python run_financial.py --dataset_name electricity --window_size 168 --horizon 3 --hidden-size 8 --single_step 1 --lastWeight 0.5 --stacks 2 --layers 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o3_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
+python run_financial.py --dataset_name electricity --window_size 168 --horizon 3 --hidden-size 8 --single_step_output_One 1 --lastWeight 0.5 --stacks 2 --layers 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o3_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
 ```
 predict 6
 ```
-python run_financial.py --dataset_name electricity --window_size 168 --horizon 6 --hidden-size 8 --single_step 1 --lastWeight 0.5 --stacks 2 --layers 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o6_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
+python run_financial.py --dataset_name electricity --window_size 168 --horizon 6 --hidden-size 8 --single_step_output_One 1 --lastWeight 0.5 --stacks 2 --layers 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o6_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
 ```
 predict 12
 ```
-python run_financial.py --dataset_name electricity --window_size 168 --horizon 12 --hidden-size 8 --single_step 1 --lastWeight 0.5 --stacks 2 --layers 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o12_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
+python run_financial.py --dataset_name electricity --window_size 168 --horizon 12 --hidden-size 8 --single_step_output_One 1 --lastWeight 0.5 --stacks 2 --layers 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o12_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
 ```
 predict 24
 ```
-python run_financial.py --dataset_name electricity --window_size 168 --horizon 24 --hidden-size 8 --single_step 1 --lastWeight 0.5 --stacks 2 --layers 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o24_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
+python run_financial.py --dataset_name electricity --window_size 168 --horizon 24 --hidden-size 8 --single_step_output_One 1 --lastWeight 0.5 --stacks 2 --layers 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o24_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
 ```
 
-#### For Traffic dataset:
+#### For Traffic dataset (warning: 20,000MiB+ memory usage!):
 
 predict 3 
 ```
-python run_financial.py --dataset_name traffic --window_size 168 --horizon 3 --hidden-size 2 --single_step 1 --lastWeight 1.0 --stacks 2 --layers 3 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I168_o3_lr5e-4_bs16_dp0.25_h2_s2l3_w1.0
+python run_financial.py --dataset_name traffic --window_size 168 --horizon 3 --hidden-size 2 --single_step_output_One 1 --lastWeight 1.0 --stacks 2 --layers 3 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I168_o3_lr5e-4_bs16_dp0.25_h2_s2l3_w1.0
 ```
 predict 6
 ```
-python run_financial.py --dataset_name traffic --window_size 168 --horizon 6 --hidden-size 2 --single_step 1 --lastWeight 1.0 --stacks 2 --layers 2 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I168_o6_lr5e-4_bs16_dp0.25_h2_s2l2_w1.0
+python run_financial.py --dataset_name traffic --window_size 168 --horizon 6 --hidden-size 2 --single_step_output_One 1 --lastWeight 1.0 --stacks 2 --layers 2 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I168_o6_lr5e-4_bs16_dp0.25_h2_s2l2_w1.0
 ```
 predict 12
 ```
-python run_financial.py --dataset_name traffic --window_size 168 --horizon 12 --hidden-size 1 --single_step 1 --lastWeight 1.0 --stacks 2 --layers 3 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I168_o12_lr5e-4_bs16_dp0.25_h1_s2l3_w1.0
+python run_financial.py --dataset_name traffic --window_size 168 --horizon 12 --hidden-size 1 --single_step_output_One 1 --lastWeight 1.0 --stacks 2 --layers 3 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I168_o12_lr5e-4_bs16_dp0.25_h1_s2l3_w1.0
 ```
 predict 24
 ```
-python run_financial.py --dataset_name traffic --window_size 168 --horizon 24 --hidden-size 2 --single_step 1 --lastWeight 1.0 --stacks 2 --layers 2 --lr 5e-4 --dropout 0.5 --batch_size 16 --model_name traf_I168_o24_lr5e-4_bs16_dp0.5_h2_s2l2_w1.0
+python run_financial.py --dataset_name traffic --window_size 168 --horizon 24 --hidden-size 2 --single_step_output_One 1 --lastWeight 1.0 --stacks 2 --layers 2 --lr 5e-4 --dropout 0.5 --batch_size 16 --model_name traf_I168_o24_lr5e-4_bs16_dp0.5_h2_s2l2_w1.0
 ```
 
 #### For Exchange rate dataset:
 
 predict 3 
 ```
-python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 3 --hidden-size 0.125 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 3 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o3_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
+python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 3 --hidden-size 0.125 --lastWeight 0.5 --stacks 1 --layers 3 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o3_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
 ```
 predict 6
 ```
-python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 6 --hidden-size 0.125 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 3 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o6_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
+python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 6 --hidden-size 0.125 --lastWeight 0.5 --stacks 1 --layers 3 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o6_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
 ```
 predict 12
 ```
-python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 12 --hidden-size 0.125 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 3 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o12_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
+python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 12 --hidden-size 0.125 --lastWeight 0.5 --stacks 1 --layers 3 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o12_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
 ```
 predict 24
 ```
-python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 24 --hidden-size 0.125 --single_step 0 --lastWeight 0.5 --stacks 1 --layers 3 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o24_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
+python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 24 --hidden-size 0.125 --lastWeight 0.5 --stacks 1 --layers 3 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o24_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
 ```
 
 

@@ -281,9 +281,9 @@ class SCINet(nn.Module):
                 m.bias.data.zero_()
             elif isinstance(m, nn.Linear):
                 m.bias.data.zero_()
-
+        self.projection1 = nn.Conv1d(self.input_len, self.output_len, kernel_size=1, stride=1, bias=False)
+        
         if self.single_step_output_One: # only output the N_th timestep.
-            self.projection1 = nn.Conv1d(self.input_len, 1, kernel_size=1, stride=1, bias=False)
             if self.stacks == 2:
                 if self.concat_len:
                     self.projection2 = nn.Conv1d(self.concat_len + self.output_len, 1,
@@ -292,7 +292,6 @@ class SCINet(nn.Module):
                     self.projection2 = nn.Conv1d(self.input_len + self.output_len, 1,
                                                 kernel_size = 1, bias = False)
         else: # output the N timesteps.
-            self.projection1 = nn.Conv1d(self.input_len, self.output_len, kernel_size=1, stride=1, bias=False)
             if self.stacks == 2:
                 if self.concat_len:
                     self.projection2 = nn.Conv1d(self.concat_len + self.output_len, self.output_len,
