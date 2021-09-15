@@ -105,39 +105,53 @@ class Exp_financial(Exp_Basic):
                 self.model.zero_grad()             #torch.Size([32, 168, 137])
                 if self.args.stacks == 1:
                     forecast = self.model(tx)
-                elif self.args.stacks == 2:
+                elif self.args.stacks == 2: 
                     forecast, res = self.model(tx)
                 scale = data.scale.expand(forecast.size(0), self.args.horizon, data.m)
                 bias = data.bias.expand(forecast.size(0), self.args.horizon, data.m)
-                weight = torch.tensor(self.args.lastWeight).to(self.device)
+                weight = torch.tensor(self.args.lastWeight).to(self.device) #used with multi-step
 
-                if self.args.normalize == 3:
-                    if self.args.lastWeight == 1.0:
-                        loss_f = self.criterion(forecast, ty)
+                if self.args.single_step: #single step
+                    ty_last = ty[:, -1, :]
+                    scale_last = data.scale.expand(forecast.size(0), data.m)
+                    bias_last = data.bias.expand(forecast.size(0), data.m)
+                    if self.args.normalize == 3:
+                        loss_f = self.criterion(forecast[:, -1], ty_last)
                         if self.args.stacks == 2:
-                            loss_m = self.criterion(res, ty)
+                            loss_m = self.criterion(res, ty)/res.shape[1] #average results
+
                     else:
-                        loss_f = self.criterion(forecast[:, :-1, :], ty[:, :-1, :] ) \
-                                + weight * self.criterion(forecast[:, -1:, :], ty[:, -1:, :] )
+                        loss_f = self.criterion(forecast[:, -1] * scale_last + bias_last, ty_last * scale_last + bias_last)
                         if self.args.stacks == 2:
-                            loss_m = self.criterion(res[:, :-1, :] , ty[:, :-1, :] ) \
-                                    + weight * self.criterion(res[:, -1:, :], ty[:, -1:, :] )
+                            loss_m = self.criterion(res * scale + bias, ty * scale + bias)/res.shape[1] #average results
+
                 else:
-                    if self.args.lastWeight == 1.0:
-                        loss_f = self.criterion(forecast * scale + bias, ty * scale + bias)
-                        if self.args.stacks == 2:
-                            loss_m = self.criterion(res * scale + bias, ty * scale + bias)
+                    if self.args.normalize == 3:
+                        if self.args.lastWeight == 1.0:
+                            loss_f = self.criterion(forecast, ty)
+                            if self.args.stacks == 2:
+                                loss_m = self.criterion(res, ty)
+                        else:
+                            loss_f = self.criterion(forecast[:, :-1, :], ty[:, :-1, :] ) \
+                                    + weight * self.criterion(forecast[:, -1:, :], ty[:, -1:, :] )
+                            if self.args.stacks == 2:
+                                loss_m = self.criterion(res[:, :-1, :] , ty[:, :-1, :] ) \
+                                        + weight * self.criterion(res[:, -1:, :], ty[:, -1:, :] )
                     else:
-
-                        loss_f = self.criterion(forecast[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :],
-                                        ty[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :]) \
-                            + weight * self.criterion(forecast[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :],
-                                                    ty[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :])
-                        if self.args.stacks == 2:
-                            loss_m = self.criterion(res[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :],
+                        if self.args.lastWeight == 1.0:
+                            loss_f = self.criterion(forecast * scale + bias, ty * scale + bias)
+                            if self.args.stacks == 2:
+                                loss_m = self.criterion(res * scale + bias, ty * scale + bias)
+                        else:
+                            loss_f = self.criterion(forecast[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :],
                                             ty[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :]) \
-                                + weight * self.criterion(res[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :],
+                                + weight * self.criterion(forecast[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :],
                                                         ty[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :])
+                            if self.args.stacks == 2:
+                                loss_m = self.criterion(res[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :],
+                                                ty[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :]) \
+                                    + weight * self.criterion(res[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :],
+                                                            ty[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :])
                 loss = loss_f
                 if self.args.stacks == 2:
                     loss += loss_m
@@ -218,10 +232,8 @@ class Exp_financial(Exp_Basic):
                     forecast = self.model(X)
                 elif self.args.stacks == 2:
                     forecast, res = self.model(X) #torch.Size([32, 3, 137])
-
+            # only predict the last step
             true = Y[:, -1, :].squeeze()
-
-
             forecast_set.append(forecast)
             target_set.append(Y)
             if self.args.stacks == 2:
@@ -247,7 +259,6 @@ class Exp_financial(Exp_Basic):
             bias = data.bias.expand(output.size(0), data.m)
             if self.args.stacks == 2:
                 output_res = res[:,-1,:].squeeze()
-
 
             total_loss += self.evaluateL2(output * scale + bias, true * scale+ bias).item()
             total_loss_l1 += self.evaluateL1(output * scale+ bias, true * scale+ bias).item()

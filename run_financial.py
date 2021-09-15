@@ -22,11 +22,12 @@ parser.add_argument('--use_multi_gpu', action='store_true', help='use multiple g
 parser.add_argument('--gpu', type=int, default=0, help='gpu')
 
 ### -------  input/output length settings --------------                                                                            
-parser.add_argument('--window_size', type=int, default=168) # input size
-parser.add_argument('--horizon', type=int, default=3)  # predication
+parser.add_argument('--window_size', type=int, default=168, help='input length')
+parser.add_argument('--horizon', type=int, default=3, help='prediction length')
 parser.add_argument('--concat_len', type=int, default=165)
-parser.add_argument('--single_step_output_One', type=int, default=0)
-parser.add_argument('--lastWeight', type=float, default=1.0,help='Loss weight lambda')
+parser.add_argument('--single_step', type=int, default=0, help='only supervise the final setp')
+parser.add_argument('--single_step_output_One', type=int, default=0, help='only output the single final step')
+parser.add_argument('--lastWeight', type=float, default=1.0,help='Loss weight lambda on the final step')
 
 ### -------  training settings --------------  
 parser.add_argument('--train', type=bool, default=True)
