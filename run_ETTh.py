@@ -27,7 +27,7 @@ parser.add_argument('--use_multi_gpu', action='store_true', help='use multiple g
 parser.add_argument('--devices', type=str, default='0',help='device ids of multile gpus')
                                                                                   
 ### -------  input/output length settings --------------                                                                            
-parser.add_argument('--seq_len', type=int, default=96, help='input sequence length of Informer encoder, look back window')
+parser.add_argument('--seq_len', type=int, default=96, help='input sequence length of SCINet encoder, look back window')
 parser.add_argument('--label_len', type=int, default=48, help='start token length of Informer decoder')
 parser.add_argument('--pred_len', type=int, default=48, help='prediction sequence length, horizon')
 parser.add_argument('--concat_len', type=int, default=0)

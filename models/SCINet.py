@@ -129,47 +129,17 @@ class InteractorLevel(nn.Module):
         (x_even_update, x_odd_update) = self.level(x)
         return (x_even_update, x_odd_update)
 
-
-class BottleneckBlock(nn.Module):
-    def __init__(self, in_planes, out_planes, disable_conv):
-        super(BottleneckBlock, self).__init__()
-        self.bn1 = nn.BatchNorm1d(in_planes)
-        self.relu = nn.ReLU(inplace=True)
-
-        self.disable_conv = disable_conv  # in_planes == out_planes
-        if not self.disable_conv:
-            self.conv1 = nn.Conv1d(in_planes, out_planes, kernel_size=1, stride=1,
-                                   padding=0, bias=False)
-
-    def forward(self, x):
-        if self.disable_conv:
-            return self.relu(self.bn1(x))
-        else:
-            return self.conv1(self.relu(self.bn1(x)))
-
-
 class LevelSCINet(nn.Module):
-    def __init__(self,in_planes, kernel_size, dropout, groups, hidden_size, INN, no_bottleneck):
+    def __init__(self,in_planes, kernel_size, dropout, groups, hidden_size, INN):
         super(LevelSCINet, self).__init__()
-
         self.interact = InteractorLevel(in_planes= in_planes, kernel = kernel_size, dropout = dropout, groups =groups , hidden_size = hidden_size, INN = INN)
-        self.no_bottleneck = no_bottleneck
-        if not no_bottleneck:
-            self.bottleneck_even = BottleneckBlock(in_planes, in_planes, disable_conv=True)
-            self.bottleneck_odd = BottleneckBlock(in_planes, in_planes, disable_conv=True)
-        #     self.bottleneck_even = BottleneckBlock(in_planes, in_planes, disable_conv=False)
-        #     self.bottleneck_odd = BottleneckBlock(in_planes, in_planes, disable_conv=False)
 
     def forward(self, x):
         (x_even_update, x_odd_update) = self.interact(x)
-
-        if self.no_bottleneck:
-            return x_even_update.permute(0, 2, 1), x_odd_update.permute(0, 2, 1) #even: B, T, D odd: B, T, D
-        else:
-            return self.bottleneck_even(x_even_update).permute(0, 2, 1), x_odd_update.permute(0, 2, 1)
+        return x_even_update.permute(0, 2, 1), x_odd_update.permute(0, 2, 1) #even: B, T, D odd: B, T, D
 
 class SCINet_Tree(nn.Module):
-    def __init__(self, in_planes, current_layer, kernel_size, dropout, groups, hidden_size, INN, no_bottleneck):
+    def __init__(self, in_planes, current_layer, kernel_size, dropout, groups, hidden_size, INN):
         super().__init__()
         self.current_layer = current_layer
 
@@ -179,12 +149,11 @@ class SCINet_Tree(nn.Module):
             dropout = dropout,
             groups= groups,
             hidden_size = hidden_size,
-            INN = INN,
-            no_bottleneck=no_bottleneck)
+            INN = INN)
 
         if current_layer!=0:
-            self.SCINet_Tree_odd=SCINet_Tree(in_planes, current_layer-1, kernel_size, dropout, groups, hidden_size, INN, no_bottleneck)
-            self.SCINet_Tree_even=SCINet_Tree(in_planes, current_layer-1, kernel_size, dropout, groups, hidden_size, INN, no_bottleneck)
+            self.SCINet_Tree_odd=SCINet_Tree(in_planes, current_layer-1, kernel_size, dropout, groups, hidden_size, INN)
+            self.SCINet_Tree_even=SCINet_Tree(in_planes, current_layer-1, kernel_size, dropout, groups, hidden_size, INN)
     
     def zip_up_the_pants(self, even, odd):
         even = even.permute(1, 0, 2)
@@ -209,7 +178,7 @@ class SCINet_Tree(nn.Module):
             return self.zip_up_the_pants(self.SCINet_Tree_even(x_even_update), self.SCINet_Tree_odd(x_odd_update))
 
 class EncoderTree(nn.Module):
-    def __init__(self, in_planes,  num_layers, kernel_size, dropout, groups, hidden_size, INN, no_bottleneck):
+    def __init__(self, in_planes,  num_layers, kernel_size, dropout, groups, hidden_size, INN):
         super().__init__()
         self.layers=num_layers
         self.SCINet_Tree = SCINet_Tree(
@@ -219,8 +188,7 @@ class EncoderTree(nn.Module):
             dropout =dropout ,
             groups = groups,
             hidden_size = hidden_size,
-            INN = INN,
-            no_bottleneck = no_bottleneck)
+            INN = INN)
         
     def forward(self, x):
         x= self.SCINet_Tree(x)
@@ -230,7 +198,7 @@ class EncoderTree(nn.Module):
 class SCINet(nn.Module):
     def __init__(self, output_len, input_len, input_dim = 9, hid_size = 1, num_stacks = 1,
                 num_layers = 3, concat_len = 0, groups = 1, kernel = 5, dropout = 0.5,
-                 single_step_output_One = 0, positionalE = False, modified = True, no_bottleneck = True):
+                 single_step_output_One = 0, positionalE = False, modified = True):
         super(SCINet, self).__init__()
 
         self.input_dim = input_dim
@@ -253,8 +221,7 @@ class SCINet(nn.Module):
             dropout = self.dropout,
             groups = self.groups,
             hidden_size = self.hidden_size,
-            INN =  modified,
-            no_bottleneck=no_bottleneck)
+            INN =  modified)
 
         if num_stacks == 2: # we only implement two stacks at most.
             self.blocks2 = EncoderTree(
@@ -264,13 +231,9 @@ class SCINet(nn.Module):
             dropout = self.dropout,
             groups = self.groups,
             hidden_size = self.hidden_size,
-            INN =  modified,
-            no_bottleneck=no_bottleneck)
+            INN =  modified)
 
         self.stacks = num_stacks
-
-        if no_bottleneck:
-            input_dim *= 1
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -386,7 +349,7 @@ if __name__ == '__main__':
 
     model = SCINet(output_len = args.horizon, input_len= args.window_size, input_dim = 9, hid_size = args.hidden_size, num_stacks = 1,
                 num_layers = 3, concat_len = 0, groups = args.groups, kernel = args.kernel, dropout = args.dropout,
-                 single_step_output_One = args.single_step_output_One, positionalE =  args.positionalEcoding, modified = True, no_bottleneck = True).cuda()
+                 single_step_output_One = args.single_step_output_One, positionalE =  args.positionalEcoding, modified = True).cuda()
     x = torch.randn(32, 96, 9).cuda()
     y = model(x)
     print(y.shape)

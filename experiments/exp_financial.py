@@ -57,7 +57,7 @@ class Exp_financial(Exp_Basic):
             dropout=self.args.dropout,
             single_step_output_One=self.args.single_step_output_One,
             positionalE=self.args.positionalEcoding,
-            modified=True, no_bottleneck=True
+            modified=True
         )
         print(model)
         return model
