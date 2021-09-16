@@ -27,7 +27,7 @@ parser.add_argument('--use_multi_gpu', action='store_true', help='use multiple g
 parser.add_argument('--devices', type=str, default='0',help='device ids of multile gpus')
                                                                                   
 ### -------  input/output length settings --------------                                                                            
-parser.add_argument('--seq_len', type=int, default=96, help='input sequence length of Informer encoder, look back window')
+parser.add_argument('--seq_len', type=int, default=96, help='input sequence length of SCINet encoder, look back window')
 parser.add_argument('--label_len', type=int, default=48, help='start token length of Informer decoder')
 parser.add_argument('--pred_len', type=int, default=48, help='prediction sequence length, horizon')
 parser.add_argument('--concat_len', type=int, default=0)
@@ -41,7 +41,7 @@ parser.add_argument('--num_workers', type=int, default=0, help='data loader num 
 parser.add_argument('--itr', type=int, default=0, help='experiments times')
 parser.add_argument('--train_epochs', type=int, default=100, help='train epochs')
 parser.add_argument('--batch_size', type=int, default=32, help='batch size of train input data')
-parser.add_argument('--patience', type=int, default=15, help='early stopping patience')
+parser.add_argument('--patience', type=int, default=10, help='early stopping patience')
 parser.add_argument('--lr', type=float, default=0.0001, help='optimizer learning rate')
 parser.add_argument('--loss', type=str, default='mae',help='loss function')
 parser.add_argument('--lradj', type=int, default=1,help='adjust learning rate')

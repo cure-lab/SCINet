@@ -38,20 +38,22 @@ class DataLoaderH(object):
         self.device = device
 
     def _normalized(self, normalize):
-        # normalized by the maximum value of entire matrix.
 
         if (normalize == 0):
             self.dat = self.rawdat
 
         if (normalize == 1):
+            # normalized by the maximum value of entire matrix.
             self.dat = self.rawdat / np.max(self.rawdat)
-        # normlized by the maximum value of each row(sensor).
+        
         if (normalize == 2):
+            # normlized by the maximum value of each row (sensor).
             for i in range(self.m):
                 self.scale[i] = np.max(np.abs(self.rawdat[:, i]))
                 self.dat[:, i] = self.rawdat[:, i] / np.max(np.abs(self.rawdat[:, i]))
 
         if (normalize == 3):
+            # normlized by the mean/std value of each row (sensor).
             for i in range(self.m):
                 self.scale[i] = np.std(self.rawdat[:, i]) #std
                 self.bias[i] = np.mean(self.rawdat[:, i])

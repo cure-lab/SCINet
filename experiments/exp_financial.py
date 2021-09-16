@@ -57,7 +57,7 @@ class Exp_financial(Exp_Basic):
             dropout=self.args.dropout,
             single_step_output_One=self.args.single_step_output_One,
             positionalE=self.args.positionalEcoding,
-            modified=True, no_bottleneck=True
+            modified=True
         )
         print(model)
         return model
@@ -189,11 +189,9 @@ class Exp_financial(Exp_Basic):
             self.writer.add_scalar('Test_final_corr', test_corr, global_step=epoch)
             if self.args.stacks == 2:
                 self.writer.add_scalar('Train_loss_Mid', min_loss / n_samples, global_step=epoch)
-
                 self.writer.add_scalar('Validation_mid_rse', val_rse_mid, global_step=epoch)
                 self.writer.add_scalar('Validation_mid_rae', val_rae_mid, global_step=epoch)
                 self.writer.add_scalar('Validation_mid_corr', val_correlation_mid, global_step=epoch)
-
                 self.writer.add_scalar('Test_mid_rse', test_rse_mid, global_step=epoch)
                 self.writer.add_scalar('Test_mid_rae', test_rae_mid, global_step=epoch)
                 self.writer.add_scalar('Test_mid_corr', test_correlation_mid, global_step=epoch)
@@ -232,6 +230,7 @@ class Exp_financial(Exp_Basic):
                     forecast = self.model(X)
                 elif self.args.stacks == 2:
                     forecast, res = self.model(X) #torch.Size([32, 3, 137])
+            print('ff111,',forecast.shape,Y.shape,X.shape)
             # only predict the last step
             true = Y[:, -1, :].squeeze()
             forecast_set.append(forecast)
@@ -254,6 +253,7 @@ class Exp_financial(Exp_Basic):
                 test = torch.cat((test, Y[:, -1, :].squeeze()))
                 if self.args.stacks == 2:
                     res_mid = torch.cat((res_mid, res[:,-1,:].squeeze()))
+            print('f2222',predict.shape,test.shape)
             output = forecast[:,-1,:].squeeze()
             scale = data.scale.expand(output.size(0),data.m)
             bias = data.bias.expand(output.size(0), data.m)
@@ -267,40 +267,43 @@ class Exp_financial(Exp_Basic):
                 total_loss_l1_mid += self.evaluateL1(output_res * scale+ bias, true * scale+ bias).item()
 
             n_samples += (output.size(0) * data.m)
-
+            print('f333',output.shape, data.m, scale.shape)
         forecast_Norm = torch.cat(forecast_set, axis=0)
         target_Norm = torch.cat(target_set, axis=0)
         if self.args.stacks == 2:
             Mid_Norm = torch.cat(Mid_set, axis=0)
-
 
         rse_final_each = []
         rae_final_each = []
         corr_final_each = []
         Scale = data.scale.expand(forecast_Norm.size(0),data.m)
         bias = data.bias.expand(forecast_Norm.size(0),data.m)
-        for i in range(forecast_Norm.shape[1]):
-            lossL2_F = self.evaluateL2(forecast_Norm[:,i,:] * Scale + bias, target_Norm[:,i,:] * Scale+ bias).item()
-            lossL1_F = self.evaluateL1(forecast_Norm[:,i,:] * Scale+ bias, target_Norm[:,i,:] * Scale+ bias).item()
-            if self.args.stacks == 2:
-                lossL2_M = self.evaluateL2(Mid_Norm[:, i, :] * Scale+ bias, target_Norm[:, i, :] * Scale+ bias).item()
-                lossL1_M = self.evaluateL1(Mid_Norm[:, i, :] * Scale+ bias, target_Norm[:, i, :] * Scale+ bias).item()
-            rse_F = math.sqrt(lossL2_F / forecast_Norm.shape[0]/ data.m) / data.rse
-            rae_F = (lossL1_F / forecast_Norm.shape[0]/ data.m) / data.rae
-            rse_final_each.append(rse_F.item())
-            rae_final_each.append(rae_F.item())
+        print('f4444',forecast_Norm.shape,target_Norm.shape)
+        print('dddd',self.args.single_step)
+        if is not self.args.single_step: #single step
+            for i in range(forecast_Norm.shape[1]): #get results of each step
+                lossL2_F = self.evaluateL2(forecast_Norm[:,i,:] * Scale + bias, target_Norm[:,i,:] * Scale+ bias).item()
+                lossL1_F = self.evaluateL1(forecast_Norm[:,i,:] * Scale+ bias, target_Norm[:,i,:] * Scale+ bias).item()
+                if self.args.stacks == 2:
+                    lossL2_M = self.evaluateL2(Mid_Norm[:, i, :] * Scale+ bias, target_Norm[:, i, :] * Scale+ bias).item()
+                    lossL1_M = self.evaluateL1(Mid_Norm[:, i, :] * Scale+ bias, target_Norm[:, i, :] * Scale+ bias).item()
+                rse_F = math.sqrt(lossL2_F / forecast_Norm.shape[0]/ data.m) / data.rse
+                rae_F = (lossL1_F / forecast_Norm.shape[0]/ data.m) / data.rae
+                rse_final_each.append(rse_F.item())
+                rae_final_each.append(rae_F.item())
 
-            pred = forecast_Norm[:,i,:].data.cpu().numpy()
-            y_true = target_Norm[:,i,:].data.cpu().numpy()
+                pred = forecast_Norm[:,i,:].data.cpu().numpy()
+                y_true = target_Norm[:,i,:].data.cpu().numpy()
 
-            sig_p = (pred).std(axis=0)
-            sig_g = (y_true).std(axis=0)
-            m_p = pred.mean(axis=0)
-            m_g = y_true.mean(axis=0)
-            ind = (sig_g != 0)
-            corr = ((pred - m_p) * (y_true - m_g)).mean(axis=0) / (sig_p * sig_g)
-            corr = (corr[ind]).mean()
-            corr_final_each.append(corr)
+                sig_p = pred.std(axis=0)
+                sig_g = y_true.std(axis=0)
+                m_p = pred.mean(axis=0)
+                m_g = y_true.mean(axis=0)
+                ind = (sig_p * sig_g != 0)
+                print('iiii',sig_p.shape,sig_p * sig_g,len(ind))
+                corr = ((pred - m_p) * (y_true - m_g)).mean(axis=0) / (sig_p * sig_g)
+                corr = (corr[ind]).mean()
+                corr_final_each.append(corr)
 
         rse = math.sqrt(total_loss / n_samples) / data.rse
         rae = (total_loss_l1 / n_samples) / data.rae
@@ -315,15 +318,17 @@ class Exp_financial(Exp_Basic):
         sigma_g = (Ytest).std(axis=0)
         mean_p = predict.mean(axis=0)
         mean_g = Ytest.mean(axis=0)
-        index = (sigma_g != 0)
+        index = (sigma_p * sigma_g != 0)
+        print('kkk',len(index),sigma_p.shape,predict.shape)
         correlation = ((predict - mean_p) * (Ytest - mean_g)).mean(axis=0) / (sigma_p * sigma_g)
         correlation = (correlation[index]).mean()
         if self.args.stacks == 2:
             mid_pred = Mid_Norm.cpu().numpy()
-            sigma_p = (mid_pred).std(axis=0)
-            mean_p = mid_pred.mean(axis=0)
-            correlation_mid = ((mid_pred - mean_p) * (Ytest - mean_g)).mean(axis=0) / (sigma_p * sigma_g)
-            correlation_mid = (correlation_mid[index]).mean()
+            sigma_mid = (mid_pred).std(axis=0)
+            mean_mid = mid_pred.mean(axis=0)
+            index_mid = (sigma_mid * sigma_g != 0)
+            correlation_mid = ((mid_pred - mean_mid) * (Ytest - mean_g)).mean(axis=0) / (sigma_mid * sigma_g)
+            correlation_mid = (correlation_mid[index_mid]).mean()
 
         print(
             '|valid_final rse {:5.4f} | valid_final rae {:5.4f} | valid_final corr  {:5.4f}'.format(
