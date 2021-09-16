@@ -43,7 +43,7 @@ parser.add_argument('--lr',type=float,default=5e-3,help='learning rate')
 parser.add_argument('--weight_decay',type=float,default=0.00001,help='weight decay rate')
 parser.add_argument('--epochs',type=int,default=100,help='')
 parser.add_argument('--lradj', type=int, default=1,help='adjust learning rate')
-parser.add_argument('--save_path', type=str, default='.exp/financial_checkpoints/')
+parser.add_argument('--save_path', type=str, default='exp/financial_checkpoints/')
 parser.add_argument('--model_name', type=str, default='SCINet')
 
 ### -------  model settings --------------  
