@@ -30,6 +30,7 @@ parser.add_argument('--lastWeight', type=float, default=1.0,help='Loss weight la
 
 ### -------  training settings --------------  
 parser.add_argument('--train', type=bool, default=True)
+parser.add_argument('--resume', type=bool, default=False)
 parser.add_argument('--log_interval', type=int, default=2000, metavar='N',
                     help='report interval')
 parser.add_argument('--save', type=str, default='model/model.pt',
@@ -72,7 +73,7 @@ if __name__ == '__main__':
     Exp=Exp_financial
     exp=Exp(args)
 
-    if args.train:
+    if args.train or args.resume:
         before_train = datetime.now().timestamp()
         print("===================Normal-Start=========================")
         normalize_statistic = exp.train()

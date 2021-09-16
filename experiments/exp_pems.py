@@ -254,8 +254,14 @@ class Exp_pems(Exp_Basic):
         writer = SummaryWriter('exp/run_PEMS/{}_scinet'.format(self.args.model_name))
         
         performance_metrics = {}
-        for epoch in range(self.args.epoch):
-            adjust_learning_rate(my_optim, epoch, self.args)
+
+        if self.args.resume:
+            self.model, lr, epoch_start = load_model(self.model, self.result_file, model_name=self.args.dataset, horizon=self.args.horizon)
+        else:
+            epoch_start = 0
+
+        for epoch in range(epoch_start, self.args.epoch):
+            lr = adjust_learning_rate(my_optim, epoch, self.args)
             epoch_start_time = time.time()
             self.model.train()
             loss_total = 0
@@ -318,7 +324,7 @@ class Exp_pems(Exp_Basic):
                     
                 # save model
                 if is_best_for_now:
-                    save_model(model=self.model, model_dir=self.result_file, model_name=self.args.dataset, horizon=self.args.horizon)
+                    save_model(epoch, lr, model=self.model, model_dir=self.result_file, model_name=self.args.dataset, horizon=self.args.horizon)
                     print('saved model!')
             # early stop
             if self.args.early_stop and validate_score_non_decrease_count >= self.args.early_stop_step:

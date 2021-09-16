@@ -81,6 +81,7 @@ class Exp_financial(Exp_Basic):
 
 
     def train(self):
+
         best_val=10000000
         
         optim=self._select_optimizer()
@@ -91,7 +92,13 @@ class Exp_financial(Exp_Basic):
         save_path = os.path.join(self.args.save_path, self.args.model_name)
         if not os.path.exists(save_path):
             os.makedirs(save_path)
-        for epoch in range(0, self.args.epochs):
+
+        if self.args.resume:
+            self.model, lr, epoch_start = load_model(self.model, save_path, model_name=self.args.dataset_name, horizon=self.args.horizon)
+        else:
+            epoch_start = 0
+            
+        for epoch in range(epoch_start, self.args.epochs):
             epoch_start_time = time.time()
             iter = 0
             self.model.train()
@@ -99,7 +106,7 @@ class Exp_financial(Exp_Basic):
             n_samples = 0
             final_loss = 0
             min_loss = 0
-            adjust_learning_rate(optim, epoch, self.args)
+            lr = adjust_learning_rate(optim, epoch, self.args)
 
             for tx, ty in data.get_batches(X, Y, self.args.batch_size, True):
                 self.model.zero_grad()             #torch.Size([32, 168, 137])
@@ -202,7 +209,7 @@ class Exp_financial(Exp_Basic):
                     epoch, (time.time() - epoch_start_time), total_loss / n_samples, val_loss, val_rae, val_corr, test_loss, test_rae, test_corr), flush=True)
             
             if val_loss < best_val:
-                save_model(self.model, save_path, model_name=self.args.dataset_name, horizon=self.args.horizon)
+                save_model(epoch, lr, self.model, save_path, model_name=self.args.dataset_name, horizon=self.args.horizon)
                 print('--------------| Best Val loss |--------------')
                 best_val = val_loss
         return total_loss / n_samples
@@ -320,7 +327,7 @@ class Exp_financial(Exp_Basic):
         correlation = ((predict - mean_p) * (Ytest - mean_g)).mean(axis=0) / (sigma_p * sigma_g)
         correlation = (correlation[index]).mean()
         if self.args.stacks == 2:
-            mid_pred = Mid_Norm.cpu().numpy()
+            mid_pred = Mid_Norm.cpu().numpy()[:,-1,:]
             sigma_mid = mid_pred.std(axis=0)
             mean_mid = mid_pred.mean(axis=0)
             index_mid = (sigma_mid * sigma_g != 0)

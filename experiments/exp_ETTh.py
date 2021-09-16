@@ -186,7 +186,6 @@ class Exp_ETTh(Exp_Basic):
         else:
             print('Error!')
 
-        self.model.train()
         return total_loss
 
     def train(self, setting):
@@ -208,6 +207,11 @@ class Exp_ETTh(Exp_Basic):
 
         if self.args.use_amp:
             scaler = torch.cuda.amp.GradScaler()
+
+        if self.args.resume:
+            self.model, lr, epoch_start = load_model(self.model, path, model_name=self.args.data, horizon=self.args.horizon)
+        else:
+            epoch_start = 0
 
         for epoch in range(self.args.train_epochs):
             iter_count = 0
@@ -267,9 +271,9 @@ class Exp_ETTh(Exp_Basic):
                 print("Early stopping")
                 break
 
-            adjust_learning_rate(model_optim, epoch+1, self.args)
-        save_model(self.model, path, model_name=self.args.data, horizon=self.args.pred_len)
-        best_model_path = path+'/'+'checkpoint.pth'
+            lr = adjust_learning_rate(model_optim, epoch+1, self.args)
+        save_model(epoch, lr, self.model, path, model_name=self.args.data, horizon=self.args.pred_len)
+        # best_model_path = path+'/'+'checkpoint.pth'
         self.model.load_state_dict(torch.load(best_model_path))
         
         return self.model

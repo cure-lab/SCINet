@@ -3,29 +3,36 @@ import os
 import numpy as np
 import torch
 
-def save_model(model, model_dir, model_name='pems08', horizon=12):
+def save_model(epoch, lr, model, model_dir, model_name='pems08', horizon=12):
     if model_dir is None:
         return
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)
-    file_name = os.path.join(model_dir, model_name+str(horizon))
-    with open(file_name, 'wb') as f:
-        torch.save(model, f)
-        print('save model in ',file_name)
+    file_name = os.path.join(model_dir, model_name+str(horizon)+'.bin')
+    torch.save(
+        {
+        'epoch': epoch,
+        'lr': lr,
+        'model': model.state_dict(),
+        }, file_name)
+    print('save model in ',file_name)
 
-def load_model(model, model_dir, model_name='pems08',horizon=12):
+
+def load_model(model, model_dir, model_name='pems08', horizon=12):
     if not model_dir:
         return
-    file_name = os.path.join(model_dir, model_name+str(horizon)) 
-    if not os.path.exists(model_dir):
-        os.makedirs(model_dir)
+    file_name = os.path.join(model_dir, model_name+str(horizon)+'.bin') 
+
     if not os.path.exists(file_name):
         return
     with open(file_name, 'rb') as f:
-        model = torch.load(f, map_location=lambda storage, loc: storage)
-        # model.load_state_dict(checkpoint)
-        print('loaded the model...', file_name)
-    return model
+        checkpoint = torch.load(f, map_location=lambda storage, loc: storage)
+        print('This model was trained for {} epochs'.format(checkpoint['epoch']))
+        model.load_state_dict(checkpoint['model'])
+        epoch = checkpoint['epoch']
+        lr = checkpoint['lr']
+        print('loaded the model...', file_name, 'now lr:', lr, 'now epoch:', epoch)
+    return model, lr, epoch
 
 def adjust_learning_rate(optimizer, epoch, args):
     if args.lradj==1:
@@ -42,6 +49,7 @@ def adjust_learning_rate(optimizer, epoch, args):
         for param_group in optimizer.param_groups:
             param_group['lr'] = lr
         print('Updating learning rate to {}'.format(lr))
+    return lr
 
 class EarlyStopping:
     def __init__(self, patience=7, verbose=False, delta=0):

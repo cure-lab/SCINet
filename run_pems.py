@@ -32,6 +32,8 @@ parser.add_argument('--test_length', type=float, default=2)
 
 ### -------  training settings --------------  
 parser.add_argument('--train', type=bool, default=True)
+parser.add_argument('--resume', type=bool, default=False)
+parser.add_argument('--resume-model', type=str, default='SCINet')
 parser.add_argument('--evaluate', type=bool, default=True)
 parser.add_argument('--finetune', type=bool, default=False)
 parser.add_argument('--validate_freq', type=int, default=1)
@@ -72,7 +74,7 @@ if __name__ == '__main__':
 
     Exp=Exp_pems
     exp=Exp(args)
-    if args.train:
+    if args.train or args.resume:
         before_train = datetime.now().timestamp()
         print("===================Normal-Start=========================")
         _, normalize_statistic = exp.train()

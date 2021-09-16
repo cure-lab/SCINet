@@ -48,6 +48,7 @@ parser.add_argument('--lradj', type=int, default=1,help='adjust learning rate')
 parser.add_argument('--use_amp', action='store_true', help='use automatic mixed precision training', default=False)
 parser.add_argument('--save', type=bool, default =False, help='save the output results')
 parser.add_argument('--model_name', type=str, default='SCINet')
+parser.add_argument('--resume', type=bool, default=False)
 
 ### -------  model settings --------------  
 parser.add_argument('--hidden-size', default=1, type=float, help='hidden channel of module')
