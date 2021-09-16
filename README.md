@@ -222,7 +222,7 @@ python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon
 
 multivariate, out 24
 ```
-python run_ETTh.py --data ETTh1 --features M  --seq_len 48 --label_len 24 --pred_len 24 --hidden-size 4 --stacks 1 --layers 3 --lr 5e-3 --batch_size 14 --dropout 0.5 --model_name etth1_M_I48_O24_lr5e-3_bs16_dp0.5_h4_s1l3
+python run_ETTh.py --data ETTh1 --features M  --seq_len 48 --label_len 24 --pred_len 24 --hidden-size 4 --stacks 1 --layers 3 --lr 5e-3 --batch_size 16 --dropout 0.5 --model_name etth1_M_I48_O24_lr5e-3_bs16_dp0.5_h4_s1l3
 ```
 multivariate, out 48
 ```
