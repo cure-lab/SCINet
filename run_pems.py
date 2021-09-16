@@ -6,9 +6,9 @@ import argparse
 import pandas as pd
 import numpy as np
 from torch.utils.tensorboard import SummaryWriter
-#os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(description='SCINet on pems datasets')
+
 ### -------  dataset settings --------------
 parser.add_argument('--dataset', type=str, default='PEMS08', choices=['PEMS03', 'PEMS04', 'PEMS07', 'PEMS08'])  #sometimes use: PeMS08
 parser.add_argument('--norm_method', type=str, default='z_score')

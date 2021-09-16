@@ -6,9 +6,8 @@ import argparse
 import pandas as pd
 import numpy as np
 from torch.utils.tensorboard import SummaryWriter
-#os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
-parser = argparse.ArgumentParser(description='PyTorch Time series forecasting')
+parser = argparse.ArgumentParser(description='SCINet on financial datasets')
 ### -------  dataset settings --------------
 parser.add_argument('--dataset_name', type=str, default='exchange_rate', choices=['electricity', 'solar_AL', 'exchange_rate', 'traffic'])
 parser.add_argument('--data', type=str, default='./datasets/exchange_rate.txt',
@@ -44,7 +43,7 @@ parser.add_argument('--weight_decay',type=float,default=0.00001,help='weight dec
 parser.add_argument('--epochs',type=int,default=100,help='')
 parser.add_argument('--lradj', type=int, default=1,help='adjust learning rate')
 parser.add_argument('--save_path', type=str, default='.exp/financial_checkpoints/')
-parser.add_argument('--model_name', type=str, default='SCNet')
+parser.add_argument('--model_name', type=str, default='SCINet')
 
 ### -------  model settings --------------  
 parser.add_argument('--hidden-size', default=1.0, type=float, help='hidden channel of module')# H, EXPANSION RATE
