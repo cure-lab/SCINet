@@ -49,6 +49,9 @@ def adjust_learning_rate(optimizer, epoch, args):
         for param_group in optimizer.param_groups:
             param_group['lr'] = lr
         print('Updating learning rate to {}'.format(lr))
+    else:
+        for param_group in optimizer.param_groups:
+            lr = param_group['lr']
     return lr
 
 class EarlyStopping:
