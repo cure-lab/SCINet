@@ -336,7 +336,7 @@ python run_ETTh.py --data ETTm1 --features S  --seq_len 96 --label_len 48 --pred
 ```
 Univariate, out 96
 ```
-python run_ETTh.py --data ETTm1 --features S  --seq_len 384 --label_len 96 --pred_len 96 --hidden-size 2 --stacks 1 --layers 4 --lr 1e-4 --batch_size 8 --dropout 0 --model_name ettm1_S_I384_O96_lr1e-4_bs8_dp0_h2_s1l4
+python run_ETTh.py --data ETTm1 --features S  --seq_len 384 --label_len 96 --pred_len 96 --hidden-size 2 --stacks 1 --layers 4 --lr 1e-5 --batch_size 8 --dropout 0 --model_name ettm1_S_I384_O96_lr1e-5_bs8_dp0_h2_s1l4
 ```
 Univariate, out 288
 ```
