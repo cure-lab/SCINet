@@ -23,6 +23,7 @@ This is the original PyTorch implementation of the following work: [Time Series 
 ![traffic](https://img.shields.io/badge/🚅-Traffic-yellow)
 ![electric](https://img.shields.io/badge/%F0%9F%92%A1-Electricity-yellow)
 ![Solar Energy](https://img.shields.io/badge/%F0%9F%94%86-Solar%20Energy-yellow)
+![finance](https://img.shields.io/badge/💵-Finance-yellow)
 - [x] Provide all training logs.
 
 
