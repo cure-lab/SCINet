@@ -22,6 +22,14 @@ This is the original PyTorch implementation of the following work: [Time Series 
 - [x] Support **11** popular time-series forecasting datasets.
 - [x] Provide all training logs.
 
+
+## To-do items
+-  Integrate GNN-based spatial models into SCINet for better performance on spatial-temporal time series. Our preliminary results show that this feature could result in considerable prediction gains on some datasets such as PEMS.
+-  Generate probalistic forecasting results. 
+```
+
+Stay tuned!
+
 ## Dataset
 
 We conduct the experiments on 11 popular time-series datasets, namely Electricity Transformer Temperature (ETTh1, ETTh2 and ETTm1) , Traffic, Solar-Energy, Electricity and Exchange Rate and PeMS (PEMS03, PEMS04, PEMS07 and PEMS08), ranging from power, energy, finance and traffic domains. 
@@ -373,5 +381,14 @@ Ailing Zeng: alzeng@cse.cuhk.edu.hk
 Zhijian Xu: zjxu21@cse.cuhk.edu.hk
 ```
 
-## Acknowledgements
-Thank you all for your attention to our work!
+## Send us feedback!
+
+First of all, thank you all for your attention to this work!
+```
+
+Our library is open source for research purposes, and we would like to keep on improving it for a very long time! So please let us know if you:
+```
+
+- Find/fix any bug or know how to speed up or improve any part of SCINet.
+- Want to add/show some cool functionalities/projects made on top of SCINet. We could add your project link to our Community-based Projects section later or  integrate it into the next version of SCINet!
+
