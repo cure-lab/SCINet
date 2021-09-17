@@ -18,7 +18,7 @@ This is the original PyTorch implementation of the following work: [Time Series 
 [2021-09-17] SCINet v1.0 is released! 
 
 ## Features
-- [x] Support **11** popular time-series forecasting datasets.
+- [x] Support **11** popular time-series forecasting datasets. 🚅 %F0%9F%92%A1 %F0%9F%94%86
 ![traffic](https://img.shields.io/badge/%F0%9F%9A%86-Traffic-yellow)
 ![electric](https://img.shields.io/badge/%F0%9F%92%A1-Electricity-yellow)
 ![Solar Energy](https://img.shields.io/badge/%F0%9F%94%86-Solar%20Energy-yellow)
