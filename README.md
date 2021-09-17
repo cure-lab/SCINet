@@ -26,7 +26,6 @@ This is the original PyTorch implementation of the following work: [Time Series 
 ## To-do items
 -  Integrate GNN-based spatial models into SCINet for better performance on spatial-temporal time series. Our preliminary results show that this feature could result in considerable prediction gains on some datasets such as PEMS.
 -  Generate probalistic forecasting results. 
-```
 
 Stay tuned!
 
