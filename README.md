@@ -16,7 +16,7 @@ This is the original pytorch implementation for the following paper: [Time Serie
 ```
 
 ## Updates
-[2021-09-14] SCINet is released! 
+[2021-09-17] SCINet v1.0 is released! 
 
 ## Features
 - [x] Support **11** popular time-series forecasting datasets.
