@@ -1,10 +1,9 @@
 # SCINet
 [![Arxiv link](https://img.shields.io/badge/arXiv-Time%20Series%20is%20a%20Special%20Sequence%3A%20Forecasting%20with%20Sample%20Convolution%20and%20Interaction-%23B31B1B)](https://arxiv.org/pdf/2106.09305.pdf)
-[![state-of-the-art](https://img.shields.io/badge/-STATE--OF--THE--ART-blue?logo=Accenture&labelColor=lightgrey)]()
 ![pytorch](https://img.shields.io/badge/-PyTorch-%23EE4C2C?logo=PyTorch&labelColor=lightgrey)
 [![cure](https://img.shields.io/badge/-CURE_Lab-%23B31B1B)](http://cure-lab.github.io/)
 
-This is the original pytorch implementation for the following paper: [Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction](https://arxiv.org/pdf/2106.09305.pdf). If you find this repository useful for your work, please consider citing it as follows:
+This is the original PyTorch implementation of the following work: [Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction](https://arxiv.org/pdf/2106.09305.pdf). If you find this repository useful for your work, please consider citing it as follows:
 
 ```
 @article{liu2021SCINet,
@@ -16,12 +15,18 @@ This is the original pytorch implementation for the following paper: [Time Serie
 ```
 
 ## Updates
-[2021-09-14] SCINet is released! 
+[2021-09-17] SCINet v1.0 is released! 
 
 ## Features
 - [x] Support **11** popular time-series forecasting datasets.
-- [x] Provide all pretrained models.
 - [x] Provide all training logs.
+
+
+## To-do items
+-  Integrate GNN-based spatial models into SCINet for better performance on spatial-temporal time series. Our preliminary results show that this feature could result in considerable gains on the prediction accuracy of some datasets (e.g., PEMSxx).
+-  Generate probalistic forecasting results. 
+
+Stay tuned!
 
 ## Dataset
 
@@ -44,7 +49,7 @@ We conduct the experiments on 11 popular time-series datasets, namely Electricit
 | Exchange-Rate | 8        | 7,588     | 1hour       | 1/1/1990   | Single-step |
 
 
-## Get start
+## Get started
 
 ### Requirements
 
@@ -242,19 +247,19 @@ python run_ETTh.py --data ETTh1 --features M  --seq_len 736 --label_len 720 --pr
 ```
 Univariate, out 24
 ```
-python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 24 --pred_len 24 --hidden-size 8 --stacks 1 --layers 3 --lr 0.007 --batch_size 16 --dropout 0.25 --model_name etth1_S_I48_O24_lr0.007_bs16_dp0.25_h8_s1l3
+python run_ETTh.py --data ETTh1 --features S  --seq_len 64 --label_len 24 --pred_len 24 --hidden-size 8 --stacks 1 --layers 3 --lr 0.007 --batch_size 64 --dropout 0.25 --model_name etth1_S_I64_O24_lr0.007_bs64_dp0.25_h8_s1l3
 ```
 Univariate, out 48
 ```
-python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 48 --pred_len 48 --hidden-size 4 --stacks 1 --layers 4 --lr 0.0001 --batch_size 8 --dropout 0.5 --model_name etth1_S_I96_O48_lr0.0001_bs8_dp0.5_h4_s1l4
+python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 48 --pred_len 48 --hidden-size 4 --stacks 1 --layers 4 --lr 0.0001 --batch_size 8 --dropout 0.5 --model_name etth1_S_I720_O48_lr0.0001_bs8_dp0.5_h4_s1l4
 ```
 Univariate, out 168
 ```
-python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 168 --pred_len 168 --hidden-size 4 --stacks 1 --layers 4 --lr 5e-5 --batch_size 8 --dropout 0.5 --model_name etth1_S_I336_O168_lr5e-5_bs8_dp0.5_h4_s1l4
+python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 168 --pred_len 168 --hidden-size 4 --stacks 1 --layers 4 --lr 5e-5 --batch_size 8 --dropout 0.5 --model_name etth1_S_I720_O168_lr5e-5_bs8_dp0.5_h4_s1l4
 ```
 Univariate, out 336
 ```
-python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 336 --pred_len 336 --hidden-size 1 --stacks 1 --layers 4 --lr 1e-3 --batch_size 128 --dropout 0.5 --model_name etth1_S_I336_O336_lr1e-3_bs128_dp0.5_h1_s1l4
+python run_ETTh.py --data ETTh1 --features S  --seq_len 720 --label_len 336 --pred_len 336 --hidden-size 1 --stacks 1 --layers 4 --lr 1e-3 --batch_size 128 --dropout 0.5 --model_name etth1_S_I720_O336_lr1e-3_bs128_dp0.5_h1_s1l4
 ```
 Univariate, out 720
 ```
@@ -273,7 +278,7 @@ python run_ETTh.py --data ETTh2 --features M  --seq_len 96 --label_len 48 --pred
 ```
 multivariate, out 168
 ```
-python run_ETTh.py --data ETTh2 --features M  --seq_len 336 --label_len 168 --pred_len 168 --hidden-size 0.5 --stacks 1 --layers 4 --lr 5e-5 --batch_size 8 --dropout 0.5 --model_name etth2_M_I336_O168_lr5e-5_bs8_dp0.5_h0.5_s1l4
+python run_ETTh.py --data ETTh2 --features M  --seq_len 336 --label_len 168 --pred_len 168 --hidden-size 0.5 --stacks 1 --layers 4 --lr 5e-5 --batch_size 16 --dropout 0.5 --model_name etth2_M_I336_O168_lr5e-5_bs16_dp0.5_h0.5_s1l4
 ```
 multivariate, out 336
 ```
@@ -332,11 +337,11 @@ python run_ETTh.py --data ETTm1 --features S  --seq_len 96 --label_len 24 --pred
 ```
 Univariate, out 48
 ```
-python run_ETTh.py --data ETTm1 --features S  --seq_len 96 --label_len 48 --pred_len 48 --hidden-size 4 --stacks 1 --layers 3 --lr 0.005 --batch_size 16 --dropout 0 --model_name ettm1_S_I96_O48_lr5e-3_bs16_dp0_h4_s1l3
+python run_ETTh.py --data ETTm1 --features S  --seq_len 96 --label_len 48 --pred_len 48 --hidden-size 4 --stacks 1 --layers 3 --lr 0.0005 --batch_size 16 --dropout 0 --model_name ettm1_S_I96_O48_lr5e-4_bs16_dp0_h4_s1l3
 ```
 Univariate, out 96
 ```
-python run_ETTh.py --data ETTm1 --features S  --seq_len 384 --label_len 96 --pred_len 96 --hidden-size 2 --stacks 1 --layers 4 --lr 1e-4 --batch_size 8 --dropout 0 --model_name ettm1_S_I384_O96_lr1e-4_bs8_dp0_h2_s1l4
+python run_ETTh.py --data ETTm1 --features S  --seq_len 384 --label_len 96 --pred_len 96 --hidden-size 2 --stacks 1 --layers 4 --lr 1e-5 --batch_size 8 --dropout 0 --model_name ettm1_S_I384_O96_lr1e-5_bs8_dp0_h2_s1l4
 ```
 Univariate, out 288
 ```
@@ -374,5 +379,12 @@ Ailing Zeng: alzeng@cse.cuhk.edu.hk
 Zhijian Xu: zjxu21@cse.cuhk.edu.hk
 ```
 
-## Acknowledgements
-Thank you all for your attention to our work!
+## Send us feedback!
+
+First of all, thank you all for your attention to this work!
+
+Our library is open source for research purposes, and we would like to keep on improving it for a very long time! So please let us know if you:
+
+- Find/fix any bug or know how to improve any part of SCINet.
+- Want to add/show some cool functionalities/projects made on top of SCINet. We could add your project link to our Community-based Projects section later or  integrate it into the next version of SCINet!
+
