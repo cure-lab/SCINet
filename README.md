@@ -78,7 +78,7 @@ source prepare_data.sh
 
 The data directory structure is shown as follows. 
 ```
-├── datasets/
+└── datasets/
     ├── ETT-data
     │   ├── ETTh1.csv
     │   ├── ETTh2.csv
