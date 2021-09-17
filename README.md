@@ -199,7 +199,7 @@ python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon
 ```
 predict 24
 ```
-python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 24 --hidden-size 0.125 --lastWeight 0.5 --stacks 1 --layers 3 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o24_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
+python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 24 --hidden-size 0.125 --lastWeight 0.5 --stacks 1 --layers 3 --lr 7e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o24_lr7e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
 ```
 
 
