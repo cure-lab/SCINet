@@ -18,19 +18,24 @@ This is the original PyTorch implementation of the following work: [Time Series 
 [2021-09-17] SCINet v1.0 is released! 
 
 ## Features
-- [x] Support **11** popular time-series forecasting datasets.
+- [x] Support **11** popular time-series forecasting datasets.  
+
+![traffic](https://img.shields.io/badge/🚅-Traffic-yellow)
+![electric](https://img.shields.io/badge/%F0%9F%92%A1-Electricity-yellow)
+![Solar Energy](https://img.shields.io/badge/%F0%9F%94%86-Solar%20Energy-yellow)
+![finance](https://img.shields.io/badge/💵-Finance-yellow)
 - [x] Provide all training logs.
 
 
 ## To-do items
--  Integrate GNN-based spatial models into SCINet for better performance on spatial-temporal time series. Our preliminary results show that this feature could result in considerable gains on the prediction accuracy of some datasets (e.g., PEMSxx).
+-  Integrate GNN-based spatial models into SCINet for better performance and higher efficiency on spatial-temporal time series. Our preliminary results show that this feature could result in considerable gains on the prediction accuracy of some datasets (e.g., PEMSxx).
 -  Generate probalistic forecasting results. 
 
 Stay tuned!
 
 ## Dataset
 
-We conduct the experiments on 11 popular time-series datasets, namely Electricity Transformer Temperature (ETTh1, ETTh2 and ETTm1) , Traffic, Solar-Energy, Electricity and Exchange Rate and PeMS (PEMS03, PEMS04, PEMS07 and PEMS08), ranging from power, energy, finance and traffic domains. 
+We conduct the experiments on **11** popular time-series datasets, namely **Electricity Transformer Temperature (ETTh1, ETTh2 and ETTm1) , Traffic, Solar-Energy, Electricity and Exchange Rate and PeMS (PEMS03, PEMS04, PEMS07 and PEMS08)**, ranging from **power, energy, finance and traffic domains**. 
 
 ### Overall information of the 11 datasets
 
@@ -74,21 +79,22 @@ source prepare_data.sh
 
 The data directory structure is shown as follows. 
 ```
-|-- datasets/
-`-- |-- ETT-data/
-    `-- |-- ETTh1.csv
-        |-- ETTh2.csv
-        |-- ETThm1.csv
-`-- |-- financial/
-    `-- |-- electricity.txt
-        |-- exchange_rate.txt
-        |-- solar_AL.txt
-        |-- traffic.txt
-`-- |-- PEMS/
-    `-- |-- PEMS03.npz
-        |-- PEMS04.npz
-        |-- PEMS07.npz
-        |-- PEMS08.npz
+./
+└── datasets/
+    ├── ETT-data
+    │   ├── ETTh1.csv
+    │   ├── ETTh2.csv
+    │   └── ETTm1.csv
+    ├── financial
+    │   ├── electricity.txt
+    │   ├── exchange_rate.txt
+    │   ├── solar_AL.txt
+    │   └── traffic.txt
+    └── PEMS
+        ├── PEMS03.npz
+        ├── PEMS04.npz
+        ├── PEMS07.npz
+        └── PEMS08.npz
 ```
 
 ### Run training code
