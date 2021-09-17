@@ -4,7 +4,7 @@
 ![pytorch](https://img.shields.io/badge/-PyTorch-%23EE4C2C?logo=PyTorch&labelColor=lightgrey)
 [![cure](https://img.shields.io/badge/-CURE_Lab-%23B31B1B)](http://cure-lab.github.io/)
 
-This is the original pytorch implementation for the following paper: [Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction](https://arxiv.org/pdf/2106.09305.pdf). If you find this repository useful for your work, please consider citing it as follows:
+This is the original PyTorch implementation of the following work: [Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction](https://arxiv.org/pdf/2106.09305.pdf). If you find this repository useful for your work, please consider citing it as follows:
 
 ```
 @article{liu2021SCINet,
@@ -20,7 +20,6 @@ This is the original pytorch implementation for the following paper: [Time Serie
 
 ## Features
 - [x] Support **11** popular time-series forecasting datasets.
-- [x] Provide all pretrained models.
 - [x] Provide all training logs.
 
 ## Dataset
@@ -44,7 +43,7 @@ We conduct the experiments on 11 popular time-series datasets, namely Electricit
 | Exchange-Rate | 8        | 7,588     | 1hour       | 1/1/1990   | Single-step |
 
 
-## Get start
+## Get started
 
 ### Requirements
 
