@@ -32,7 +32,13 @@ class Interactor(nn.Module):
         self.dropout = dropout
         self.hidden_size = hidden_size
         self.groups = groups
-        pad = self.dilation * (self.kernel_size - 1) // 2 + 1 # we fix the kernel size of the second layer as 3.
+        if self.kernel_size % 2 == 0:
+            pad_l = self.dilation * (self.kernel_size - 2) // 2 + 1 #by default: stride==1 
+            pad_r = self.dilation * (self.kernel_size) // 2 + 1 #by default: stride==1 
+
+        else:
+            pad_l = self.dilation * (self.kernel_size - 1) // 2 + 1 # we fix the kernel size of the second layer as 3.
+            pad_r = self.dilation * (self.kernel_size - 1) // 2 + 1
         self.splitting = splitting
         self.split = Splitting()
 
@@ -44,7 +50,7 @@ class Interactor(nn.Module):
 
         size_hidden = self.hidden_size
         modules_P += [
-            nn.ReplicationPad1d(pad),
+            nn.ReplicationPad1d((pad_l, pad_r)),
 
             nn.Conv1d(in_planes * prev_size, int(in_planes * size_hidden),
                       kernel_size=self.kernel_size, dilation=self.dilation, stride=1, groups= self.groups),
@@ -56,7 +62,7 @@ class Interactor(nn.Module):
             nn.Tanh()
         ]
         modules_U += [
-            nn.ReplicationPad1d(pad),
+            nn.ReplicationPad1d((pad_l, pad_r)),
             nn.Conv1d(in_planes * prev_size, int(in_planes * size_hidden),
                       kernel_size=self.kernel_size, dilation=self.dilation, stride=1, groups= self.groups),
             nn.LeakyReLU(negative_slope=0.01, inplace=True),
@@ -67,7 +73,7 @@ class Interactor(nn.Module):
         ]
 
         modules_phi += [
-            nn.ReplicationPad1d(pad),
+            nn.ReplicationPad1d((pad_l, pad_r)),
             nn.Conv1d(in_planes * prev_size, int(in_planes * size_hidden),
                       kernel_size=self.kernel_size, dilation=self.dilation, stride=1, groups= self.groups),
             nn.LeakyReLU(negative_slope=0.01, inplace=True),
@@ -77,7 +83,7 @@ class Interactor(nn.Module):
             nn.Tanh()
         ]
         modules_psi += [
-            nn.ReplicationPad1d(pad),
+            nn.ReplicationPad1d((pad_l, pad_r)),
             nn.Conv1d(in_planes * prev_size, int(in_planes * size_hidden),
                       kernel_size=self.kernel_size, dilation=self.dilation, stride=1, groups= self.groups),
             nn.LeakyReLU(negative_slope=0.01, inplace=True),
@@ -294,6 +300,7 @@ class SCINet(nn.Module):
         return signal
 
     def forward(self, x):
+        assert self.input_len % (np.power(2, self.num_layers)) == 0 # evenly divided the input length into two parts. (e.g., 32 -> 16 -> 8 -> 4 for 3 layers)
         if self.pe:
             pe = self.get_position_encoding(x)
             if pe.shape[2] > x.shape[2]:

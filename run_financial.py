@@ -83,7 +83,8 @@ if __name__ == '__main__':
     
     else:
         data=exp._get_data()
-        exp.model=exp.load_model(args.save_dir, epoch=args.epoch)
+        save_path = os.path.join(args.save_path, args.model_name)
+        exp.model=exp.load_model(model, save_path, model_name=args.dataset_name, horizon=args.horizon)
         before_evaluation = datetime.now().timestamp()
         rse, rae, correlation,rse_mid, rae_mid, correlation_mid=exp.test(data,data.test[0],data.test[1])
         after_evaluation = datetime.now().timestamp()

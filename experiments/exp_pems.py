@@ -346,7 +346,7 @@ class Exp_pems(Exp_Basic):
         normalize_statistic = {"mean": test_mean.tolist(), "std": test_std.tolist()}
 
         forecast_loss = nn.L1Loss().to(self.device) #smooth_l1_loss #nn.MSELoss(reduction='mean').to(self.device)
-        model = load_model(result_train_file, model_name=self.args.dataset, horizon=self.args.horizon)
+        model = load_model(self.model, self.result_file, model_name=self.args.dataset, horizon=self.args.horizon)
         node_cnt = test_data.shape[1]
         test_set = ForecastTestDataset(test_data, window_size=self.args.window_size, horizon=self.args.horizon,
                                 normalize_method=self.args.norm_method, norm_statistic=normalize_statistic)

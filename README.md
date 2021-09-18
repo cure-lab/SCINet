@@ -183,7 +183,7 @@ python run_financial.py --dataset_name traffic --window_size 168 --horizon 3 --h
 ```
 predict 6
 ```
-python run_financial.py --dataset_name traffic --window_size 168 --horizon 6 --hidden-size 2 --single_step 1 --stacks 2 --layers 2 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I168_o6_lr5e-4_bs16_dp0.25_h2_s2l2_w1.0
+python run_financial.py --dataset_name traffic --window_size 168 --horizon 6 --hidden-size 2 --single_step 1 --stacks 1 --layers 3 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I168_o6_lr5e-4_bs16_dp0.25_h2_s1l3_w1.0
 ```
 predict 12
 ```
