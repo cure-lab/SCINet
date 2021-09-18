@@ -74,6 +74,7 @@ if __name__ == '__main__':
 
     Exp = Exp_pems
     exp = Exp(args)
+    
     if args.train or args.resume:
         before_train = datetime.now().timestamp()
         print("===================Normal-Start=========================")
@@ -81,6 +82,7 @@ if __name__ == '__main__':
         after_train = datetime.now().timestamp()
         print(f'Training took {(after_train - before_train) / 60} minutes')
         print("===================Normal-End=========================")
+
     if args.evaluate:
         before_evaluation = datetime.now().timestamp()
         exp.test()
