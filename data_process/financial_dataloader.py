@@ -62,24 +62,23 @@ class DataLoaderH(object):
 
     def _split(self, train, valid, test):
 
-        train_set = range(self.P + self.h - 1, train)  # range(26, 31536)
-        valid_set = range(train, valid)  # range(31536, 42048)
-        test_set = range(valid, self.n)  # range(42048, 52560)
+        train_set = range(self.P + self.h - 1, train)
+        valid_set = range(train, valid)
+        test_set = range(valid, self.n)
         self.train = self._batchify(train_set, self.h)
         self.valid = self._batchify(valid_set, self.h)
         self.test = self._batchify(test_set, self.h)
 
     def _batchify(self, idx_set, horizon):
         n = len(idx_set)
-        X = torch.zeros((n, self.P, self.m))  # torch.Size([31366, 24, 137])
-        Y = torch.zeros((n, self.h, self.m))  # torch.Size([31366, 137])  torch.Size([31366, 3, 137])
+        X = torch.zeros((n, self.P, self.m))
+        Y = torch.zeros((n, self.h, self.m))
         for i in range(n):
-            end = idx_set[i] - self.h + 1  # 168
+            end = idx_set[i] - self.h + 1
             start = end - self.P
-            X[i, :, :] = torch.from_numpy(self.dat[start:end, :]) # dat (7588, 8)
+            X[i, :, :] = torch.from_numpy(self.dat[start:end, :]) 
             Y[i, :, :] = torch.from_numpy(self.dat[idx_set[i] - self.h:idx_set[i], :])
-            temp = Y[i,-1,:]
-        return [X, Y]                               #191 - 24： 191
+        return [X, Y]
 
     def get_batches(self, inputs, targets, batch_size, shuffle=True):
         length = len(inputs)
