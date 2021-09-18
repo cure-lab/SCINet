@@ -149,6 +149,7 @@ class SCINet_Tree(nn.Module):
         super().__init__()
         self.current_layer = current_layer
 
+
         self.workingblock = LevelSCINet(
             in_planes = in_planes,
             kernel_size = kernel_size,
@@ -156,6 +157,7 @@ class SCINet_Tree(nn.Module):
             groups= groups,
             hidden_size = hidden_size,
             INN = INN)
+
 
         if current_layer!=0:
             self.SCINet_Tree_odd=SCINet_Tree(in_planes, current_layer-1, kernel_size, dropout, groups, hidden_size, INN)
@@ -184,12 +186,12 @@ class SCINet_Tree(nn.Module):
             return self.zip_up_the_pants(self.SCINet_Tree_even(x_even_update), self.SCINet_Tree_odd(x_odd_update))
 
 class EncoderTree(nn.Module):
-    def __init__(self, in_planes,  num_layers, kernel_size, dropout, groups, hidden_size, INN):
+    def __init__(self, in_planes,  num_levels, kernel_size, dropout, groups, hidden_size, INN):
         super().__init__()
-        self.layers=num_layers
+        self.levels=num_levels
         self.SCINet_Tree = SCINet_Tree(
             in_planes = in_planes,
-            current_layer = num_layers-1,
+            current_layer = num_levels-1,
             kernel_size = kernel_size,
             dropout =dropout ,
             groups = groups,
@@ -197,21 +199,22 @@ class EncoderTree(nn.Module):
             INN = INN)
         
     def forward(self, x):
+
         x= self.SCINet_Tree(x)
 
         return x
 
 class SCINet(nn.Module):
     def __init__(self, output_len, input_len, input_dim = 9, hid_size = 1, num_stacks = 1,
-                num_layers = 3, concat_len = 0, groups = 1, kernel = 5, dropout = 0.5,
-                 single_step_output_One = 0, positionalE = False, modified = True):
+                num_levels = 3, concat_len = 0, groups = 1, kernel = 5, dropout = 0.5,
+                 single_step_output_One = 0, input_len_seg = 0, positionalE = False, modified = True):
         super(SCINet, self).__init__()
 
         self.input_dim = input_dim
         self.input_len = input_len
         self.output_len = output_len
         self.hidden_size = hid_size
-        self.num_layers = num_layers
+        self.num_levels = num_levels
         self.groups = groups
         self.modified = modified
         self.kernel_size = kernel
@@ -222,7 +225,7 @@ class SCINet(nn.Module):
 
         self.blocks1 = EncoderTree(
             in_planes=self.input_dim,
-            num_layers = self.num_layers,
+            num_levels = self.num_levels,
             kernel_size = self.kernel_size,
             dropout = self.dropout,
             groups = self.groups,
@@ -232,7 +235,7 @@ class SCINet(nn.Module):
         if num_stacks == 2: # we only implement two stacks at most.
             self.blocks2 = EncoderTree(
                 in_planes=self.input_dim,
-            num_layers = self.num_layers,
+            num_levels = self.num_levels,
             kernel_size = self.kernel_size,
             dropout = self.dropout,
             groups = self.groups,
@@ -355,7 +358,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     model = SCINet(output_len = args.horizon, input_len= args.window_size, input_dim = 9, hid_size = args.hidden_size, num_stacks = 1,
-                num_layers = 3, concat_len = 0, groups = args.groups, kernel = args.kernel, dropout = args.dropout,
+                num_levels = 3, concat_len = 0, groups = args.groups, kernel = args.kernel, dropout = args.dropout,
                  single_step_output_One = args.single_step_output_One, positionalE =  args.positionalEcoding, modified = True).cuda()
     x = torch.randn(32, 96, 9).cuda()
     y = model(x)

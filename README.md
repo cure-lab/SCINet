@@ -373,7 +373,15 @@ python run_ETTh.py --data ETTm1 --features S  --seq_len 672 --label_len 672 --pr
 | layers         | SCINet block layers          | L                  | 3                          |
 | stacks         | The number of SCINet blocks  | K                  | 1                          |
 
+## Special Constraint
 
+- Because of the stacked binary down-sampling method that SCINet adopts, the number of layers (L) and look-back window (W) size should satisfy:
+
+<img src="https://render.githubusercontent.com/render/math?math=W\bmod{2^{L}}=0">
+
+(The formula might not be shown in the darkmode Github)
+
+- The kernel are generally set as odd number such as 3, 5 or 7.
 
 ## Contact
 

@@ -8,6 +8,7 @@ from experiments.exp_ETTh import Exp_ETTh
 
 parser = argparse.ArgumentParser(description='SCINet on ETT dataset')
 
+
 parser.add_argument('--model', type=str, required=False, default='SCINet', help='model of the experiment')
 ### -------  dataset settings --------------
 parser.add_argument('--data', type=str, required=False, default='ETTh1', choices=['ETTh1', 'ETTh2', 'ETTm1'], help='name of dataset')
@@ -19,6 +20,7 @@ parser.add_argument('--freq', type=str, default='h', help='freq for time feature
 parser.add_argument('--checkpoints', type=str, default='exp/ETT_checkpoints/', help='location of model checkpoints')
 parser.add_argument('--inverse', type=bool, default =False, help='denorm the output data')
 parser.add_argument('--embed', type=str, default='timeF', help='time features encoding, options:[timeF, fixed, learned]')
+
 
 ### -------  device settings --------------
 parser.add_argument('--use_gpu', type=bool, default=True, help='use gpu')
@@ -41,7 +43,7 @@ parser.add_argument('--num_workers', type=int, default=0, help='data loader num 
 parser.add_argument('--itr', type=int, default=0, help='experiments times')
 parser.add_argument('--train_epochs', type=int, default=100, help='train epochs')
 parser.add_argument('--batch_size', type=int, default=32, help='batch size of train input data')
-parser.add_argument('--patience', type=int, default=10, help='early stopping patience')
+parser.add_argument('--patience', type=int, default=5, help='early stopping patience')
 parser.add_argument('--lr', type=float, default=0.0001, help='optimizer learning rate')
 parser.add_argument('--loss', type=str, default='mae',help='loss function')
 parser.add_argument('--lradj', type=int, default=1,help='adjust learning rate')
@@ -59,7 +61,7 @@ parser.add_argument('--window_size', default=12, type=int, help='input size')
 parser.add_argument('--dropout', type=float, default=0.5, help='dropout')
 parser.add_argument('--positionalEcoding', type=bool, default=False)
 parser.add_argument('--groups', type=int, default=1)
-parser.add_argument('--layers', type=int, default=3)
+parser.add_argument('--levels', type=int, default=3)
 parser.add_argument('--stacks', type=int, default=1, help='1 stack or 2 stacks')
 
 
@@ -110,7 +112,7 @@ mses_ = []
 if args.itr:
     for ii in range(args.itr):
         # setting record of experiments
-        setting = '{}_{}_ft{}_sl{}_ll{}_pl{}_lr{}_bs{}_hid{}_s{}_l{}_dp{}_inv{}_itr{}'.format(args.model,args.data, args.features, args.seq_len, args.label_len, args.pred_len,args.lr,args.batch_size,args.hidden_size,args.stacks, args.layers,args.dropout,args.inverse,ii)
+        setting = '{}_{}_ft{}_sl{}_ll{}_pl{}_lr{}_bs{}_hid{}_s{}_l{}_dp{}_inv{}_itr{}'.format(args.model,args.data, args.features, args.seq_len, args.label_len, args.pred_len,args.lr,args.batch_size,args.hidden_size,args.stacks, args.levels,args.dropout,args.inverse,ii)
 
         exp = Exp(args)  # set experiments
         print('>>>>>>>start training : {}>>>>>>>>>>>>>>>>>>>>>>>>>>'.format(setting))
@@ -129,7 +131,7 @@ if args.itr:
     print('Final min normed mse:{:.4f}, mae:{:.4f}'.format(min(mse_), min(mae_)))
     print('Final min denormed mse:{:.4f}, mae:{:.4f}'.format(min(mses_), min(maes_)))
 else:
-    setting = '{}_{}_ft{}_sl{}_ll{}_pl{}_lr{}_bs{}_hid{}_s{}_l{}_dp{}_inv{}_itr0'.format(args.model,args.data, args.features, args.seq_len, args.label_len, args.pred_len,args.lr,args.batch_size,args.hidden_size,args.stacks, args.layers,args.dropout,args.inverse)
+    setting = '{}_{}_ft{}_sl{}_ll{}_pl{}_lr{}_bs{}_hid{}_s{}_l{}_dp{}_inv{}_itr0'.format(args.model,args.data, args.features, args.seq_len, args.label_len, args.pred_len,args.lr,args.batch_size,args.hidden_size,args.stacks, args.levels,args.dropout,args.inverse)
     exp = Exp(args)  # set experiments
     print('>>>>>>>start training : {}>>>>>>>>>>>>>>>>>>>>>>>>>>'.format(setting))
     exp.train(setting)

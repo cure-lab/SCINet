@@ -57,7 +57,7 @@ parser.add_argument('--kernel', default=5, type=int, help='kernel size for the f
 parser.add_argument('--dilation', default=1, type=int, help='dilation')
 parser.add_argument('--positionalEcoding', type=bool , default = True)
 parser.add_argument('--groups', type=int, default=1)
-parser.add_argument('--layers', type=int, default=2)
+parser.add_argument('--levels', type=int, default=2)
 parser.add_argument('--stacks', type=int, default=1)
 parser.add_argument('--dropout', type=float, default=0.5)
 
@@ -72,8 +72,9 @@ if __name__ == '__main__':
     torch.backends.cudnn.deterministic = True  # Can change it to False --> default: False
     torch.backends.cudnn.enabled = True
 
-    Exp=Exp_pems
-    exp=Exp(args)
+    Exp = Exp_pems
+    exp = Exp(args)
+
     if args.train or args.resume:
         before_train = datetime.now().timestamp()
         print("===================Normal-Start=========================")
@@ -81,6 +82,7 @@ if __name__ == '__main__':
         after_train = datetime.now().timestamp()
         print(f'Training took {(after_train - before_train) / 60} minutes')
         print("===================Normal-End=========================")
+
     if args.evaluate:
         before_evaluation = datetime.now().timestamp()
         exp.test()

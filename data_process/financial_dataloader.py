@@ -76,8 +76,8 @@ class DataLoaderH(object):
         for i in range(n):
             end = idx_set[i] - self.h + 1
             start = end - self.P
-            X[i, :, :] = torch.from_numpy(self.dat[start:end, :]) 
-            Y[i, :, :] = torch.from_numpy(self.dat[idx_set[i] - self.h:idx_set[i], :])
+            X[i, :, :] = torch.from_numpy(self.dat[start:end, :])
+            Y[i, :, :] = torch.from_numpy(self.dat[end:(idx_set[i]+1), :])
         return [X, Y]
 
     def get_batches(self, inputs, targets, batch_size, shuffle=True):
