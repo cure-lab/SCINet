@@ -377,7 +377,7 @@ python run_ETTh.py --data ETTm1 --features S  --seq_len 672 --label_len 672 --pr
 
 Because of the stacked binary down-sampling method that SCINet adapts, the max number of layers (L_max) and look-back window (W) size should satisfy:
 
-<img src="https://render.githubusercontent.com/render/math?math=$$L_{max}=\lfloor log_2 W \rfloor$$">
+<img src="https://render.githubusercontent.com/render/math?math=L_{max}=\lfloor log_2 W \rfloor">
 
 
 ## Contact
