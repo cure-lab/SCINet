@@ -12,7 +12,7 @@ import warnings
 warnings.filterwarnings('ignore')
 from data_process.etth_data_loader import Dataset_ETT_hour, Dataset_ETT_minute, Dataset_Custom, Dataset_Pred
 from experiments.exp_basic import Exp_Basic
-from utils.tools import EarlyStopping, adjust_learning_rate, save_model
+from utils.tools import EarlyStopping, adjust_learning_rate, save_model, load_model
 from metrics.ETTh_metrics import metric
 from models.SCINet import SCINet
 
@@ -213,7 +213,7 @@ class Exp_ETTh(Exp_Basic):
         else:
             epoch_start = 0
 
-        for epoch in range(self.args.train_epochs):
+        for epoch in range(epoch_start, self.args.train_epochs):
             iter_count = 0
             train_loss = []
             
@@ -272,10 +272,10 @@ class Exp_ETTh(Exp_Basic):
                 break
 
             lr = adjust_learning_rate(model_optim, epoch+1, self.args)
+            
         save_model(epoch, lr, self.model, path, model_name=self.args.data, horizon=self.args.pred_len)
-        # best_model_path = path+'/'+'checkpoint.pth'
+        best_model_path = path+'/'+'checkpoint.pth'
         self.model.load_state_dict(torch.load(best_model_path))
-        
         return self.model
 
     def test(self, setting):
