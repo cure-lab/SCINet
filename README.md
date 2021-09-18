@@ -381,8 +381,6 @@ python run_ETTh.py --data ETTm1 --features S  --seq_len 672 --label_len 672 --pr
 
 (The formula might not be shown in the darkmode Github)
 
-- The kernel are generally set as odd number such as 3, 5 or 7.
-
 ## Contact
 
 If you have any questions, feel free to contact us or post github issues. Pull requests are highly welcomed! 
