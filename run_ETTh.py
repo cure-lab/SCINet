@@ -61,7 +61,7 @@ parser.add_argument('--window_size', default=12, type=int, help='input size')
 parser.add_argument('--dropout', type=float, default=0.5, help='dropout')
 parser.add_argument('--positionalEcoding', type=bool, default=False)
 parser.add_argument('--groups', type=int, default=1)
-parser.add_argument('--layers', type=int, default=3)
+parser.add_argument('--levels', type=int, default=3)
 parser.add_argument('--stacks', type=int, default=1, help='1 stack or 2 stacks')
 
 
