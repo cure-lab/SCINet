@@ -8,6 +8,7 @@ from experiments.exp_ETTh import Exp_ETTh
 
 parser = argparse.ArgumentParser(description='SCINet on ETT dataset')
 
+
 parser.add_argument('--model', type=str, required=False, default='SCINet', help='model of the experiment')
 ### -------  dataset settings --------------
 parser.add_argument('--data', type=str, required=False, default='ETTh1', choices=['ETTh1', 'ETTh2', 'ETTm1'], help='name of dataset')
@@ -19,6 +20,7 @@ parser.add_argument('--freq', type=str, default='h', help='freq for time feature
 parser.add_argument('--checkpoints', type=str, default='exp/ETT_checkpoints/', help='location of model checkpoints')
 parser.add_argument('--inverse', type=bool, default =False, help='denorm the output data')
 parser.add_argument('--embed', type=str, default='timeF', help='time features encoding, options:[timeF, fixed, learned]')
+
 
 ### -------  device settings --------------
 parser.add_argument('--use_gpu', type=bool, default=True, help='use gpu')
@@ -41,7 +43,7 @@ parser.add_argument('--num_workers', type=int, default=0, help='data loader num 
 parser.add_argument('--itr', type=int, default=0, help='experiments times')
 parser.add_argument('--train_epochs', type=int, default=100, help='train epochs')
 parser.add_argument('--batch_size', type=int, default=32, help='batch size of train input data')
-parser.add_argument('--patience', type=int, default=10, help='early stopping patience')
+parser.add_argument('--patience', type=int, default=5, help='early stopping patience')
 parser.add_argument('--lr', type=float, default=0.0001, help='optimizer learning rate')
 parser.add_argument('--loss', type=str, default='mae',help='loss function')
 parser.add_argument('--lradj', type=int, default=1,help='adjust learning rate')

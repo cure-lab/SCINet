@@ -72,8 +72,8 @@ if __name__ == '__main__':
     torch.backends.cudnn.deterministic = True  # Can change it to False --> default: False
     torch.backends.cudnn.enabled = True
 
-    Exp=Exp_pems
-    exp=Exp(args)
+    Exp = Exp_pems
+    exp = Exp(args)
     if args.train or args.resume:
         before_train = datetime.now().timestamp()
         print("===================Normal-Start=========================")

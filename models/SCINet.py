@@ -143,6 +143,7 @@ class SCINet_Tree(nn.Module):
         super().__init__()
         self.current_layer = current_layer
 
+
         self.workingblock = LevelSCINet(
             in_planes = in_planes,
             kernel_size = kernel_size,
@@ -150,6 +151,7 @@ class SCINet_Tree(nn.Module):
             groups= groups,
             hidden_size = hidden_size,
             INN = INN)
+
 
         if current_layer!=0:
             self.SCINet_Tree_odd=SCINet_Tree(in_planes, current_layer-1, kernel_size, dropout, groups, hidden_size, INN)
@@ -191,6 +193,7 @@ class EncoderTree(nn.Module):
             INN = INN)
         
     def forward(self, x):
+
         x= self.SCINet_Tree(x)
 
         return x
@@ -198,7 +201,7 @@ class EncoderTree(nn.Module):
 class SCINet(nn.Module):
     def __init__(self, output_len, input_len, input_dim = 9, hid_size = 1, num_stacks = 1,
                 num_layers = 3, concat_len = 0, groups = 1, kernel = 5, dropout = 0.5,
-                 single_step_output_One = 0, positionalE = False, modified = True):
+                 single_step_output_One = 0, input_len_seg = 0, positionalE = False, modified = True):
         super(SCINet, self).__init__()
 
         self.input_dim = input_dim
