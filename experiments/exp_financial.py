@@ -50,7 +50,7 @@ class Exp_financial(Exp_Basic):
             input_dim=self.input_dim,
             hid_size=self.args.hidden_size,
             num_stacks=self.args.stacks,
-            num_layers=self.args.levels,
+            num_levels=self.args.levels,
             concat_len=self.args.concat_len,
             groups=self.args.groups,
             kernel=self.args.kernel,
