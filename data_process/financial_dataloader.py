@@ -8,7 +8,7 @@ def normal_std(x):
 
 class DataLoaderH(object):
     # train and valid is the ratio of training set and validation set. test = 1 - train - valid
-    def __init__(self, file_name, train, valid, device, horizon, window, normalize=2):
+    def __init__(self, file_name, train, valid, horizon, window, normalize=2):
         self.P = window
         self.h = horizon
         fin = open(file_name)
@@ -26,16 +26,14 @@ class DataLoaderH(object):
         self.bias = torch.from_numpy(self.bias).float()
         tmp = self.test[1] * self.scale.expand(self.test[1].size(0), self.h, self.m)
 
-        self.scale = self.scale.to(device)
+        self.scale = self.scale.cuda()
         self.scale = Variable(self.scale)
-        self.bias = self.bias.to(device)
+        self.bias = self.bias.cuda()
         self.bias = Variable(self.bias)
 
         tmp = tmp[:, -1, :].squeeze()
         self.rse = normal_std(tmp)
         self.rae = torch.mean(torch.abs(tmp - torch.mean(tmp)))
-
-        self.device = device
 
     def _normalized(self, normalize):
 
@@ -95,8 +93,8 @@ class DataLoaderH(object):
             excerpt = index[start_idx:end_idx]
             X = inputs[excerpt]
             Y = targets[excerpt]
-            X = X.to(self.device)
-            Y = Y.to(self.device)
+            X = X.cuda()
+            Y = Y.cuda()
             yield Variable(X), Variable(Y)
             start_idx += batch_size
 

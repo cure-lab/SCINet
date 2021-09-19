@@ -113,7 +113,7 @@ class Exp_pems(Exp_Basic):
             my_optim = torch.optim.Adam(params=self.model.parameters(), lr=self.args.lr, betas=(0.9, 0.999), weight_decay=self.args.weight_decay)
         return my_optim
 
-    def inference(self, model, dataloader, device, node_cnt, window_size, horizon):
+    def inference(self, model, dataloader, node_cnt, window_size, horizon):
         forecast_set = []
         Mid_set = []
         target_set = []
@@ -121,8 +121,8 @@ class Exp_pems(Exp_Basic):
         self.model.eval()
         with torch.no_grad():
             for i, (inputs, target) in enumerate(dataloader):
-                inputs = inputs.to(device)
-                target = target.to(device)
+                inputs = inputs.cuda()
+                target = target.cuda()
                 input_set.append(inputs.detach().cpu().numpy())
                 step = 0
                 forecast_steps = np.zeros([inputs.size()[0], horizon, node_cnt], dtype=np.float)
@@ -160,16 +160,16 @@ class Exp_pems(Exp_Basic):
         elif self.args.stacks == 2:
             return np.concatenate(forecast_set, axis=0), np.concatenate(target_set, axis=0),np.concatenate(Mid_set, axis=0), np.concatenate(input_set, axis=0)
 
-    def validate(self, model, epoch, forecast_loss, dataloader, device, normalize_method, statistic,
+    def validate(self, model, epoch, forecast_loss, dataloader, normalize_method, statistic,
                 node_cnt, window_size, horizon, writer,
                 result_file=None,test=False):
         #start = datetime.now()
         print("===================Validate Normal=========================")
         if self.args.stacks == 1:
-            forecast_norm, target_norm, input_norm = self.inference(model, dataloader, device,
+            forecast_norm, target_norm, input_norm = self.inference(model, dataloader, 
                                     node_cnt, window_size, horizon)
         elif self.args.stacks == 2:
-            forecast_norm, target_norm, mid_norm, input_norm = self.inference(model, dataloader, device,
+            forecast_norm, target_norm, mid_norm, input_norm = self.inference(model, dataloader, 
                                             node_cnt, window_size, horizon)
         if normalize_method and statistic:
             forecast = de_normalized(forecast_norm, normalize_method, statistic)
@@ -247,7 +247,7 @@ class Exp_pems(Exp_Basic):
         my_optim=self._select_optimizer()
         my_lr_scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer=my_optim, gamma=self.args.decay_rate)
         test_loader, train_loader, valid_loader,node_cnt,test_normalize_statistic,val_normalize_statistic=self._get_data()
-        forecast_loss = nn.L1Loss().to(self.device)
+        forecast_loss = nn.L1Loss().cuda()
         best_validate_mae = np.inf
         best_test_mae = np.inf
         validate_score_non_decrease_count = 0
@@ -269,8 +269,8 @@ class Exp_pems(Exp_Basic):
             loss_total_M = 0
             cnt = 0
             for i, (inputs, target) in enumerate(train_loader):
-                inputs = inputs.to(self.device)  # torch.Size([32, 12, 228])
-                target = target.to(self.device)  # torch.Size([32, 3, 228])
+                inputs = inputs.cuda()  # torch.Size([32, 12, 228])
+                target = target.cuda()  # torch.Size([32, 3, 228])
                 self.model.zero_grad()
                 if self.args.stacks == 1:
                     forecast = self.model(inputs)
@@ -305,10 +305,10 @@ class Exp_pems(Exp_Basic):
             if (epoch + 1) % self.args.validate_freq == 0:
                 is_best_for_now = False
                 print('------ validate on data: VALIDATE ------')
-                performance_metrics = self.validate(self.model, epoch, forecast_loss, valid_loader, self.device, self.args.norm_method, val_normalize_statistic,
+                performance_metrics = self.validate(self.model, epoch, forecast_loss, valid_loader, self.args.norm_method, val_normalize_statistic,
                             node_cnt, self.args.window_size, self.args.horizon,
                             writer, result_file=None, test=False)
-                test_metrics = self.validate(self.model, epoch,  forecast_loss, test_loader, self.device, self.args.norm_method, test_normalize_statistic,
+                test_metrics = self.validate(self.model, epoch,  forecast_loss, test_loader, self.args.norm_method, test_normalize_statistic,
                             node_cnt, self.args.window_size, self.args.horizon,
                             writer, result_file=None, test=True)
                 if best_validate_mae > performance_metrics['mae']:
@@ -345,14 +345,14 @@ class Exp_pems(Exp_Basic):
         test_std = np.std(test_data, axis=0)
         normalize_statistic = {"mean": test_mean.tolist(), "std": test_std.tolist()}
 
-        forecast_loss = nn.L1Loss().to(self.device) #smooth_l1_loss #nn.MSELoss(reduction='mean').to(self.device)
+        forecast_loss = nn.L1Loss().cuda() #smooth_l1_loss #nn.MSELoss(reduction='mean').cuda()
         model = load_model(self.model, self.result_file, model_name=self.args.dataset, horizon=self.args.horizon)
         node_cnt = test_data.shape[1]
         test_set = ForecastTestDataset(test_data, window_size=self.args.window_size, horizon=self.args.horizon,
                                 normalize_method=self.args.norm_method, norm_statistic=normalize_statistic)
         test_loader = DataLoader(test_set, batch_size=self.args.batch_size*10, drop_last=False,
                                             shuffle=False, num_workers=0)
-        performance_metrics = self.validate(model = model, epoch = 100, forecast_loss = forecast_loss, dataloader = test_loader, device =self.device, normalize_method = self.args.norm_method, statistic = normalize_statistic,
+        performance_metrics = self.validate(model = model, epoch = 100, forecast_loss = forecast_loss, dataloader = test_loader, normalize_method = self.args.norm_method, statistic = normalize_statistic,
                         node_cnt = node_cnt, window_size = self.args.window_size, horizon =self.args.horizon,
                         result_file=result_test_file, writer = None, test=True)
         mae, rmse, mape = performance_metrics['mae'], performance_metrics['rmse'], performance_metrics['mape']

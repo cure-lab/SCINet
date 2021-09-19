@@ -378,7 +378,7 @@ class Exp_ETTh(Exp_Basic):
         return mae, maes, mse, mses
 
     def _process_one_batch_SCINet(self, dataset_object, batch_x, batch_y):
-        batch_x = batch_x.double().to(self.device)
+        batch_x = batch_x.double().cuda()
         batch_y = batch_y.double()
 
         if self.args.stacks == 1:
@@ -393,7 +393,7 @@ class Exp_ETTh(Exp_Basic):
         if self.args.stacks == 2:
             mid_scaled = dataset_object.inverse_transform(mid)
         f_dim = -1 if self.args.features=='MS' else 0
-        batch_y = batch_y[:,-self.args.pred_len:,f_dim:].to(self.device)
+        batch_y = batch_y[:,-self.args.pred_len:,f_dim:].cuda()
         batch_y_scaled = dataset_object.inverse_transform(batch_y)
 
         if self.args.stacks == 1:
