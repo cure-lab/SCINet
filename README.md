@@ -145,7 +145,7 @@ python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 3 --
 ```
 predict 6
 ```
-python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 6 --hidden-size 2 --lastWeight 0.5 --stacks 2 --levels 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o6_lr1e-4_bs1024_dp0.25_h2_s2l4_w0.5 
+python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 6 --hidden-size 2 --lastWeight 0.5 --stacks 1 --levels 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o6_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5 
 ```
 predict 12
 ```
@@ -233,7 +233,7 @@ python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon
 
 multivariate, out 24
 ```
-python run_ETTh.py --data ETTh1 --features M  --seq_len 48 --label_len 24 --pred_len 24 --hidden-size 4 --stacks 1 --levels 3 --lr 5e-3 --batch_size 16 --dropout 0.5 --model_name etth1_M_I48_O24_lr5e-3_bs16_dp0.5_h4_s1l3
+python run_ETTh.py --data ETTh1 --features M  --seq_len 48 --label_len 24 --pred_len 24 --hidden-size 4 --stacks 1 --levels 3 --lr 3e-3 --batch_size 8 --dropout 0.5 --model_name etth1_M_I48_O24_lr3e-3_bs8_dp0.5_h4_s1l3
 ```
 multivariate, out 48
 ```

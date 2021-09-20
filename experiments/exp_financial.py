@@ -215,7 +215,7 @@ class Exp_financial(Exp_Basic):
         return total_loss / n_samples
 
 
-    def validate(self, data, X, Y):
+    def validate(self, data, X, Y, evaluate=False):
         self.model.eval()
         total_loss = 0
         total_loss_l1 = 0
@@ -231,7 +231,11 @@ class Exp_financial(Exp_Basic):
         Mid_set = []
         target_set = []
 
-        for X, Y in data.get_batches(X, Y, self.args.batch_size*200, False):
+        if evaluate:
+            save_path = os.path.join(self.args.save_path, self.args.model_name)
+            self.model = load_model(self.model, save_path, model_name=self.args.dataset_name, horizon=self.args.horizon)[0]
+
+        for X, Y in data.get_batches(X, Y, self.args.batch_size, False):
             with torch.no_grad():
                 if self.args.stacks == 1:
                     forecast = self.model(X)

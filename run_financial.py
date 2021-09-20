@@ -31,6 +31,7 @@ parser.add_argument('--lastWeight', type=float, default=1.0,help='Loss weight la
 ### -------  training settings --------------  
 parser.add_argument('--train', type=bool, default=True)
 parser.add_argument('--resume', type=bool, default=False)
+parser.add_argument('--evaluate', type=bool, default=False)
 parser.add_argument('--log_interval', type=int, default=2000, metavar='N',
                     help='report interval')
 parser.add_argument('--save', type=str, default='model/model.pt',
@@ -73,28 +74,25 @@ if __name__ == '__main__':
     Exp=Exp_financial
     exp=Exp(args)
 
-    if args.train or args.resume:
+    if args.evaluate:
+        data=exp._get_data()
+        before_evaluation = datetime.now().timestamp()
+        if args.stacks == 1:
+            rse, rae, correlation = exp.validate(data,data.test[0],data.test[1], evaluate=True)
+        else:
+            rse, rae, correlation,rse_mid, rae_mid, correlation_mid = exp.validate(data,data.test[0],data.test[1], evaluate=True)
+        after_evaluation = datetime.now().timestamp()
+        print(f'Evaluation took {(after_evaluation - before_evaluation) / 60} minutes')
+
+    elif args.train or args.resume:
         before_train = datetime.now().timestamp()
         print("===================Normal-Start=========================")
         normalize_statistic = exp.train()
         after_train = datetime.now().timestamp()
         print(f'Training took {(after_train - before_train) / 60} minutes')
         print("===================Normal-End=========================")
-    
-    else:
-        data=exp._get_data()
-        save_path = os.path.join(args.save_path, args.model_name)
-        exp.model=exp.load_model(model, save_path, model_name=args.dataset_name, horizon=args.horizon)
-        before_evaluation = datetime.now().timestamp()
-        rse, rae, correlation,rse_mid, rae_mid, correlation_mid=exp.test(data,data.test[0],data.test[1])
-        after_evaluation = datetime.now().timestamp()
-        print(
-        '|Test_final rse {:5.4f} | Test_final rae {:5.4f} | Test_final corr   {:5.4f}'.format(
-            rse, rae, correlation), flush=True)
-        print(
-        '|Test_mid rse {:5.4f} | Test_mid rae {:5.4f} | Test_mid corr  {:5.4f}'.format(
-            rse_mid, rae_mid, correlation_mid), flush=True)
-        print(f'Evaluation took {(after_evaluation - before_evaluation) / 60} minutes')
+        exp.validate(data,data.test[0],data.test[1], evaluate=True)
+
 
 
 
