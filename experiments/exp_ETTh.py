@@ -279,7 +279,7 @@ class Exp_ETTh(Exp_Basic):
         self.model.load_state_dict(torch.load(best_model_path))
         return self.model
 
-    def test(self, setting):
+    def test(self, setting, evaluate=False):
         test_data, test_loader = self._get_data(flag='test')
         
         self.model.eval()
@@ -291,6 +291,11 @@ class Exp_ETTh(Exp_Basic):
         true_scales = []
         mid_scales = []
         
+        if evaluate:
+            path = os.path.join(self.args.checkpoints, setting)
+            best_model_path = path+'/'+'checkpoint.pth'
+            self.model.load_state_dict(torch.load(best_model_path))
+
         for i, (batch_x,batch_y,batch_x_mark,batch_y_mark) in enumerate(test_loader):
             pred, pred_scale, mid, mid_scale, true, true_scale = self._process_one_batch_SCINet(
                 test_data, batch_x, batch_y)

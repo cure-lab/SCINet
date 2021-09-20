@@ -145,9 +145,9 @@ class LevelSCINet(nn.Module):
         return x_even_update.permute(0, 2, 1), x_odd_update.permute(0, 2, 1) #even: B, T, D odd: B, T, D
 
 class SCINet_Tree(nn.Module):
-    def __init__(self, in_planes, current_layer, kernel_size, dropout, groups, hidden_size, INN):
+    def __init__(self, in_planes, current_level, kernel_size, dropout, groups, hidden_size, INN):
         super().__init__()
-        self.current_layer = current_layer
+        self.current_level = current_level
 
 
         self.workingblock = LevelSCINet(
@@ -159,9 +159,9 @@ class SCINet_Tree(nn.Module):
             INN = INN)
 
 
-        if current_layer!=0:
-            self.SCINet_Tree_odd=SCINet_Tree(in_planes, current_layer-1, kernel_size, dropout, groups, hidden_size, INN)
-            self.SCINet_Tree_even=SCINet_Tree(in_planes, current_layer-1, kernel_size, dropout, groups, hidden_size, INN)
+        if current_level!=0:
+            self.SCINet_Tree_odd=SCINet_Tree(in_planes, current_level-1, kernel_size, dropout, groups, hidden_size, INN)
+            self.SCINet_Tree_even=SCINet_Tree(in_planes, current_level-1, kernel_size, dropout, groups, hidden_size, INN)
     
     def zip_up_the_pants(self, even, odd):
         even = even.permute(1, 0, 2)
@@ -180,7 +180,7 @@ class SCINet_Tree(nn.Module):
     def forward(self, x):
         x_even_update, x_odd_update= self.workingblock(x)
         # We recursively reordered these sub-series. You can run the ./utils/recursive_demo.py to emulate this procedure. 
-        if self.current_layer ==0:
+        if self.current_level ==0:
             return self.zip_up_the_pants(x_even_update, x_odd_update)
         else:
             return self.zip_up_the_pants(self.SCINet_Tree_even(x_even_update), self.SCINet_Tree_odd(x_odd_update))
@@ -191,7 +191,7 @@ class EncoderTree(nn.Module):
         self.levels=num_levels
         self.SCINet_Tree = SCINet_Tree(
             in_planes = in_planes,
-            current_layer = num_levels-1,
+            current_level = num_levels-1,
             kernel_size = kernel_size,
             dropout =dropout ,
             groups = groups,
@@ -303,7 +303,7 @@ class SCINet(nn.Module):
         return signal
 
     def forward(self, x):
-        assert self.input_len % (np.power(2, self.num_levels)) == 0 # evenly divided the input length into two parts. (e.g., 32 -> 16 -> 8 -> 4 for 3 layers)
+        assert self.input_len % (np.power(2, self.num_levels)) == 0 # evenly divided the input length into two parts. (e.g., 32 -> 16 -> 8 -> 4 for 3 levels)
         if self.pe:
             pe = self.get_position_encoding(x)
             if pe.shape[2] > x.shape[2]:
