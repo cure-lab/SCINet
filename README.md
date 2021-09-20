@@ -312,7 +312,7 @@ python run_ETTh.py --data ETTh2 --features S  --seq_len 336 --label_len 336 --pr
 ```
 Univariate, out 720
 ```
-python run_ETTh.py --data ETTh2 --features S  --seq_len 720 --label_len 720 --pred_len 720 --hidden-size 8 --stacks 1 --levels 3 --lr 5e-5 --batch_size 16 --dropout 0.6 --model_name etth2_S_I736_O720_lr5e-5_bs16_dp0.6_h8_s1l3
+python run_ETTh.py --data ETTh2 --features S  --seq_len 720 --label_len 720 --pred_len 720 --hidden-size 8 --stacks 1 --levels 3 --lr 1e-5 --batch_size 128 --dropout 0.6 --model_name etth2_S_I736_O720_lr1e-5_bs128_dp0.6_h8_s1l3
 ```
 
 #### For ETTM1 dataset:
