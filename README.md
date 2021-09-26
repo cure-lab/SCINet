@@ -292,7 +292,7 @@ python run_ETTh.py --data ETTh2 --features M  --seq_len 336 --label_len 336 --pr
 ```
 multivariate, out 720
 ```
-python run_ETTh.py --data ETTh2 --features M  --seq_len 736 --label_len 720 --pred_len 720 --hidden-size 4 --stacks 1 --levels 5 --lr 1e-5 --batch_size 32 --dropout 0.5 --model_name etth2_M_I736_O720_lr1e-5_bs32_dp0.5_h4_s1l5
+python run_ETTh.py --data ETTh2 --features M  --seq_len 736 --label_len 720 --pred_len 720 --hidden-size 4 --stacks 1 --levels 5 --lr 1e-5 --batch_size 128 --dropout 0.5 --model_name etth2_M_I736_O720_lr1e-5_bs128_dp0.5_h4_s1l5
 ```
 Univariate, out 24
 ```
