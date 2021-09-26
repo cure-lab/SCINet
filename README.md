@@ -141,11 +141,11 @@ python run_pems.py --dataset PEMS08 --hidden-size 1 --dropout 0.5 --model_name p
 
 predict 3 
 ```
-python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 3 --hidden-size 2  --lastWeight 0.5 --stacks 1 --levels 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o3_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5
+python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 3 --hidden-size 1  --lastWeight 0.5 --stacks 2 --levels 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 256 --model_name so_I160_o3_lr1e-4_bs256_dp0.25_h1_s2l4_w0.5
 ```
 predict 6
 ```
-python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 6 --hidden-size 2 --lastWeight 0.5 --stacks 1 --levels 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o6_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5 
+python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 6 --hidden-size 0.5 --lastWeight 0.5 --stacks 2 --levels 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 256 --model_name so_I160_o6_lr1e-4_bs256_dp0.25_h0.5_s2l4_w0.5 
 ```
 predict 12
 ```
@@ -153,7 +153,7 @@ python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 12 -
 ```
 predict 24
 ```
-python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 24 --hidden-size 2 --lastWeight 0.5 --stacks 1 --levels 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 1024 --model_name so_I160_o24_lr1e-4_bs1024_dp0.25_h2_s1l4_w0.5
+python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 24 --hidden-size 1 --lastWeight 0.5 --stacks 1 --levels 4 --lradj 2 --lr 1e-4 --dropout 0.25 --batch_size 256 --model_name so_I160_o24_lr1e-4_bs256_dp0.25_h1_s1l4_w0.5
 ```
 
 #### For Electricity dataset:
@@ -179,7 +179,7 @@ python run_financial.py --dataset_name electricity --window_size 168 --horizon 2
 
 predict 3 
 ```
-python run_financial.py --dataset_name traffic --window_size 168 --horizon 3 --hidden-size 2 --single_step 1 --stacks 2 --levels 3 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I168_o3_lr5e-4_bs16_dp0.25_h2_s2l3_w1.0
+python run_financial.py --dataset_name traffic --window_size 168 --horizon 3 --hidden-size 1 --single_step 1 --stacks 2 --levels 3 --lr 5e-4 --dropout 0.5 --batch_size 16 --model_name traf_I168_o3_lr5e-4_bs16_dp0.5_h1_s2l3_w1.0
 ```
 predict 6
 ```
@@ -187,7 +187,7 @@ python run_financial.py --dataset_name traffic --window_size 168 --horizon 6 --h
 ```
 predict 12
 ```
-python run_financial.py --dataset_name traffic --window_size 168 --horizon 12 --hidden-size 1 --single_step 1 --stacks 2 --levels 3 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I168_o12_lr5e-4_bs16_dp0.25_h1_s2l3_w1.0
+python run_financial.py --dataset_name traffic --window_size 168 --horizon 12 --hidden-size 0.5 --single_step 1 --stacks 2 --levels 3 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I168_o12_lr5e-4_bs16_dp0.25_h0.5_s2l3_w1.0
 ```
 predict 24
 ```
@@ -312,7 +312,7 @@ python run_ETTh.py --data ETTh2 --features S  --seq_len 336 --label_len 336 --pr
 ```
 Univariate, out 720
 ```
-python run_ETTh.py --data ETTh2 --features S  --seq_len 720 --label_len 720 --pred_len 720 --hidden-size 8 --stacks 1 --levels 3 --lr 5e-5 --batch_size 16 --dropout 0.6 --model_name etth2_S_I736_O720_lr5e-5_bs16_dp0.6_h8_s1l3
+python run_ETTh.py --data ETTh2 --features S  --seq_len 720 --label_len 720 --pred_len 720 --hidden-size 8 --stacks 1 --levels 3 --lr 1e-5 --batch_size 128 --dropout 0.6 --model_name etth2_S_I736_O720_lr1e-5_bs128_dp0.6_h8_s1l3
 ```
 
 #### For ETTM1 dataset:
