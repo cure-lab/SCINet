@@ -8,7 +8,7 @@ This is the original PyTorch implementation of the following work: [Time Series 
 ```
 @article{liu2021SCINet,
   title={Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction},
-  author={Liu, Minhao and Zeng, Ailing and Lai, Qiuxia and Xu, Qiang},
+  author={Liu, Minhao and Zeng, Ailing and Xu, Zhijian and Lai, Qiuxia and Xu, Qiang},
   journal={arXiv preprint arXiv:2106.09305},
   year={2021}
 }
@@ -35,7 +35,9 @@ Stay tuned!
 
 ## Dataset
 
-We conduct the experiments on **11** popular time-series datasets, namely **Electricity Transformer Temperature (ETTh1, ETTh2 and ETTm1) , Traffic, Solar-Energy, Electricity and Exchange Rate and PeMS (PEMS03, PEMS04, PEMS07 and PEMS08)**, ranging from **power, energy, finance and traffic domains**. 
+We conduct the experiments on **11** popular time-series datasets, namely **Electricity Transformer Temperature (ETTh1, ETTh2 and ETTm1) ,  PeMS (PEMS03, PEMS04, PEMS07 and PEMS08) and Traffic, Solar-Energy, Electricity and Exchange Rate**, ranging from **power, energy, finance and traffic domains**. 
+
+The results of **Traffic, Solar-Energy, Electricity and Exchange Rate** are shown in the [Appendix](./Appendix).
 
 ### Overall information of the 11 datasets
 
