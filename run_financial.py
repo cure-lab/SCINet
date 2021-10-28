@@ -85,6 +85,7 @@ if __name__ == '__main__':
         print(f'Evaluation took {(after_evaluation - before_evaluation) / 60} minutes')
 
     elif args.train or args.resume:
+        data=exp._get_data()
         before_train = datetime.now().timestamp()
         print("===================Normal-Start=========================")
         normalize_statistic = exp.train()
