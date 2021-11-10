@@ -207,7 +207,7 @@ class EncoderTree(nn.Module):
 class SCINet(nn.Module):
     def __init__(self, output_len, input_len, input_dim = 9, hid_size = 1, num_stacks = 1,
                 num_levels = 3, concat_len = 0, groups = 1, kernel = 5, dropout = 0.5,
-                 single_step_output_One = 0, input_len_seg = 0, positionalE = False, modified = True):
+                 single_step_output_One = 0, input_len_seg = 0, positionalE = False, modified = True, RIN=False):
         super(SCINet, self).__init__()
 
         self.input_dim = input_dim
@@ -222,6 +222,7 @@ class SCINet(nn.Module):
         self.single_step_output_One = single_step_output_One
         self.concat_len = concat_len
         self.pe = positionalE
+        self.RIN=RIN
 
         self.blocks1 = EncoderTree(
             in_planes=self.input_dim,
@@ -289,6 +290,11 @@ class SCINet(nn.Module):
             torch.arange(num_timescales, dtype=torch.float32) *
             -log_timescale_increment)
         self.register_buffer('inv_timescales', inv_timescales)
+
+        ### RIN Parameters ###
+        if self.RIN:
+            self.affine_weight = nn.Parameter(torch.ones(1, 1, input_dim))
+            self.affine_bias = nn.Parameter(torch.zeros(1, 1, input_dim))
     
     def get_position_encoding(self, x):
         max_length = x.size()[1]
@@ -310,6 +316,20 @@ class SCINet(nn.Module):
                 x += pe[:, :, :-1]
             else:
                 x += self.get_position_encoding(x)
+
+        ### activated when RIN flag is set ###
+        if self.RIN:
+            print('/// RIN ACTIVATED ///\r',end='')
+            means = x.mean(1, keepdim=True).detach()
+            #mean
+            x = x - means
+            #var
+            stdev = torch.sqrt(torch.var(x, dim=1, keepdim=True, unbiased=False) + 1e-5)
+            x /= stdev
+            # affine
+            # print(x.shape,self.affine_weight.shape,self.affine_bias.shape)
+            x = x * self.affine_weight + self.affine_bias
+
         # the first stack
         res1 = x
         x = self.blocks1(x)
@@ -317,6 +337,13 @@ class SCINet(nn.Module):
         x = self.projection1(x)
 
         if self.stacks == 1:
+            ### reverse RIN ###
+            if self.RIN:
+                x = x - self.affine_bias
+                x = x / (self.affine_weight + 1e-10)
+                x = x * stdev
+                x = x + means
+
             return x
 
         elif self.stacks == 2:
@@ -331,6 +358,20 @@ class SCINet(nn.Module):
             x = self.blocks2(x)
             x += res2
             x = self.projection2(x)
+            
+            ### Reverse RIN ###
+            if self.RIN:
+                MidOutPut = MidOutPut - self.affine_bias
+                MidOutPut = MidOutPut / (self.affine_weight + 1e-10)
+                MidOutPut = MidOutPut * stdev
+                MidOutPut = MidOutPut + means
+
+            if self.RIN:
+                x = x - self.affine_bias
+                x = x / (self.affine_weight + 1e-10)
+                x = x * stdev
+                x = x + means
+
             return x, MidOutPut
 
 

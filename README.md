@@ -17,6 +17,8 @@ This is the original PyTorch implementation of the following work: [Time Series 
 ## Updates
 [2021-09-17] SCINet v1.0 is released! 
 
+[2021-11-10] Added RevIN [[1](##References)] support!
+
 ## Features
 - [x] Support **11** popular time-series forecasting datasets.  
 
@@ -131,7 +133,7 @@ python run_pems.py --dataset PEMS08 --hidden-size 1 --dropout 0.5 --model_name p
 
 | Parameter Name | Description             | Parameter in paper | Default |
 | -------------- | ----------------------- | ------------------ | ------- |
-| dataset        | Name of dataset      | N/A                | PEMS08  |
+| dataset        | Name of dataset         | N/A                | PEMS08  |
 | horizon        | Horizon                 | Horizon            | 12      |
 | window_size    | Look-back window        | Look-back window   | 12      |
 | hidden-size    | hidden expansion        | h                  | 1       |
@@ -220,7 +222,7 @@ python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon
 
 | Parameter Name | Description               | Parameter in paper      | Default                                |
 | -------------- | ------------------------- | ----------------------- | -------------------------------------- |
-| dataset_name           | Data name | N/A     | exchange_rate |
+| dataset_name   | Data name                 | N/A                     | exchange_rate                          |
 | horizon        | Horizon                   | Horizon                 | 3                                      |
 | window_size    | Look-back window          | Look-back window        | 168                                    |
 | batch_size     | Batch size                | batch size              | 8                                      |
@@ -382,6 +384,10 @@ python run_ETTh.py --data ETTm1 --features S  --seq_len 672 --label_len 672 --pr
 <img src="https://render.githubusercontent.com/render/math?math=W\bmod{2^{L}}=0">
 
 (The formula might not be shown in the darkmode Github)
+
+## References
+
+[1] [Reversible Instance Normalization for Accurate Time-Series Forecasting against Distribution Shift](https://openreview.net/forum?id=cGDAkQo1C0p)
 
 ## Contact
 
