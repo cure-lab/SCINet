@@ -17,7 +17,7 @@ This is the original PyTorch implementation of the following work: [Time Series 
 ## Updates
 [2021-09-17] SCINet v1.0 is released! 
 
-[2021-11-10] Added RevIN [[1](##References)] support!
+[2021-11-10] Added Reversible Instance Normalization(RevIN) [[1](##References)] support!
 
 ## Features
 - [x] Support **11** popular time-series forecasting datasets.  
@@ -27,6 +27,7 @@ This is the original PyTorch implementation of the following work: [Time Series 
 ![Solar Energy](https://img.shields.io/badge/%F0%9F%94%86-Solar%20Energy-yellow)
 ![finance](https://img.shields.io/badge/💵-Finance-yellow)
 - [x] Provide all training logs.
+- [x] Support RevIN to handle datasets with a large train-test sample distribution gap. To activate, simply add ```--RIN True``` to the command line. [**Read more**](./docs/RevIN.md)
 
 
 ## To-do items
