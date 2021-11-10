@@ -60,6 +60,8 @@ parser.add_argument('--levels', type=int, default=2)
 parser.add_argument('--stacks', type=int, default=1)
 parser.add_argument('--dropout', type=float, default=0.5)
 
+parser.add_argument('--RIN', type=bool, default=False)
+
 
 args = parser.parse_args()
 
