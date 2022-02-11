@@ -3,16 +3,23 @@
 ![pytorch](https://img.shields.io/badge/-PyTorch-%23EE4C2C?logo=PyTorch&labelColor=lightgrey)
 [![cure](https://img.shields.io/badge/-CURE_Lab-%23B31B1B)](http://cure-lab.github.io/)
 
-This is the original PyTorch implementation of the following work: [Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction](https://arxiv.org/pdf/2106.09305.pdf). If you find this repository useful for your work, please consider citing it as follows:
+[comment]: <> (This is the original PyTorch implementation of the following work: [Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction]&#40;https://arxiv.org/pdf/2106.09305.pdf&#41;. If you find this repository useful for your work, please consider citing it as follows:)
 
-```
-@article{liu2021SCINet,
-  title={Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction},
-  author={Liu, Minhao and Zeng, Ailing and Xu, Zhijian and Lai, Qiuxia and Xu, Qiang},
-  journal={arXiv preprint arXiv:2106.09305},
-  year={2021}
-}
-```
+[comment]: <> (```)
+
+[comment]: <> (@article{liu2021SCINet,)
+
+[comment]: <> (  title={Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction},)
+
+[comment]: <> (  author={Liu, Minhao and Zeng, Ailing and Xu, Zhijian and Lai, Qiuxia and Xu, Qiang},)
+
+[comment]: <> (  journal={arXiv preprint arXiv:2106.09305},)
+
+[comment]: <> (  year={2021})
+
+[comment]: <> (})
+
+[comment]: <> (```)
 
 ## Updates
 [2021-09-17] SCINet v1.0 is released! 
@@ -390,15 +397,19 @@ python run_ETTh.py --data ETTm1 --features S  --seq_len 672 --label_len 672 --pr
 
 [1] [Reversible Instance Normalization for Accurate Time-Series Forecasting against Distribution Shift](https://openreview.net/forum?id=cGDAkQo1C0p)
 
-## Contact
+[comment]: <> (## Contact)
 
-If you have any questions, feel free to contact us or post github issues. Pull requests are highly welcomed! 
+[comment]: <> (If you have any questions, feel free to contact us or post github issues. Pull requests are highly welcomed! )
 
-```
-Minhao Liu: mhliu@cse.cuhk.edu.hk
-Ailing Zeng: alzeng@cse.cuhk.edu.hk
-Zhijian Xu: zjxu21@cse.cuhk.edu.hk
-```
+[comment]: <> (```)
+
+[comment]: <> (Minhao Liu: mhliu@cse.cuhk.edu.hk)
+
+[comment]: <> (Ailing Zeng: alzeng@cse.cuhk.edu.hk)
+
+[comment]: <> (Zhijian Xu: zjxu21@cse.cuhk.edu.hk)
+
+[comment]: <> (```)
 
 ## Send us feedback!
 
