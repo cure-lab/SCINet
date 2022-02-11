@@ -1,7 +1,8 @@
 # SCINet
 [![Arxiv link](https://img.shields.io/badge/arXiv-Time%20Series%20is%20a%20Special%20Sequence%3A%20Forecasting%20with%20Sample%20Convolution%20and%20Interaction-%23B31B1B)](https://arxiv.org/pdf/2106.09305.pdf)
 ![pytorch](https://img.shields.io/badge/-PyTorch-%23EE4C2C?logo=PyTorch&labelColor=lightgrey)
-[![cure](https://img.shields.io/badge/-CURE_Lab-%23B31B1B)](http://cure-lab.github.io/)
+
+[comment]: <> ([![cure]&#40;https://img.shields.io/badge/-CURE_Lab-%23B31B1B&#41;]&#40;http://cure-lab.github.io/&#41;)
 
 [comment]: <> (This is the original PyTorch implementation of the following work: [Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction]&#40;https://arxiv.org/pdf/2106.09305.pdf&#41;. If you find this repository useful for your work, please consider citing it as follows:)
 
