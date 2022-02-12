@@ -1,6 +1,8 @@
 # SCINet
-[![Arxiv link](https://img.shields.io/badge/arXiv-Time%20Series%20is%20a%20Special%20Sequence%3A%20Forecasting%20with%20Sample%20Convolution%20and%20Interaction-%23B31B1B)](https://arxiv.org/pdf/2106.09305.pdf)
-![pytorch](https://img.shields.io/badge/-PyTorch-%23EE4C2C?logo=PyTorch&labelColor=lightgrey)
+
+[comment]: <> ([![Arxiv link]&#40;https://img.shields.io/badge/arXiv-Time%20Series%20is%20a%20Special%20Sequence%3A%20Forecasting%20with%20Sample%20Convolution%20and%20Interaction-%23B31B1B&#41;]&#40;https://arxiv.org/pdf/2106.09305.pdf&#41;)
+
+[comment]: <> (![pytorch]&#40;https://img.shields.io/badge/-PyTorch-%23EE4C2C?logo=PyTorch&labelColor=lightgrey&#41;)
 
 [comment]: <> ([![cure]&#40;https://img.shields.io/badge/-CURE_Lab-%23B31B1B&#41;]&#40;http://cure-lab.github.io/&#41;)
 
