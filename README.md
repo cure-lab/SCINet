@@ -84,7 +84,8 @@ pip install -r requirements.txt
 
 ### Dataset preparation
 
-All datasets can be downloaded [here](https://drive.google.com/drive/folders/1Gv1MXjLo5bLGep4bsqDyaNMI2oQC9GH2?usp=sharing). To prepare all dataset at one time, you can just run:
+[comment]: <> (https://drive.google.com/drive/folders/1Gv1MXjLo5bLGep4bsqDyaNMI2oQC9GH2?usp=sharing)
+All datasets can be downloaded [here](https://drive.google.com/drive/folders/1nPdc75aI_V4Ugd59wUOxWqMrpvmVIwPg). To prepare all dataset at one time, you can just run:
 ```
 source prepare_data.sh
 ```
@@ -114,7 +115,8 @@ The data directory structure is shown as follows.
 
 ### Run training code
 
-To facilitate reproduction, we provide the logs on the above datasets [here](https://drive.google.com/drive/folders/1MBK5MOShD4ygLIinNBo2F8EPRM5y9qIQ?usp=sharing) in details. You can check **the hyperparameters, training loss and test results for each epoch** in these logs as well.
+[comment]: <> (https://drive.google.com/drive/folders/1MBK5MOShD4ygLIinNBo2F8EPRM5y9qIQ?usp=sharing)
+To facilitate reproduction, we provide the logs on the above datasets [here](https://drive.google.com/drive/folders/1JhIsie9UIUoEs-laFYFl9KyeJbgNkJ8K) in details. You can check **the hyperparameters, training loss and test results for each epoch** in these logs as well.
 
 We follow the same settings of [StemGNN](https://github.com/microsoft/StemGNN) for PEMS 03, 04, 07, 08 datasets, [MTGNN](https://github.com/nnzhan/MTGNN) for Solar, electricity, traffic, financial datasets, [Informer](https://github.com/zhouhaoyi/Informer2020) for ETTH1, ETTH2, ETTM1 datasets. The detailed training commands are given as follows.
 
