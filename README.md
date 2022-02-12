@@ -23,7 +23,7 @@
 [comment]: <> (```)
 
 ## Updates
-[2021-09-17] SCINet v1.0 is released! 
+[2021-09-17] SCINet v1.0 is released
 
 [2021-11-10] Added Reversible Instance Normalization(RevIN) [[1](##References)] support!
 
