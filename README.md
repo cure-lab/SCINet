@@ -50,7 +50,7 @@ Stay tuned!
 
 We conduct the experiments on **11** popular time-series datasets, namely **Electricity Transformer Temperature (ETTh1, ETTh2 and ETTm1) ,  PeMS (PEMS03, PEMS04, PEMS07 and PEMS08) and Traffic, Solar-Energy, Electricity and Exchange Rate**, ranging from **power, energy, finance and traffic domains**. 
 
-The results of **Traffic, Solar-Energy, Electricity and Exchange Rate** are shown in the [Appendix](./Appendix).
+[comment]: <> (The results of **Traffic, Solar-Energy, Electricity and Exchange Rate** are shown in the [Appendix]&#40;./Appendix&#41;.)
 
 ### Overall information of the 11 datasets
 
