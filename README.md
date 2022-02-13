@@ -419,7 +419,7 @@ python run_ETTh.py --data ETTm1 --features S  --seq_len 672 --label_len 672 --pr
 
 [comment]: <> (```)
 
-## Send us feedback!
+[comment]: <> (## Send us feedback!)
 
 [comment]: <> (First of all, thank you all for your attention to this work!)
 
