@@ -25,9 +25,10 @@
 [comment]: <> (```)
 
 ## Updates
-[2021-09-17] SCINet v1.0 is released
 
-[2021-11-10] Added Reversible Instance Normalization(RevIN) [[1](##References)] support!
+[comment]: <> ([2021-09-17] SCINet v1.0 is released)
+
+[comment]: <> ([2021-11-10] Added Reversible Instance Normalization&#40;RevIN&#41; [[1]&#40;##References&#41;] support!)
 
 ## Features
 - [x] Support **11** popular time-series forecasting datasets.  
@@ -40,11 +41,13 @@
 - [x] Support RevIN to handle datasets with a large train-test sample distribution gap. To activate, simply add ```--RIN True``` to the command line. [**Read more**](./docs/RevIN.md)
 
 
-## To-do items
--  Integrate GNN-based spatial models into SCINet for better performance and higher efficiency on spatial-temporal time series. Our preliminary results show that this feature could result in considerable gains on the prediction accuracy of some datasets (e.g., PEMSxx).
--  Generate probalistic forecasting results. 
+[comment]: <> (## To-do items)
 
-Stay tuned!
+[comment]: <> (-  Integrate GNN-based spatial models into SCINet for better performance and higher efficiency on spatial-temporal time series. Our preliminary results show that this feature could result in considerable gains on the prediction accuracy of some datasets &#40;e.g., PEMSxx&#41;.)
+
+[comment]: <> (-  Generate probalistic forecasting results. )
+
+[comment]: <> (Stay tuned!)
 
 ## Dataset
 
@@ -418,10 +421,11 @@ python run_ETTh.py --data ETTm1 --features S  --seq_len 672 --label_len 672 --pr
 
 ## Send us feedback!
 
-First of all, thank you all for your attention to this work!
+[comment]: <> (First of all, thank you all for your attention to this work!)
 
-Our library is open source for research purposes, and we would like to keep on improving it for a very long time! So please let us know if you:
+[comment]: <> (Our library is open source for research purposes, and we would like to keep on improving it for a very long time! So please let us know if you:)
 
-- Find/fix any bug or know how to improve any part of SCINet.
-- Want to add/show some cool functionalities/projects made on top of SCINet. We could add your project link to our Community-based Projects section later or  integrate it into the next version of SCINet!
+[comment]: <> (- Find/fix any bug or know how to improve any part of SCINet.)
+
+[comment]: <> (- Want to add/show some cool functionalities/projects made on top of SCINet. We could add your project link to our Community-based Projects section later or  integrate it into the next version of SCINet!)
 
