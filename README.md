@@ -24,21 +24,27 @@
 
 [comment]: <> (```)
 
-## Updates
+[comment]: <> (## Updates)
 
 [comment]: <> ([2021-09-17] SCINet v1.0 is released)
 
 [comment]: <> ([2021-11-10] Added Reversible Instance Normalization&#40;RevIN&#41; [[1]&#40;##References&#41;] support!)
 
-## Features
-- [x] Support **11** popular time-series forecasting datasets.  
+[comment]: <> (## Features)
 
-![traffic](https://img.shields.io/badge/🚅-Traffic-yellow)
-![electric](https://img.shields.io/badge/%F0%9F%92%A1-Electricity-yellow)
-![Solar Energy](https://img.shields.io/badge/%F0%9F%94%86-Solar%20Energy-yellow)
-![finance](https://img.shields.io/badge/💵-Finance-yellow)
-- [x] Provide all training logs.
-- [x] Support RevIN to handle datasets with a large train-test sample distribution gap. To activate, simply add ```--RIN True``` to the command line. [**Read more**](./docs/RevIN.md)
+[comment]: <> (- [x] Support **11** popular time-series forecasting datasets.  )
+
+[comment]: <> (![traffic]&#40;https://img.shields.io/badge/🚅-Traffic-yellow&#41;)
+
+[comment]: <> (![electric]&#40;https://img.shields.io/badge/%F0%9F%92%A1-Electricity-yellow&#41;)
+
+[comment]: <> (![Solar Energy]&#40;https://img.shields.io/badge/%F0%9F%94%86-Solar%20Energy-yellow&#41;)
+
+[comment]: <> (![finance]&#40;https://img.shields.io/badge/💵-Finance-yellow&#41;)
+
+[comment]: <> (- [x] Provide all training logs.)
+
+[comment]: <> (- [x] Support RevIN to handle datasets with a large train-test sample distribution gap. To activate, simply add ```--RIN True``` to the command line. [**Read more**]&#40;./docs/RevIN.md&#41;)
 
 
 [comment]: <> (## To-do items)
@@ -116,10 +122,11 @@ The data directory structure is shown as follows.
         └── PEMS08.npz
 ```
 
-### Run training code
+[comment]: <> (### Run training code)
 
-[comment]: <> (https://drive.google.com/drive/folders/1MBK5MOShD4ygLIinNBo2F8EPRM5y9qIQ?usp=sharing)
-To facilitate reproduction, we provide the logs on the above datasets [here](https://drive.google.com/drive/folders/1JhIsie9UIUoEs-laFYFl9KyeJbgNkJ8K) in details. You can check **the hyperparameters, training loss and test results for each epoch** in these logs as well.
+[comment]: <> ([comment]: <> &#40;https://drive.google.com/drive/folders/1MBK5MOShD4ygLIinNBo2F8EPRM5y9qIQ?usp=sharing&#41;)
+
+[comment]: <> (To facilitate reproduction, we provide the logs on the above datasets [here]&#40;https://drive.google.com/drive/folders/1JhIsie9UIUoEs-laFYFl9KyeJbgNkJ8K&#41; in details. You can check **the hyperparameters, training loss and test results for each epoch** in these logs as well.)
 
 We follow the same settings of [StemGNN](https://github.com/microsoft/StemGNN) for PEMS 03, 04, 07, 08 datasets, [MTGNN](https://github.com/nnzhan/MTGNN) for Solar, electricity, traffic, financial datasets, [Informer](https://github.com/zhouhaoyi/Informer2020) for ETTH1, ETTH2, ETTM1 datasets. The detailed training commands are given as follows.
 
@@ -393,17 +400,17 @@ python run_ETTh.py --data ETTm1 --features S  --seq_len 672 --label_len 672 --pr
 | levels         | SCINet block levels          | L                  | 3                          |
 | stacks         | The number of SCINet blocks  | K                  | 1                          |
 
-## Special Constraint
+[comment]: <> (## Special Constraint)
 
-- Because of the stacked binary down-sampling method that SCINet adopts, the number of levels (L) and look-back window (W) size should satisfy:
+[comment]: <> (- Because of the stacked binary down-sampling method that SCINet adopts, the number of levels &#40;L&#41; and look-back window &#40;W&#41; size should satisfy:)
 
-<img src="https://render.githubusercontent.com/render/math?math=W\bmod{2^{L}}=0">
+[comment]: <> (<img src="https://render.githubusercontent.com/render/math?math=W\bmod{2^{L}}=0">)
 
-(The formula might not be shown in the darkmode Github)
+[comment]: <> (&#40;The formula might not be shown in the darkmode Github&#41;)
 
-## References
+[comment]: <> (## References)
 
-[1] [Reversible Instance Normalization for Accurate Time-Series Forecasting against Distribution Shift](https://openreview.net/forum?id=cGDAkQo1C0p)
+[comment]: <> ([1] [Reversible Instance Normalization for Accurate Time-Series Forecasting against Distribution Shift]&#40;https://openreview.net/forum?id=cGDAkQo1C0p&#41;)
 
 [comment]: <> (## Contact)
 
