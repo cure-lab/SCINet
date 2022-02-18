@@ -12,7 +12,7 @@ from torch import optim
 from torch.utils.data import DataLoader
 from torch.autograd import Variable
 from torch.utils.tensorboard import SummaryWriter
-
+from metrics.Finantial_metics import MSE, MAE
 from experiments.exp_basic import Exp_Basic
 from data_process.financial_dataloader import DataLoaderH
 from utils.tools import EarlyStopping, adjust_learning_rate, save_model, load_model
@@ -51,6 +51,7 @@ class Exp_financial(Exp_Basic):
             hid_size=self.args.hidden_size,
             num_stacks=self.args.stacks,
             num_levels=self.args.levels,
+            num_decoder_layer=self.args.num_decoder_layer,
             concat_len=self.args.concat_len,
             groups=self.args.groups,
             kernel=self.args.kernel,
@@ -75,7 +76,11 @@ class Exp_financial(Exp_Basic):
             
         if self.args.dataset_name == 'traffic':
             self.args.data = './datasets/financial/traffic.txt'
-        return DataLoaderH(self.args.data, 0.6, 0.2, self.args.horizon, self.args.window_size, self.args.normalize)
+
+        if self.args.long_term_forecast:
+            return DataLoaderH(self.args.data, 0.7, 0.1, self.args.horizon, self.args.window_size, 4)
+        else:
+            return DataLoaderH(self.args.data, 0.6, 0.2, self.args.horizon, self.args.window_size, self.args.normalize)
 
     def _select_optimizer(self):
         return torch.optim.Adam(params=self.model.parameters(), lr=self.args.lr, betas=(0.9, 0.999), weight_decay=1e-5)
@@ -181,11 +186,11 @@ class Exp_financial(Exp_Basic):
                                 loss_f.item()/(forecast.size(0) * data.m),loss_m.item()/(forecast.size(0) * data.m)))
                 iter += 1
             if self.args.stacks == 1:
-                val_loss, val_rae, val_corr = self.validate(data, data.valid[0],data.valid[1])
-                test_loss, test_rae, test_corr = self.validate(data, data.test[0],data.test[1])      
+                val_loss, val_rae, val_corr, val_mse, val_mae = self.validate(data, data.valid[0],data.valid[1])
+                test_loss, test_rae, test_corr, test_mse, test_mae = self.validate(data, data.test[0],data.test[1])      
             elif self.args.stacks == 2:
-                val_loss, val_rae, val_corr, val_rse_mid, val_rae_mid, val_correlation_mid=self.validate(data, data.valid[0],data.valid[1])
-                test_loss, test_rae, test_corr, test_rse_mid, test_rae_mid, test_correlation_mid= self.validate(data, data.test[0],data.test[1])
+                val_loss, val_rae, val_corr, val_rse_mid, val_rae_mid, val_correlation_mid, val_mse, val_mae =self.validate(data, data.valid[0],data.valid[1])
+                test_loss, test_rae, test_corr, test_rse_mid, test_rae_mid, test_correlation_mid, test_mse, test_mae = self.validate(data, data.test[0],data.test[1])
 
             self.writer.add_scalar('Train_loss_tatal', total_loss / n_samples, global_step=epoch)
             self.writer.add_scalar('Train_loss_Final', final_loss / n_samples, global_step=epoch)
@@ -205,16 +210,20 @@ class Exp_financial(Exp_Basic):
                 self.writer.add_scalar('Test_mid_corr', test_correlation_mid, global_step=epoch)
 
             print(
-                '| EncoDeco: end of epoch {:3d} | time: {:5.2f}s | train_loss {:5.4f} | valid rse {:5.4f} | valid rae {:5.4f} | valid corr  {:5.4f}|'
-                ' test rse {:5.4f} | test rae {:5.4f} | test corr  {:5.4f}'.format(
-                    epoch, (time.time() - epoch_start_time), total_loss / n_samples, val_loss, val_rae, val_corr, test_loss, test_rae, test_corr), flush=True)
+                '| EncoDeco: end of epoch {:3d} | time: {:5.2f}s | train_loss {:5.4f} | valid rse {:5.4f} | valid rae {:5.4f} | valid corr  {:5.4f}| valid mse {:5.4f} | valid mae  {:5.4f}|'
+                ' test rse {:5.4f} | test rae {:5.4f} | test corr  {:5.4f} | test mse {:5.4f} | test mae  {:5.4f}|'.format(
+                    epoch, (time.time() - epoch_start_time), total_loss / n_samples, val_loss, val_rae, val_corr, val_mse, val_mae, test_loss, test_rae, test_corr, test_mse, test_mae), flush=True)
             
-            if val_loss < best_val:
+            if val_mse < best_val and self.args.long_term_forecast:
+                save_model(epoch, lr, self.model, save_path, model_name=self.args.dataset_name, horizon=self.args.horizon)
+                print('--------------| Best Val loss |--------------')
+                best_val = val_mse
+            elif val_loss < best_val and not self.args.long_term_forecast:
                 save_model(epoch, lr, self.model, save_path, model_name=self.args.dataset_name, horizon=self.args.horizon)
                 print('--------------| Best Val loss |--------------')
                 best_val = val_loss
-        return total_loss / n_samples
 
+        return total_loss / n_samples
 
     def validate(self, data, X, Y, evaluate=False):
         self.model.eval()
@@ -282,6 +291,9 @@ class Exp_financial(Exp_Basic):
 
         forecast_Norm = torch.cat(forecast_set, axis=0)
         target_Norm = torch.cat(target_set, axis=0)
+        mse = MSE(forecast_Norm.cpu().numpy(), target_Norm.cpu().numpy())
+        mae = MAE(forecast_Norm.cpu().numpy(), target_Norm.cpu().numpy())
+
         if self.args.stacks == 2:
             Mid_Norm = torch.cat(Mid_set, axis=0)
 
@@ -340,14 +352,14 @@ class Exp_financial(Exp_Basic):
             correlation_mid = (correlation_mid[index_mid]).mean()
 
         print(
-            '|valid_final rse {:5.4f} | valid_final rae {:5.4f} | valid_final corr  {:5.4f}'.format(
+            '|valid_final mse {:5.4f} |valid_final mae {:5.4f} |valid_final rse {:5.4f} | valid_final rae {:5.4f} | valid_final corr  {:5.4f}'.format(mse,mae,
                 rse, rae, correlation), flush=True)
         if self.args.stacks == 2:
             print(
-            '|valid_mid rse {:5.4f} | valid_mid rae {:5.4f} | valid_mid corr  {:5.4f}'.format(
+            '|valid_final mse {:5.4f} |valid_final mae {:5.4f} |valid_mid rse {:5.4f} | valid_mid rae {:5.4f} | valid_mid corr  {:5.4f}'.format(mse,mae,
                 rse_mid, rae_mid, correlation_mid), flush=True)
 
         if self.args.stacks == 1:
-            return rse, rae, correlation
+            return rse, rae, correlation, mse, mae
         if self.args.stacks == 2:
-            return rse, rae, correlation, rse_mid, rae_mid, correlation_mid
+            return rse, rae, correlation, rse_mid, rae_mid, correlation_mid, mse, mae

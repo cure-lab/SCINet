@@ -56,7 +56,13 @@ class DataLoaderH(object):
                 self.scale[i] = np.std(self.rawdat[:, i]) #std
                 self.bias[i] = np.mean(self.rawdat[:, i])
                 self.dat[:, i] = (self.rawdat[:, i] - self.bias[i]) / self.scale[i]
-
+                
+        if (normalize == 4):
+            # normlized by the mean/std value of each row (sensor).
+            for i in range(self.m):
+                self.scale[i] = np.std(self.rawdat[:int(self.dat.shape[0]*0.7), i]) #std
+                self.bias[i] = np.mean(self.rawdat[:int(self.dat.shape[0]*0.7), i])
+                self.dat[:, i] = (self.rawdat[:, i] - self.bias[i]) / self.scale[i]
 
     def _split(self, train, valid, test):
 

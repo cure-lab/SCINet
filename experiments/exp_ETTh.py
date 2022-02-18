@@ -36,6 +36,7 @@ class Exp_ETTh(Exp_Basic):
             hid_size = self.args.hidden_size,
             num_stacks=self.args.stacks,
             num_levels=self.args.levels,
+            num_decoder_layer=self.args.num_decoder_layer,
             concat_len = self.args.concat_len,
             groups = self.args.groups,
             kernel = self.args.kernel,
@@ -334,26 +335,6 @@ class Exp_ETTh(Exp_Basic):
             print('normed mse:{:.4f}, mae:{:.4f}, rmse:{:.4f}, mape:{:.4f}, mspe:{:.4f}, corr:{:.4f}'.format(mse, mae, rmse, mape, mspe, corr))
             print('TTTT denormed mse:{:.4f}, mae:{:.4f}, rmse:{:.4f}, mape:{:.4f}, mspe:{:.4f}, corr:{:.4f}'.format(mses, maes, rmses, mapes, mspes, corrs))
 
-            # result save
-            if self.args.save:
-                folder_path = 'exp/ett_results/' + setting + '/'
-                if not os.path.exists(folder_path):
-                    os.makedirs(folder_path)
-
-                mae, mse, rmse, mape, mspe, corr = metric(preds, trues)
-                print('Test:mse:{:.4f}, mae:{:.4f}, rmse:{:.4f}, mape:{:.4f}, mspe:{:.4f}, corr:{:.4f}'.format(mse, mae, rmse, mape, mspe, corr))
-
-                np.save(folder_path + 'metrics.npy', np.array([mae, mse, rmse, mape, mspe]))
-                np.save(folder_path + 'pred.npy', preds)
-                np.save(folder_path + 'true.npy', trues)
-                np.save(folder_path + 'pred_scales.npy', pred_scales)
-                np.save(folder_path + 'true_scales.npy', true_scales)
-                
-                np.savetxt(f'{folder_path}/pred.csv', preds[0], delimiter=",")
-                np.savetxt(f'{folder_path}/true.csv', trues[0], delimiter=",")
-                np.savetxt(f'{folder_path}/pred_scales.csv', pred_scales[0], delimiter=",")
-                np.savetxt(f'{folder_path}/true_scales.csv', true_scales[0], delimiter=",")
-
         elif self.args.stacks == 2:
             preds = np.array(preds)
             trues = np.array(trues)
@@ -381,6 +362,22 @@ class Exp_ETTh(Exp_Basic):
 
         else:
             print('Error!')
+
+        # result save
+        if self.args.save:
+            folder_path = 'exp/ett_results/' + setting + '/'
+            if not os.path.exists(folder_path):
+                os.makedirs(folder_path)
+
+            mae, mse, rmse, mape, mspe, corr = metric(preds, trues)
+            print('Test:mse:{:.4f}, mae:{:.4f}, rmse:{:.4f}, mape:{:.4f}, mspe:{:.4f}, corr:{:.4f}'.format(mse, mae, rmse, mape, mspe, corr))
+
+            np.save(folder_path + 'metrics.npy', np.array([mae, mse, rmse, mape, mspe]))
+            np.save(folder_path + 'pred.npy', preds)
+            np.save(folder_path + 'true.npy', trues)
+            np.save(folder_path + 'pred_scales.npy', pred_scales)
+            np.save(folder_path + 'true_scales.npy', true_scales)
+            
         return mae, maes, mse, mses
 
     def _process_one_batch_SCINet(self, dataset_object, batch_x, batch_y):

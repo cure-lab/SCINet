@@ -93,8 +93,7 @@ pip install -r requirements.txt
 
 ### Dataset preparation
 
-[comment]: <> (https://drive.google.com/drive/folders/1Gv1MXjLo5bLGep4bsqDyaNMI2oQC9GH2?usp=sharing)
-All datasets can be downloaded [here](https://drive.google.com/drive/folders/1nPdc75aI_V4Ugd59wUOxWqMrpvmVIwPg). To prepare all dataset at one time, you can just run:
+All datasets can be downloaded [here](https://drive.google.com/drive/folders/1Gv1MXjLo5bLGep4bsqDyaNMI2oQC9GH2?usp=sharing). To prepare all dataset at one time, you can just run:
 ```
 source prepare_data.sh
 ```
@@ -122,11 +121,7 @@ The data directory structure is shown as follows.
         └── PEMS08.npz
 ```
 
-[comment]: <> (### Run training code)
-
-[comment]: <> ([comment]: <> &#40;https://drive.google.com/drive/folders/1MBK5MOShD4ygLIinNBo2F8EPRM5y9qIQ?usp=sharing&#41;)
-
-[comment]: <> (To facilitate reproduction, we provide the logs on the above datasets [here]&#40;https://drive.google.com/drive/folders/1JhIsie9UIUoEs-laFYFl9KyeJbgNkJ8K&#41; in details. You can check **the hyperparameters, training loss and test results for each epoch** in these logs as well.)
+### Run training code
 
 We follow the same settings of [StemGNN](https://github.com/microsoft/StemGNN) for PEMS 03, 04, 07, 08 datasets, [MTGNN](https://github.com/nnzhan/MTGNN) for Solar, electricity, traffic, financial datasets, [Informer](https://github.com/zhouhaoyi/Informer2020) for ETTH1, ETTH2, ETTM1 datasets. The detailed training commands are given as follows.
 
@@ -134,7 +129,7 @@ We follow the same settings of [StemGNN](https://github.com/microsoft/StemGNN) f
 
 pems03
 ```
-python run_pems.py --dataset PEMS03 --hidden-size 0.0625 --dropout 0.25 --model_name pems03_h0.0625_dp0.25
+python run_pems.py --dataset PEMS03 --hidden-size 0.0625 --dropout 0.25 --model_name pems03_h0.0625_dp0.25 --num_decoder_layer 2
 ```
 
 pems04
@@ -187,19 +182,35 @@ python run_financial.py --dataset_name solar_AL --window_size 160 --horizon 24 -
 
 predict 3
 ``` 
-python run_financial.py --dataset_name electricity --window_size 168 --horizon 3 --hidden-size 8 --single_step 1 --stacks 2 --levels 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o3_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
+python run_financial.py --dataset_name electricity --window_size 168 --horizon 3 --hidden-size 8 --single_step 1 --stacks 2 --levels 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o3_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321 --num_decoder_layer 2
 ```
 predict 6
 ```
-python run_financial.py --dataset_name electricity --window_size 168 --horizon 6 --hidden-size 8 --single_step 1 --stacks 2 --levels 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o6_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
+python run_financial.py --dataset_name electricity --window_size 168 --horizon 6 --hidden-size 8 --single_step 1 --stacks 2 --levels 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o6_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321 --num_decoder_layer 3
 ```
 predict 12
 ```
-python run_financial.py --dataset_name electricity --window_size 168 --horizon 12 --hidden-size 8 --single_step 1 --stacks 2 --levels 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o12_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
+python run_financial.py --dataset_name electricity --window_size 168 --horizon 12 --hidden-size 8 --single_step 1 --stacks 2 --levels 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o12_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321 --num_decoder_layer 3
 ```
 predict 24
 ```
-python run_financial.py --dataset_name electricity --window_size 168 --horizon 24 --hidden-size 8 --single_step 1 --stacks 2 --levels 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o24_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321
+python run_financial.py --dataset_name electricity --window_size 168 --horizon 24 --hidden-size 8 --single_step 1 --stacks 2 --levels 3 --lr 9e-3 --dropout 0 --batch_size 32 --model_name ele_I168_o24_lr9e-3_bs32_dp0_h8_s2l3_w0.5 --groups 321 --num_decoder_layer 3
+```
+predict 96
+```
+python -u run_financial.py --dataset_name electricity --window_size 96 --horizon 96 --hidden-size 8 --stacks 2 --levels 3 --lr 9e-4 --dropout 0 --batch_size 32 --model_name ele_I96_o96_lr9e-4_bs32_dp0_h8_s2l3_w0.5_n4 --groups 321  --concat_len 0   --normalize 4 --long_term_forecast
+```
+predict 192
+```
+python -u run_financial.py --dataset_name electricity --window_size 96 --horizon 192 --hidden-size 8 --stacks 2 --levels 3 --lr 9e-4 --dropout 0 --batch_size 32 --model_name ele_I96_o192_lr9e-4_bs32_dp0_h8_s2l3_w0.5_n4 --groups 321  --concat_len 0   --normalize 4 --long_term_forecast
+```
+predict 336
+```
+python -u run_financial.py --dataset_name electricity --window_size 96 --horizon 336 --hidden-size 8 --stacks 2 --levels 3 --lr 9e-4 --dropout 0 --batch_size 32 --model_name ele_I168_o336_lr9e-4_bs32_dp0_h8_s2l3_w0.5_n4 --groups 321  --concat_len 0   --normalize 4 --long_term_forecast
+```
+predict 720
+```
+python -u run_financial.py --dataset_name electricity --window_size 96 --horizon 720 --hidden-size 8 --stacks 2 --levels 3 --lr 9e-4 --dropout 0 --batch_size 32 --model_name ele_I168_o24_lr9e-4_bs32_dp0_h8_s2l3_w0.5_n4 --groups 321  --concat_len 0   --normalize 4 --long_term_forecast
 ```
 
 #### For Traffic dataset (warning: 20,000MiB+ memory usage!):
@@ -220,26 +231,53 @@ predict 24
 ```
 python run_financial.py --dataset_name traffic --window_size 168 --horizon 24 --hidden-size 2 --single_step 1 --stacks 2 --levels 2 --lr 5e-4 --dropout 0.5 --batch_size 16 --model_name traf_I168_o24_lr5e-4_bs16_dp0.5_h2_s2l2_w1.0
 ```
+predict 96
+```
+python -u run_financial.py --dataset_name traffic --window_size 96 --horizon 96 --hidden-size 2 --stacks 1 --levels 3 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I96_o96_lr5e-4_bs16_dp0.25_h2_s1l3_w1.0 --normalize 4 --long_term_forecast
+```
+predict 192
+```
+python -u run_financial.py --dataset_name traffic --window_size 96 --horizon 192 --hidden-size 1 --stacks 1 --levels 3 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I96_o192_lr5e-4_bs16_dp0.25_h2_s1l3_w1.0 --normalize 4  --long_term_forecast
+```
+predict 336
+```
+python -u run_financial.py --dataset_name traffic --window_size 96 --horizon 336 --hidden-size 1 --stacks 1 --levels 3 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I96_o336_lr5e-4_bs16_dp0.25_h2_s1l3_w1.0 --normalize 4 --long_term_forecast
+```
 
 #### For Exchange rate dataset:
 
 predict 3 
 ```
-python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 3 --hidden-size 0.125 --lastWeight 0.5 --stacks 1 --levels 3 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o3_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
+python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 3 --hidden-size 0.125 --lastWeight 0.5 --stacks 1 --levels 3 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o3_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --num_decoder_layer 2 --epochs 150
 ```
 predict 6
 ```
-python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 6 --hidden-size 0.125 --lastWeight 0.5 --stacks 1 --levels 3 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o6_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
+python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 6 --hidden-size 0.125 --lastWeight 0.5 --stacks 1 --levels 3 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o6_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --num_decoder_layer 2 --epochs 150
 ```
 predict 12
 ```
-python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 12 --hidden-size 0.125 --lastWeight 0.5 --stacks 1 --levels 3 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o12_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
+python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 12 --hidden-size 0.125 --lastWeight 0.5 --stacks 1 --levels 3 --lr 5e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o12_lr5e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --num_decoder_layer 2 --epochs 150
 ```
 predict 24
 ```
-python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 24 --hidden-size 0.125 --lastWeight 0.5 --stacks 1 --levels 3 --lr 7e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o24_lr7e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --epochs 150
+python run_financial.py --dataset_name exchange_rate --window_size 168 --horizon 24 --hidden-size 0.125 --lastWeight 0.5 --stacks 1 --levels 3 --lr 7e-3 --dropout 0.5 --batch_size 4 --model_name ex_I168_o24_lr7e-3_bs4_dp0.5_h0.125_s1l3_w0.5 --num_decoder_layer 2 --epochs 150
 ```
-
+predict 96
+```
+python run_financial.py --dataset_name exchange_rate --epochs 20 --window_size 96 --horizon 96 --hidden-size 0.125 --normalize 3 --lastWeight 0.5 --stacks 1 --levels 3 --lr 5e-5  --dropout 0 --model_name final --num_decoder_layer 2 --long_term_forecast
+```
+predict 192
+```
+python run_financial.py --dataset_name exchange_rate --epochs 20 --window_size 96 --horizon 192 --hidden-size 0.125 --normalize 3 --lastWeight 0.5 --stacks 1 --levels 3 --lr 5e-5  --dropout 0 --model_name final --num_decoder_layer 2 --long_term_forecast
+```
+predict 336
+```
+python run_financial.py --dataset_name exchange_rate --epochs 20 --window_size 96 --horizon 336 --hidden-size 0.125 --normalize 3 --lastWeight 0.5 --stacks 1 --levels 3 --lr 5e-5  --dropout 0 --model_name final --num_decoder_layer 2 --long_term_forecast
+```
+predict 720
+```
+python run_financial.py --dataset_name exchange_rate --epochs 20 --window_size 96 --horizon 720 --hidden-size 0.125 --normalize 3 --lastWeight 0.5 --stacks 1 --levels 3 --lr 5e-5  --dropout 0 --model_name final --num_decoder_layer 2 --long_term_forecast
+```
 
 ##### Financial Parameter highlights
 
@@ -435,4 +473,3 @@ python run_ETTh.py --data ETTm1 --features S  --seq_len 672 --label_len 672 --pr
 [comment]: <> (- Find/fix any bug or know how to improve any part of SCINet.)
 
 [comment]: <> (- Want to add/show some cool functionalities/projects made on top of SCINet. We could add your project link to our Community-based Projects section later or  integrate it into the next version of SCINet!)
-

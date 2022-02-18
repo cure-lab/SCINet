@@ -206,7 +206,7 @@ class EncoderTree(nn.Module):
 
 class SCINet(nn.Module):
     def __init__(self, output_len, input_len, input_dim = 9, hid_size = 1, num_stacks = 1,
-                num_levels = 3, concat_len = 0, groups = 1, kernel = 5, dropout = 0.5,
+                num_levels = 3, num_decoder_layer = 1, concat_len = 0, groups = 1, kernel = 5, dropout = 0.5,
                  single_step_output_One = 0, input_len_seg = 0, positionalE = False, modified = True, RIN=False):
         super(SCINet, self).__init__()
 
@@ -223,6 +223,7 @@ class SCINet(nn.Module):
         self.concat_len = concat_len
         self.pe = positionalE
         self.RIN=RIN
+        self.num_decoder_layer = num_decoder_layer
 
         self.blocks1 = EncoderTree(
             in_planes=self.input_dim,
@@ -255,7 +256,19 @@ class SCINet(nn.Module):
             elif isinstance(m, nn.Linear):
                 m.bias.data.zero_()
         self.projection1 = nn.Conv1d(self.input_len, self.output_len, kernel_size=1, stride=1, bias=False)
-        
+        self.div_projection = nn.ModuleList()
+        self.overlap_len = self.input_len//4
+        self.div_len = self.input_len//6
+
+        if self.num_decoder_layer > 1:
+            self.projection1 = nn.Linear(self.input_len, self.output_len)
+            for layer_idx in range(self.num_decoder_layer-1):
+                div_projection = nn.ModuleList()
+                for i in range(6):
+                    lens = min(i*self.div_len+self.overlap_len,self.input_len) - i*self.div_len
+                    div_projection.append(nn.Linear(lens, self.div_len))
+                self.div_projection.append(div_projection)
+
         if self.single_step_output_One: # only output the N_th timestep.
             if self.stacks == 2:
                 if self.concat_len:
@@ -334,7 +347,18 @@ class SCINet(nn.Module):
         res1 = x
         x = self.blocks1(x)
         x += res1
-        x = self.projection1(x)
+        if self.num_decoder_layer == 1:
+            x = self.projection1(x)
+        else:
+            x = x.permute(0,2,1)
+            for div_projection in self.div_projection:
+                output = torch.zeros(x.shape,dtype=x.dtpye).cuda()
+                for i, div_layer in enumerate(div_projection):
+                    div_x = x[:,:,i*self.div_len:min(i*self.div_len+self.overlap_len,self.input_len)]
+                    output[:,:,i*self.div_len:(i+1)*self.div_len] = div_layer(div_x)
+                x = output
+            x = self.projection1(x)
+            x = x.permute(0,2,1)
 
         if self.stacks == 1:
             ### reverse RIN ###
