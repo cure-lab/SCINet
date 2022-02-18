@@ -42,6 +42,7 @@ class Exp_pems(Exp_Basic):
             hid_size = self.args.hidden_size,
             num_stacks=self.args.stacks,
             num_levels=self.args.levels,
+            num_decoder_layer=self.args.num_decoder_layer,
             concat_len = self.args.concat_len,
             groups = self.args.groups,
             kernel = self.args.kernel,

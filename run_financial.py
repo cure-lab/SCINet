@@ -56,14 +56,15 @@ parser.add_argument('--positionalEcoding', type = bool , default=False)
 parser.add_argument('--dropout', type=float, default=0.5)
 parser.add_argument('--groups', type=int, default=1)
 parser.add_argument('--levels', type=int, default=3)
+parser.add_argument('--num_decoder_layer', type=int, default=1)
 parser.add_argument('--stacks', type=int, default=1)
-
+parser.add_argument('--long_term_forecast', action='store_true', default=False)
 parser.add_argument('--RIN', type=bool, default=False)
-
 
 args = parser.parse_args()
 
-args.concat_len = args.window_size - args.horizon
+if not args.long_term_forecast:
+    args.concat_len = args.window_size - args.horizon
 
 if __name__ == '__main__':
 
