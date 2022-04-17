@@ -352,7 +352,7 @@ class SCINet(nn.Module):
         else:
             x = x.permute(0,2,1)
             for div_projection in self.div_projection:
-                output = torch.zeros(x.shape,dtype=x.dtpye).cuda()
+                output = torch.zeros(x.shape,dtype=x.dtype).cuda()
                 for i, div_layer in enumerate(div_projection):
                     div_x = x[:,:,i*self.div_len:min(i*self.div_len+self.overlap_len,self.input_len)]
                     output[:,:,i*self.div_len:(i+1)*self.div_len] = div_layer(div_x)
