@@ -25,5 +25,5 @@ for i in range(0,7):
     plt.xlabel('Future Time Steps', fontsize=14)
     plt.ylabel('Prediction Results', fontsize=14)
     plt.tight_layout()
-    plt.savefig('ETTh1_M_i96o48_all_tcnbest_denorm_i{}'.format(i),dpi=300)
+    plt.savefig('ETTh1_M_i96o48_denorm_i{}'.format(i),dpi=300)
     plt.close()
