@@ -89,6 +89,8 @@ cd SCINet
 conda create -n scinet python=3.8
 conda activate scinet
 pip install -r requirements.txt
+
+forktttttest
 ```
 
 ### Dataset preparation
