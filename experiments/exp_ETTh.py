@@ -15,6 +15,7 @@ from experiments.exp_basic import Exp_Basic
 from utils.tools import EarlyStopping, adjust_learning_rate, save_model, load_model
 from metrics.ETTh_metrics import metric
 from models.SCINet import SCINet
+from models.SCINet_decompose import SCINet_decomp
 
 class Exp_ETTh(Exp_Basic):
     def __init__(self, args):
