@@ -30,6 +30,8 @@ This is the original PyTorch implementation of the following work: [Time Series 
 
 [2021-11-10] Added Reversible Instance Normalization(RevIN) [[1](##References)] support!
 
+[2022-6-30] SCINet v1.1 is released. Add new residual mechenism. 🎉 Minor bug fixed. 
+
 ## Features
 
 - [x] Support **11** popular time-series forecasting datasets.  
@@ -45,6 +47,10 @@ This is the original PyTorch implementation of the following work: [Time Series 
 - [x] Provide all training logs.
 
 - [x] Support RevIN to handle datasets with a large train-test sample distribution gap. To activate, simply add ```--RIN True``` to the command line. [**Read more**](./docs/RevIN.md)
+
+- [x] Using trend decomposition as residual connection brings large performance boost on several datasets. To activate, simply add ```--decompose True``` to the command line. More experiment result will be avaliable soon. 
+
+STAY TUNED! We will update several times in next month. 
 
 
 [comment]: <> (## To-do items)
