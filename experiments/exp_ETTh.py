@@ -29,22 +29,40 @@ class Exp_ETTh(Exp_Basic):
         else:
             print('Error!')
 
-        model = SCINet(
-            output_len=self.args.pred_len,
-            input_len=self.args.seq_len,
-            input_dim= in_dim,
-            hid_size = self.args.hidden_size,
-            num_stacks=self.args.stacks,
-            num_levels=self.args.levels,
-            num_decoder_layer=self.args.num_decoder_layer,
-            concat_len = self.args.concat_len,
-            groups = self.args.groups,
-            kernel = self.args.kernel,
-            dropout = self.args.dropout,
-            single_step_output_One = self.args.single_step_output_One,
-            positionalE = self.args.positionalEcoding,
-            modified = True,
-            RIN=self.args.RIN)
+        if self.args.decompose:
+            model = SCINet_decomp(
+                output_len=self.args.pred_len,
+                input_len=self.args.seq_len,
+                input_dim= in_dim,
+                hid_size = self.args.hidden_size,
+                num_stacks=self.args.stacks,
+                num_levels=self.args.levels,
+                num_decoder_layer=self.args.num_decoder_layer,
+                concat_len = self.args.concat_len,
+                groups = self.args.groups,
+                kernel = self.args.kernel,
+                dropout = self.args.dropout,
+                single_step_output_One = self.args.single_step_output_One,
+                positionalE = self.args.positionalEcoding,
+                modified = True,
+                RIN=self.args.RIN)
+        else:
+            model = SCINet(
+                output_len=self.args.pred_len,
+                input_len=self.args.seq_len,
+                input_dim= in_dim,
+                hid_size = self.args.hidden_size,
+                num_stacks=self.args.stacks,
+                num_levels=self.args.levels,
+                num_decoder_layer=self.args.num_decoder_layer,
+                concat_len = self.args.concat_len,
+                groups = self.args.groups,
+                kernel = self.args.kernel,
+                dropout = self.args.dropout,
+                single_step_output_One = self.args.single_step_output_One,
+                positionalE = self.args.positionalEcoding,
+                modified = True,
+                RIN=self.args.RIN)
         print(model)
         return model.double()
 
