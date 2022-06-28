@@ -19,6 +19,7 @@ from utils.tools import EarlyStopping, adjust_learning_rate, save_model, load_mo
 from metrics.ETTh_metrics import metric
 from utils.math_utils import smooth_l1_loss
 from models.SCINet import SCINet
+from models.SCINet_decompose import SCINet_decomp
 
 class Exp_financial(Exp_Basic):
     def __init__(self, args):
@@ -43,24 +44,45 @@ class Exp_financial(Exp_Basic):
             
         if self.args.dataset_name == 'traffic':
             self.input_dim = 862
+        
+        if self.args.decompose:
+            model = SCINet_decomp(
+                output_len=self.args.horizon,
+                input_len=self.args.window_size,
+                input_dim=self.input_dim,
+                hid_size=self.args.hidden_size,
+                num_stacks=self.args.stacks,
+                num_levels=self.args.levels,
+                num_decoder_layer=self.args.num_decoder_layer,
+                concat_len=self.args.concat_len,
+                groups=self.args.groups,
+                kernel=self.args.kernel,
+                dropout=self.args.dropout,
+                single_step_output_One=self.args.single_step_output_One,
+                positionalE=self.args.positionalEcoding,
+                modified=True,
+                RIN=self.args.RIN
+            )
             
-        model = SCINet(
-            output_len=self.args.horizon,
-            input_len=self.args.window_size,
-            input_dim=self.input_dim,
-            hid_size=self.args.hidden_size,
-            num_stacks=self.args.stacks,
-            num_levels=self.args.levels,
-            num_decoder_layer=self.args.num_decoder_layer,
-            concat_len=self.args.concat_len,
-            groups=self.args.groups,
-            kernel=self.args.kernel,
-            dropout=self.args.dropout,
-            single_step_output_One=self.args.single_step_output_One,
-            positionalE=self.args.positionalEcoding,
-            modified=True,
-            RIN=self.args.RIN
-        )
+        else: 
+            
+            model = SCINet(
+                output_len=self.args.horizon,
+                input_len=self.args.window_size,
+                input_dim=self.input_dim,
+                hid_size=self.args.hidden_size,
+                num_stacks=self.args.stacks,
+                num_levels=self.args.levels,
+                num_decoder_layer=self.args.num_decoder_layer,
+                concat_len=self.args.concat_len,
+                groups=self.args.groups,
+                kernel=self.args.kernel,
+                dropout=self.args.dropout,
+                single_step_output_One=self.args.single_step_output_One,
+                positionalE=self.args.positionalEcoding,
+                modified=True,
+                RIN=self.args.RIN
+            )
         print(model)
         return model
     
