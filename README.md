@@ -1,55 +1,55 @@
 # SCINet
 
-[comment]: <> ([![Arxiv link]&#40;https://img.shields.io/badge/arXiv-Time%20Series%20is%20a%20Special%20Sequence%3A%20Forecasting%20with%20Sample%20Convolution%20and%20Interaction-%23B31B1B&#41;]&#40;https://arxiv.org/pdf/2106.09305.pdf&#41;)
+[![Arxiv link](https://img.shields.io/badge/arXiv-Time%20Series%20is%20a%20Special%20Sequence%3A%20Forecasting%20with%20Sample%20Convolution%20and%20Interaction-%23B31B1B)](https://arxiv.org/pdf/2106.09305.pdf)
 
-[comment]: <> (![pytorch]&#40;https://img.shields.io/badge/-PyTorch-%23EE4C2C?logo=PyTorch&labelColor=lightgrey&#41;)
+![pytorch](https://img.shields.io/badge/-PyTorch-%23EE4C2C?logo=PyTorch&labelColor=lightgrey)
 
-[comment]: <> ([![cure]&#40;https://img.shields.io/badge/-CURE_Lab-%23B31B1B&#41;]&#40;http://cure-lab.github.io/&#41;)
+[![cure](https://img.shields.io/badge/-CURE_Lab-%23B31B1B)](http://cure-lab.github.io/)
 
-[comment]: <> (This is the original PyTorch implementation of the following work: [Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction]&#40;https://arxiv.org/pdf/2106.09305.pdf&#41;. If you find this repository useful for your work, please consider citing it as follows:)
+This is the original PyTorch implementation of the following work: [Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction](https://arxiv.org/pdf/2106.09305.pdf). If you find this repository useful for your work, please consider citing it as follows:
 
-[comment]: <> (```)
+```
 
-[comment]: <> (@article{liu2021SCINet,)
+@article{liu2021SCINet,
 
-[comment]: <> (  title={Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction},)
+  title={Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction},
 
-[comment]: <> (  author={Liu, Minhao and Zeng, Ailing and Xu, Zhijian and Lai, Qiuxia and Xu, Qiang},)
+  author={Liu, Minhao and Zeng, Ailing and Xu, Zhijian and Lai, Qiuxia and Xu, Qiang},
 
-[comment]: <> (  journal={arXiv preprint arXiv:2106.09305},)
+  journal={arXiv preprint arXiv:2106.09305},
 
-[comment]: <> (  year={2021})
+  year={2021}
 
-[comment]: <> (})
+}
 
-[comment]: <> (```)
+```
 
-[comment]: <> (## Updates)
+## Updates
 
-[comment]: <> ([2021-09-17] SCINet v1.0 is released)
+[2021-09-17] SCINet v1.0 is released
 
-[comment]: <> ([2021-11-10] Added Reversible Instance Normalization&#40;RevIN&#41; [[1]&#40;##References&#41;] support!)
+[2021-11-10] Added Reversible Instance Normalization(RevIN) [[1](##References)] support!
 
-[comment]: <> (## Features)
+## Features
 
-[comment]: <> (- [x] Support **11** popular time-series forecasting datasets.  )
+- [x] Support **11** popular time-series forecasting datasets.  
 
-[comment]: <> (![traffic]&#40;https://img.shields.io/badge/🚅-Traffic-yellow&#41;)
+![traffic](https://img.shields.io/badge/🚅-Traffic-yellow)
 
-[comment]: <> (![electric]&#40;https://img.shields.io/badge/%F0%9F%92%A1-Electricity-yellow&#41;)
+![electric](https://img.shields.io/badge/%F0%9F%92%A1-Electricity-yellow)
 
-[comment]: <> (![Solar Energy]&#40;https://img.shields.io/badge/%F0%9F%94%86-Solar%20Energy-yellow&#41;)
+![Solar Energy](https://img.shields.io/badge/%F0%9F%94%86-Solar%20Energy-yellow)
 
-[comment]: <> (![finance]&#40;https://img.shields.io/badge/💵-Finance-yellow&#41;)
+![finance](https://img.shields.io/badge/💵-Finance-yellow)
 
-[comment]: <> (- [x] Provide all training logs.)
+- [x] Provide all training logs.
 
-[comment]: <> (- [x] Support RevIN to handle datasets with a large train-test sample distribution gap. To activate, simply add ```--RIN True``` to the command line. [**Read more**]&#40;./docs/RevIN.md&#41;)
+- [x] Support RevIN to handle datasets with a large train-test sample distribution gap. To activate, simply add ```--RIN True``` to the command line. [**Read more**](./docs/RevIN.md)
 
 
 [comment]: <> (## To-do items)
 
-[comment]: <> (-  Integrate GNN-based spatial models into SCINet for better performance and higher efficiency on spatial-temporal time series. Our preliminary results show that this feature could result in considerable gains on the prediction accuracy of some datasets &#40;e.g., PEMSxx&#41;.)
+[comment]: <> (-  Integrate GNN-based spatial models into SCINet for better performance and higher efficiency on spatial-temporal time series. Our preliminary results show that this feature could result in considerable gains on the prediction accuracy of some datasets (e.g., PEMSxx).)
 
 [comment]: <> (-  Generate probalistic forecasting results )
 
@@ -59,7 +59,7 @@
 
 We conduct the experiments on **11** popular time-series datasets, namely **Electricity Transformer Temperature (ETTh1, ETTh2 and ETTm1) ,  PeMS (PEMS03, PEMS04, PEMS07 and PEMS08) and Traffic, Solar-Energy, Electricity and Exchange Rate**, ranging from **power, energy, finance and traffic domains**. 
 
-[comment]: <> (The results of **Traffic, Solar-Energy, Electricity and Exchange Rate** are shown in the [Appendix]&#40;./Appendix&#41;.)
+[comment]: <> (The results of **Traffic, Solar-Energy, Electricity and Exchange Rate** are shown in the [Appendix](./Appendix).)
 
 ### Overall information of the 11 datasets
 
@@ -438,17 +438,17 @@ python run_ETTh.py --data ETTm1 --features S  --seq_len 672 --label_len 672 --pr
 | levels         | SCINet block levels          | L                  | 3                          |
 | stacks         | The number of SCINet blocks  | K                  | 1                          |
 
-[comment]: <> (## Special Constraint)
+## Special Constraint
 
-[comment]: <> (- Because of the stacked binary down-sampling method that SCINet adopts, the number of levels &#40;L&#41; and look-back window &#40;W&#41; size should satisfy:)
+- Because of the stacked binary down-sampling method that SCINet adopts, the number of levels (L) and look-back window (W) size should satisfy:
 
-[comment]: <> (<img src="https://render.githubusercontent.com/render/math?math=W\bmod{2^{L}}=0">)
+<img src="https://render.githubusercontent.com/render/math?math=W\bmod{2^{L}}=0">
 
-[comment]: <> (&#40;The formula might not be shown in the darkmode Github&#41;)
+(The formula might not be shown in the darkmode Github)
 
 [comment]: <> (## References)
 
-[comment]: <> ([1] [Reversible Instance Normalization for Accurate Time-Series Forecasting against Distribution Shift]&#40;https://openreview.net/forum?id=cGDAkQo1C0p&#41;)
+[comment]: <> ([1] [Reversible Instance Normalization for Accurate Time-Series Forecasting against Distribution Shift](https://openreview.net/forum?id=cGDAkQo1C0p))
 
 [comment]: <> (## Contact)
 
