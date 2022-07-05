@@ -60,6 +60,7 @@ parser.add_argument('--num_decoder_layer', type=int, default=1)
 parser.add_argument('--stacks', type=int, default=1)
 parser.add_argument('--long_term_forecast', action='store_true', default=False)
 parser.add_argument('--RIN', type=bool, default=False)
+parser.add_argument('--decompose', type=bool,default=False)
 
 args = parser.parse_args()
 

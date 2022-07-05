@@ -66,6 +66,7 @@ parser.add_argument('--levels', type=int, default=3)
 parser.add_argument('--stacks', type=int, default=1, help='1 stack or 2 stacks')
 parser.add_argument('--num_decoder_layer', type=int, default=1)
 parser.add_argument('--RIN', type=bool, default=False)
+parser.add_argument('--decompose', type=bool,default=False)
 
 args = parser.parse_args()
 
