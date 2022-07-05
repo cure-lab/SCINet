@@ -55,7 +55,7 @@ STAY TUNED! We will update several times in next month.
 
 [comment]: <> (## To-do items)
 
-[comment]: <> (-  Integrate GNN-based spatial models into SCINet for better performance and higher efficiency on spatial-temporal time series. Our preliminary results show that this feature could result in considerable gains on the prediction accuracy of some datasets (e.g., PEMSxx).)
+[comment]: <> (-  Integrate GNN-based spatial models into SCINet for better performance and higher efficiency on spatial-temporal time series. Our preliminary results show that this feature could result in considerable gains on the prediction accuracy of some datasets (e.g., PEMSxx)
 
 [comment]: <> (-  Generate probalistic forecasting results )
 
