@@ -8,29 +8,29 @@
 
 This is the original PyTorch implementation of the following work: [Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction](https://arxiv.org/pdf/2106.09305.pdf). If you find this repository useful for your work, please consider citing it as follows:
 
-```
+[comment]: <> ( ```) 
 
-@article{liu2021SCINet,
+[comment]: <> (@article{liu2021SCINet,)
 
-  title={Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction},
+[comment]: <> (  title={Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction},)
 
-  author={Liu, Minhao and Zeng, Ailing and Xu, Zhijian and Lai, Qiuxia and Xu, Qiang},
+[comment]: <> (  author={Liu, Minhao and Zeng, Ailing and Xu, Zhijian and Lai, Qiuxia and Xu, Qiang},)
 
-  journal={arXiv preprint arXiv:2106.09305},
+[comment]: <> (  journal={arXiv preprint arXiv:2106.09305},)
 
-  year={2021}
+[comment]: <> (  year={2021})
 
-}
+[comment]: <> (})
 
-```
+[comment]: <> ( ``` )
 
-## Updates
+[comment]: <> ( ## Updates )
 
-[2021-09-17] SCINet v1.0 is released
+[comment]: <> ( [2021-09-17] SCINet v1.0 is released )
 
-[2021-11-10] Added Reversible Instance Normalization(RevIN) [[1](##References)] support!
+[comment]: <> ( [2021-11-10] Added Reversible Instance Normalization(RevIN) [[1](##References)] support! )
 
-[2022-6-30] SCINet v1.1 is released. Add new residual mechenism. 🎉 Minor bug fixed. 
+[comment]: <> ( [2022-6-30] SCINet v1.1 is released. Add new residual mechenism. 🎉 Minor bug fixed. )
 
 ## Features
 
