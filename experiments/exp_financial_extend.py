@@ -123,6 +123,10 @@ class Exp_financial_extend(Exp_Basic):
                 #     forecast, res = self.model(tx)
                 scale = data.scale.expand(forecast.size(0), self.args.horizon, data.m)
                 bias = data.bias.expand(forecast.size(0), self.args.horizon, data.m)
+
+                recon_scale=data.scale.expand(forecast.size(0), self.args.window_size, data.m)
+                recon_bias=data.bias.expand(forecast.size(0), self.args.window_size, data.m)
+
                 weight = torch.tensor(self.args.lastWeight).cuda() #used with multi-step
 
                 if self.args.single_step: #single step
@@ -144,12 +148,12 @@ class Exp_financial_extend(Exp_Basic):
                                     + weight * self.criterion(forecast[:, -1:, :], ty[:, -1:, :] ) + self.criterion(recon, tx)
                     else:
                         if self.args.lastWeight == 1.0:
-                            loss_f = self.criterion(forecast * scale + bias, ty * scale + bias) + self.criterion(recon* scale + bias, tx* scale + bias)
+                            loss_f = self.criterion(forecast * scale + bias, ty * scale + bias) + self.criterion(recon* recon_scale + recon_bias, tx* recon_scale + recon_bias)
                         else:
                             loss_f = self.criterion(forecast[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :],
                                             ty[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :]) \
                                 + weight * self.criterion(forecast[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :],
-                                                        ty[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :]) + self.criterion(recon* scale + bias, tx* scale + bias)
+                                                        ty[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :]) + self.criterion(recon* recon_scale + recon_bias, tx* recon_scale + recon_bias)
                 loss = loss_f
 
 
@@ -165,12 +169,8 @@ class Exp_financial_extend(Exp_Basic):
                     print('iter:{:3d} | loss: {:.7f}'.format(iter, loss.item()/(forecast.size(0) * data.m)))
 
                 iter += 1
-            if self.args.stacks == 1:
-                val_loss, val_rae, val_corr, val_mse, val_mae = self.validate(data, data.valid[0],data.valid[1])
-                test_loss, test_rae, test_corr, test_mse, test_mae = self.validate(data, data.test[0],data.test[1])      
-            elif self.args.stacks == 2:
-                val_loss, val_rae, val_corr, val_rse_mid, val_rae_mid, val_correlation_mid, val_mse, val_mae =self.validate(data, data.valid[0],data.valid[1])
-                test_loss, test_rae, test_corr, test_rse_mid, test_rae_mid, test_correlation_mid, test_mse, test_mae = self.validate(data, data.test[0],data.test[1])
+            val_loss, val_rae, val_corr, val_mse, val_mae = self.validate(data, data.valid[0],data.valid[1])
+            test_loss, test_rae, test_corr, test_mse, test_mae = self.validate(data, data.test[0],data.test[1])      
 
             self.writer.add_scalar('Train_loss_tatal', total_loss / n_samples, global_step=epoch)
             self.writer.add_scalar('Train_loss_Final', final_loss / n_samples, global_step=epoch)
@@ -180,14 +180,6 @@ class Exp_financial_extend(Exp_Basic):
             self.writer.add_scalar('Test_final_rse', test_loss, global_step=epoch)
             self.writer.add_scalar('Test_final_rae', test_rae, global_step=epoch)
             self.writer.add_scalar('Test_final_corr', test_corr, global_step=epoch)
-            if self.args.stacks == 2:
-                self.writer.add_scalar('Train_loss_Mid', min_loss / n_samples, global_step=epoch)
-                self.writer.add_scalar('Validation_mid_rse', val_rse_mid, global_step=epoch)
-                self.writer.add_scalar('Validation_mid_rae', val_rae_mid, global_step=epoch)
-                self.writer.add_scalar('Validation_mid_corr', val_correlation_mid, global_step=epoch)
-                self.writer.add_scalar('Test_mid_rse', test_rse_mid, global_step=epoch)
-                self.writer.add_scalar('Test_mid_rae', test_rae_mid, global_step=epoch)
-                self.writer.add_scalar('Test_mid_corr', test_correlation_mid, global_step=epoch)
 
             print(
                 '| EncoDeco: end of epoch {:3d} | time: {:5.2f}s | train_loss {:5.4f} | valid rse {:5.4f} | valid rae {:5.4f} | valid corr  {:5.4f}| valid mse {:5.4f} | valid mae  {:5.4f}|'
@@ -227,8 +219,7 @@ class Exp_financial_extend(Exp_Basic):
 
         for X, Y in data.get_batches(X, Y, self.args.batch_size, False):
             with torch.no_grad():
-                if self.args.stacks == 1:
-                    forecast, recon, _, __ = self.model(X)
+                forecast, recon, _, __ = self.model(X)
             # only predict the last step
             true = Y[:, -1, :].squeeze()
             output = forecast[:,-1,:].squeeze()
@@ -308,5 +299,5 @@ class Exp_financial_extend(Exp_Basic):
             '|valid_final mse {:5.4f} |valid_final mae {:5.4f} |valid_final rse {:5.4f} | valid_final rae {:5.4f} | valid_final corr  {:5.4f}'.format(mse,mae,
                 rse, rae, correlation), flush=True)
 
-        if self.args.stacks == 1:
-            return rse, rae, correlation, mse, mae
+
+        return rse, rae, correlation, mse, mae
