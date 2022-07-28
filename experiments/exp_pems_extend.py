@@ -14,7 +14,7 @@ from experiments.exp_basic import Exp_Basic
 from data_process.forecast_dataloader import ForecastDataset,ForecastTestDataset, de_normalized
 from utils.tools import EarlyStopping, adjust_learning_rate, save_model, load_model
 from metrics.ETTh_metrics import metric
-#from torch.utils.tensorboard import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter
 from utils.math_utils import evaluate, creatMask
 from models.SCINet import SCINet
 from models.SCINet_decompose import extend_SCINet
