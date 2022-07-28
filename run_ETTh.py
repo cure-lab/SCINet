@@ -5,6 +5,7 @@ import numpy as np
 from torch.utils.tensorboard import SummaryWriter
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 from experiments.exp_ETTh import Exp_ETTh
+from experiments.exp_ETTh_extend import Exp_ETTh_extend
 
 parser = argparse.ArgumentParser(description='SCINet on ETT dataset')
 
@@ -67,6 +68,7 @@ parser.add_argument('--stacks', type=int, default=1, help='1 stack or 2 stacks')
 parser.add_argument('--num_decoder_layer', type=int, default=1)
 parser.add_argument('--RIN', type=bool, default=False)
 parser.add_argument('--decompose', type=bool,default=False)
+parser.add_argument('--extend', type=bool,default=False) # will override the decompose
 
 args = parser.parse_args()
 
@@ -105,7 +107,10 @@ torch.backends.cudnn.benchmark = False
 torch.backends.cudnn.deterministic = True  # Can change it to False --> default: False
 torch.backends.cudnn.enabled = True
 
-Exp = Exp_ETTh
+if args.extend:
+    Exp = Exp_ETTh_extend
+else:
+    Exp = Exp_ETTh
 
 mae_ = []
 maes_ = []

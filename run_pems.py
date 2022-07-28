@@ -2,10 +2,11 @@ import os
 import torch
 from datetime import datetime
 from experiments.exp_pems import Exp_pems
+from experiments.exp_pems_extend import Exp_pems_extend
 import argparse
 import pandas as pd
 import numpy as np
-from torch.utils.tensorboard import SummaryWriter
+#from torch.utils.tensorboard import SummaryWriter
 
 parser = argparse.ArgumentParser(description='SCINet on pems datasets')
 
@@ -62,6 +63,7 @@ parser.add_argument('--dropout', type=float, default=0.5)
 parser.add_argument('--num_decoder_layer', type=int, default=1)
 parser.add_argument('--RIN', type=bool, default=False)
 parser.add_argument('--decompose', type=bool,default=False)
+parser.add_argument('--extend', type=bool,default=False)
 
 
 args = parser.parse_args()
@@ -74,7 +76,10 @@ if __name__ == '__main__':
     torch.backends.cudnn.deterministic = True  # Can change it to False --> default: False
     torch.backends.cudnn.enabled = True
 
-    Exp=Exp_pems
+    if args.extend:
+        Exp=Exp_pems_extend
+    else:
+        Exp=Exp_pems
     exp=Exp(args)
 
     if args.evaluate:

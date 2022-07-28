@@ -14,14 +14,14 @@ from experiments.exp_basic import Exp_Basic
 from data_process.forecast_dataloader import ForecastDataset,ForecastTestDataset, de_normalized
 from utils.tools import EarlyStopping, adjust_learning_rate, save_model, load_model
 from metrics.ETTh_metrics import metric
-from torch.utils.tensorboard import SummaryWriter
+#from torch.utils.tensorboard import SummaryWriter
 from utils.math_utils import evaluate, creatMask
 from models.SCINet import SCINet
-from models.SCINet_decompose import SCINet_decompose
+from models.SCINet_decompose import extend_SCINet
 
-class Exp_pems(Exp_Basic):
+class Exp_pems_extend(Exp_Basic):
     def __init__(self, args):
-        super(Exp_pems, self).__init__(args)
+        super(Exp_pems_extend, self).__init__(args)
         self.result_file = os.path.join('exp/pems_checkpoint', self.args.dataset, 'checkpoints')
         self.result_test_file = os.path.join('exp/pems_checkpoint', args.dataset, 'test')
         self.result_train_file = os.path.join('exp/pems_checkpoint', args.dataset, 'train')
@@ -35,42 +35,24 @@ class Exp_pems(Exp_Basic):
             self.input_dim = 883
         elif self.args.dataset == 'PEMS08':
             self.input_dim = 170
-        if self.args.decompose:
-            model = SCINet_decompose(
-                output_len=self.args.horizon,
-                input_len=self.args.window_size,
-                input_dim=self.input_dim,
-                hid_size = self.args.hidden_size,
-                num_stacks=self.args.stacks,
-                num_levels=self.args.levels,
-                num_decoder_layer=self.args.num_decoder_layer,
-                concat_len = self.args.concat_len,
-                groups = self.args.groups,
-                kernel = self.args.kernel,
-                dropout = self.args.dropout,
-                single_step_output_One = self.args.single_step_output_One,
-                positionalE = self.args.positionalEcoding,
-                modified = True,
-                RIN=self.args.RIN
-            )
-        else:
-            model = SCINet(
-                output_len=self.args.horizon,
-                input_len=self.args.window_size,
-                input_dim=self.input_dim,
-                hid_size = self.args.hidden_size,
-                num_stacks=self.args.stacks,
-                num_levels=self.args.levels,
-                num_decoder_layer=self.args.num_decoder_layer,
-                concat_len = self.args.concat_len,
-                groups = self.args.groups,
-                kernel = self.args.kernel,
-                dropout = self.args.dropout,
-                single_step_output_One = self.args.single_step_output_One,
-                positionalE = self.args.positionalEcoding,
-                modified = True,
-                RIN=self.args.RIN
-            )
+
+        model = extend_SCINet(
+            output_len=self.args.horizon,
+            input_len=self.args.window_size,
+            input_dim=self.input_dim,
+            hid_size = self.args.hidden_size,
+            num_stacks=self.args.stacks,
+            num_levels=self.args.levels,
+            #num_decoder_layer=self.args.num_decoder_layer,
+            concat_len = self.args.concat_len,
+            groups = self.args.groups,
+            kernel = self.args.kernel,
+            dropout = self.args.dropout,
+            single_step_output_One = self.args.single_step_output_One,
+            positionalE = self.args.positionalEcoding,
+            modified = True,
+            RIN=self.args.RIN
+        )
 
         print(model)
         return model
@@ -150,9 +132,8 @@ class Exp_pems(Exp_Basic):
                 Mid_steps = np.zeros([inputs.size()[0], horizon, node_cnt], dtype=np.float)
                 while step < horizon:
                     if self.args.stacks == 1:
-                        forecast_result = self.model(inputs)
-                    elif self.args.stacks == 2:
-                        forecast_result, Mid_result = self.model(inputs)
+                        forecast_result,recon,_,__ = self.model(inputs)
+
 
                     len_model_output = forecast_result.size()[1]
                     if len_model_output == 0:
@@ -162,15 +143,12 @@ class Exp_pems(Exp_Basic):
                     inputs[:, window_size - len_model_output:, :] = forecast_result.clone()
                     forecast_steps[:, step:min(horizon - step, len_model_output) + step, :] = \
                         forecast_result[:, :min(horizon - step, len_model_output), :].detach().cpu().numpy()
-                    if self.args.stacks == 2:
-                        Mid_steps[:, step:min(horizon - step, len_model_output) + step, :] = \
-                            Mid_result[:, :min(horizon - step, len_model_output), :].detach().cpu().numpy()
+
 
                     step += min(horizon - step, len_model_output)
                 forecast_set.append(forecast_steps)
                 target_set.append(target.detach().cpu().numpy())
-                if self.args.stacks == 2:
-                    Mid_set.append(Mid_steps)
+
 
                 result_save = np.concatenate(forecast_set, axis=0)
                 target_save = np.concatenate(target_set, axis=0)
@@ -178,8 +156,6 @@ class Exp_pems(Exp_Basic):
         if self.args.stacks == 1:
             return np.concatenate(forecast_set, axis=0), np.concatenate(target_set, axis=0), np.concatenate(input_set, axis=0)
 
-        elif self.args.stacks == 2:
-            return np.concatenate(forecast_set, axis=0), np.concatenate(target_set, axis=0),np.concatenate(Mid_set, axis=0), np.concatenate(input_set, axis=0)
 
     def validate(self, model, epoch, forecast_loss, dataloader, normalize_method, statistic,
                 node_cnt, window_size, horizon, writer,
@@ -189,38 +165,31 @@ class Exp_pems(Exp_Basic):
         if self.args.stacks == 1:
             forecast_norm, target_norm, input_norm = self.inference(model, dataloader, 
                                     node_cnt, window_size, horizon)
-        elif self.args.stacks == 2:
-            forecast_norm, target_norm, mid_norm, input_norm = self.inference(model, dataloader, 
-                                            node_cnt, window_size, horizon)
+
         if normalize_method and statistic:
             forecast = de_normalized(forecast_norm, normalize_method, statistic)
             target = de_normalized(target_norm, normalize_method, statistic)
             input = de_normalized(input_norm, normalize_method, statistic)
-            if self.args.stacks == 2:
-                mid = de_normalized(mid_norm, normalize_method, statistic)
+
         else:
             forecast, target, input = forecast_norm, target_norm, input_norm
-            if self.args.stacks == 2:
-                mid = mid_norm
+
 
         beta = 0.1
         forecast_norm = torch.from_numpy(forecast_norm).float()
         target_norm = torch.from_numpy(target_norm).float()
-        if self.args.stacks == 1:
-            loss = forecast_loss(forecast_norm, target_norm)
+        # if self.args.stacks == 1:
+        #     loss = forecast_loss(forecast_norm, target_norm)
 
-        elif self.args.stacks == 2:
-            mid_norm = torch.from_numpy(mid_norm).float()
 
-            loss = forecast_loss(forecast_norm, target_norm) + forecast_loss(mid_norm, target_norm)
-            loss_F = forecast_loss(forecast_norm, target_norm)
-            loss_M = forecast_loss(mid_norm, target_norm)
+        #     loss = forecast_loss(forecast_norm, target_norm) + forecast_loss(mid_norm, target_norm)
+        #     loss_F = forecast_loss(forecast_norm, target_norm)
+        #     loss_M = forecast_loss(mid_norm, target_norm)
 
         score = evaluate(target, forecast)
         score_final_detail = evaluate(target, forecast,by_step=True)
         print('by each step: MAPE & MAE & RMSE',score_final_detail)
-        if self.args.stacks == 2:
-            score1 = evaluate(target, mid)
+
         #end = datetime.now()
 
         if writer:
@@ -228,24 +197,14 @@ class Exp_pems(Exp_Basic):
                 print(f'TEST: RAW : MAE {score[1]:7.2f};MAPE {score[0]:7.2f}; RMSE {score[2]:7.2f}.')
                 writer.add_scalar('Test MAE_final', score[1], global_step=epoch)
                 writer.add_scalar('Test RMSE_final', score[2], global_step=epoch)
-                if self.args.stacks == 2:
-                    print(f'TEST: RAW-Mid : MAE {score1[1]:7.2f}; MAPE {score[0]:7.2f}; RMSE {score1[2]:7.2f}.')
-                    writer.add_scalar('Test MAE_Mid', score1[1], global_step=epoch)
-                    writer.add_scalar('Test RMSE_Mid', score1[2], global_step=epoch)
-                    writer.add_scalar('Test Loss_final', loss_F, global_step=epoch)
-                    writer.add_scalar('Test Loss_Mid', loss_M, global_step=epoch)
+
 
             else:
                 print(f'VAL: RAW : MAE {score[1]:7.2f}; RMSE {score[2]:7.2f}.')
                 writer.add_scalar('VAL MAE_final', score[1], global_step=epoch)
                 writer.add_scalar('VAL RMSE_final', score[2], global_step=epoch)
 
-                if self.args.stacks == 2:
-                    print(f'VAL: RAW-Mid : MAE {score1[1]:7.2f}; RMSE {score1[2]:7.2f}.')
-                    writer.add_scalar('VAL MAE_Mid', score1[1], global_step=epoch)
-                    writer.add_scalar('VAL RMSE_Mid', score1[2], global_step=epoch)
-                    writer.add_scalar('VAL Loss_final', loss_F, global_step=epoch)
-                    writer.add_scalar('VAL Loss_Mid', loss_M, global_step=epoch)
+
 
         if result_file:
             if not os.path.exists(result_file):
@@ -294,32 +253,20 @@ class Exp_pems(Exp_Basic):
                 target = target.cuda()  # torch.Size([32, 3, 228])
                 self.model.zero_grad()
                 if self.args.stacks == 1:
-                    forecast = self.model(inputs)
-                    loss = forecast_loss(forecast, target)
-                elif self.args.stacks == 2:
-                    forecast, res = self.model(inputs)
-                    loss = forecast_loss(forecast, target) + forecast_loss(res, target)
-                    loss_M = forecast_loss(res, target)
-                    loss_F = forecast_loss(forecast, target)
+                    forecast, recon,_,__ = self.model(inputs)
+                    loss = forecast_loss(forecast, target)+forecast_loss(recon, inputs)
                 
                 cnt += 1
                 loss.backward()
                 my_optim.step()
                 loss_total += float(loss)
-                if self.args.stacks == 2:
-                    loss_total_F  += float(loss_F)
-                    loss_total_M  += float(loss_M)
             if self.args.stacks == 1:
                 print('| end of epoch {:3d} | time: {:5.2f}s | train_total_loss {:5.4f} '.format(epoch, (
                     time.time() - epoch_start_time), loss_total / cnt))
-            elif self.args.stacks == 2:
-                print('| end of epoch {:3d} | time: {:5.2f}s | train_total_loss {:5.4f}, loss_F {:5.4f}, loss_M {:5.4f}  '.format(epoch, (
-                    time.time() - epoch_start_time), loss_total / cnt, loss_total_F / cnt, loss_total_M / cnt))
+
 
             writer.add_scalar('Train_loss_tatal', loss_total / cnt, global_step=epoch)
-            if self.args.stacks == 2:
-                writer.add_scalar('Train_loss_Mid', loss_total_F / cnt, global_step=epoch)
-                writer.add_scalar('Train_loss_Final', loss_total_M / cnt, global_step=epoch)
+
 
             if (epoch+1) % self.args.exponential_decay_step == 0:
                 my_lr_scheduler.step()

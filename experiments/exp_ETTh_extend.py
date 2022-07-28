@@ -15,11 +15,14 @@ from experiments.exp_basic import Exp_Basic
 from utils.tools import EarlyStopping, adjust_learning_rate, save_model, load_model
 from metrics.ETTh_metrics import metric
 from models.SCINet import SCINet
-from models.SCINet_decompose import SCINet_decompose
+from models.SCINet_decompose import extend_SCINet
+from utils.soft_dtw import SoftDTW
+import matplotlib.pyplot as plt
+import json
 
-class Exp_ETTh(Exp_Basic):
+class Exp_ETTh_extend(Exp_Basic):
     def __init__(self, args):
-        super(Exp_ETTh, self).__init__(args)
+        super(Exp_ETTh_extend, self).__init__(args)
     
     def _build_model(self):
 
@@ -30,40 +33,22 @@ class Exp_ETTh(Exp_Basic):
         else:
             print('Error!')
 
-        if self.args.decompose:
-            model = SCINet_decompose(
-                output_len=self.args.pred_len,
-                input_len=self.args.seq_len,
-                input_dim= in_dim,
-                hid_size = self.args.hidden_size,
-                num_stacks=self.args.stacks,
-                num_levels=self.args.levels,
-                num_decoder_layer=self.args.num_decoder_layer,
-                concat_len = self.args.concat_len,
-                groups = self.args.groups,
-                kernel = self.args.kernel,
-                dropout = self.args.dropout,
-                single_step_output_One = self.args.single_step_output_One,
-                positionalE = self.args.positionalEcoding,
-                modified = True,
-                RIN=self.args.RIN)
-        else:
-            model = SCINet(
-                output_len=self.args.pred_len,
-                input_len=self.args.seq_len,
-                input_dim= in_dim,
-                hid_size = self.args.hidden_size,
-                num_stacks=self.args.stacks,
-                num_levels=self.args.levels,
-                num_decoder_layer=self.args.num_decoder_layer,
-                concat_len = self.args.concat_len,
-                groups = self.args.groups,
-                kernel = self.args.kernel,
-                dropout = self.args.dropout,
-                single_step_output_One = self.args.single_step_output_One,
-                positionalE = self.args.positionalEcoding,
-                modified = True,
-                RIN=self.args.RIN)
+        model = extend_SCINet(
+            output_len=self.args.pred_len,
+            input_len=self.args.seq_len,
+            input_dim= in_dim,
+            hid_size = self.args.hidden_size,
+            num_stacks=self.args.stacks,
+            num_levels=self.args.levels,
+            #num_decoder_layer=self.args.num_decoder_layer,
+            concat_len = self.args.concat_len,
+            groups = self.args.groups,
+            kernel = self.args.kernel,
+            dropout = self.args.dropout,
+            single_step_output_One = self.args.single_step_output_One,
+            positionalE = self.args.positionalEcoding,
+            modified = True,
+            RIN=self.args.RIN)
         print(model)
         return model.double()
 
@@ -121,6 +106,8 @@ class Exp_ETTh(Exp_Basic):
             criterion = nn.MSELoss()
         elif losstype == "mae":
             criterion = nn.L1Loss()
+        elif losstype=='dtw':
+            criterion= SoftDTW(use_cuda=True, gamma=0.1,step_cost=True)
         else:
             criterion = nn.L1Loss()
         return criterion
@@ -137,11 +124,13 @@ class Exp_ETTh(Exp_Basic):
         mid_scales = []
 
         for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(valid_loader):
-            pred, pred_scale, mid, mid_scale, true, true_scale = self._process_one_batch_SCINet(
-                valid_data, batch_x, batch_y)
+            pred, pred_scale, mid, mid_scale, true, true_scale,recon,_,__ = self._process_one_batch_SCINet(
+                valid_data, batch_x, batch_y) 
+
+            
 
             if self.args.stacks == 1:
-                loss = criterion(pred.detach().cpu(), true.detach().cpu())
+                loss = criterion(pred.detach(), true.detach()).mean().cpu()
 
                 preds.append(pred.detach().cpu().numpy())
                 trues.append(true.detach().cpu().numpy())
@@ -245,15 +234,17 @@ class Exp_ETTh(Exp_Basic):
                 iter_count += 1
                 
                 model_optim.zero_grad()
-                pred, pred_scale, mid, mid_scale, true, true_scale = self._process_one_batch_SCINet(
-                    train_data, batch_x, batch_y)
+                pred, pred_scale, mid, mid_scale, true, true_scale, recon,midpred,midrecon = self._process_one_batch_SCINet(
+                   train_data, batch_x, batch_y,train=True)           ########################################
 
                 if self.args.stacks == 1:
-                    loss = criterion(pred, true)
+                    loss = criterion(pred, true) + criterion(recon, batch_x.double().cuda())+criterion(midpred, true) + criterion(midrecon, batch_x.double().cuda()) #################################
                 elif self.args.stacks == 2:
                     loss = criterion(pred, true) + criterion(mid, true)
                 else:
                     print('Error!')
+                if self.args.loss=='dtw':
+                    loss=loss.mean()
 
                 train_loss.append(loss.item())
                 
@@ -307,10 +298,14 @@ class Exp_ETTh(Exp_Basic):
         
         preds = []
         trues = []
+        recons = []
+        inputs = []
         mids = []
         pred_scales = []
         true_scales = []
         mid_scales = []
+
+
         
         if evaluate:
             path = os.path.join(self.args.checkpoints, setting)
@@ -318,12 +313,19 @@ class Exp_ETTh(Exp_Basic):
             self.model.load_state_dict(torch.load(best_model_path))
 
         for i, (batch_x,batch_y,batch_x_mark,batch_y_mark) in enumerate(test_loader):
-            pred, pred_scale, mid, mid_scale, true, true_scale = self._process_one_batch_SCINet(
-                test_data, batch_x, batch_y)
+            pred, pred_scale, mid, mid_scale, true, true_scale,recon,_,__ = self._process_one_batch_SCINet(
+                test_data, batch_x, batch_y,imgNO=False)
+
+            
+
 
             if self.args.stacks == 1:
                 preds.append(pred.detach().cpu().numpy())
                 trues.append(true.detach().cpu().numpy())
+
+                recons.append(recon.detach().cpu().numpy())
+                inputs.append(batch_x.detach().cpu().numpy())
+
                 pred_scales.append(pred_scale.detach().cpu().numpy())
                 true_scales.append(true_scale.detach().cpu().numpy())
             elif self.args.stacks == 2:
@@ -340,12 +342,23 @@ class Exp_ETTh(Exp_Basic):
         if self.args.stacks == 1:
             preds = np.array(preds)
             trues = np.array(trues)
+            recons = np.array(recons)
+            inputs= np.array(inputs)
 
             pred_scales = np.array(pred_scales)
             true_scales = np.array(true_scales)
 
             preds = preds.reshape(-1, preds.shape[-2], preds.shape[-1])
             trues = trues.reshape(-1, trues.shape[-2], trues.shape[-1])
+            recons= recons.reshape(-1, recons.shape[-2], recons.shape[-1])
+            inputs= inputs.reshape(-1, inputs.shape[-2], inputs.shape[-1])
+
+            gts=np.concatenate((inputs,trues),axis=1).tolist()
+            #print(gts)
+            results=np.concatenate((recons,preds),axis=1).tolist()
+            with open('./etth1result_withdrop.json', 'w') as f:
+                json.dump({'gt':gts, 'result':results}, f)
+
             true_scales = true_scales.reshape(-1, true_scales.shape[-2], true_scales.shape[-1])
             pred_scales = pred_scales.reshape(-1, pred_scales.shape[-2], pred_scales.shape[-1])
 
@@ -399,27 +412,25 @@ class Exp_ETTh(Exp_Basic):
             
         return mae, maes, mse, mses
 
-    def _process_one_batch_SCINet(self, dataset_object, batch_x, batch_y):
+    def _process_one_batch_SCINet(self, dataset_object, batch_x, batch_y,train=False,imgNO=False):
         batch_x = batch_x.double().cuda()
-        batch_y = batch_y.double()
+        batch_y = batch_y[:,-self.args.pred_len:,0:].double().cuda()
 
         if self.args.stacks == 1:
-            outputs = self.model(batch_x)
+            outputs, recon, midpred,midrecon = self.model(batch_x) #######################################
         elif self.args.stacks == 2:
             outputs, mid = self.model(batch_x)
         else:
             print('Error!')
 
-        #if self.args.inverse:
         outputs_scaled = dataset_object.inverse_transform(outputs)
         if self.args.stacks == 2:
             mid_scaled = dataset_object.inverse_transform(mid)
         f_dim = -1 if self.args.features=='MS' else 0
-        batch_y = batch_y[:,-self.args.pred_len:,f_dim:].cuda()
         batch_y_scaled = dataset_object.inverse_transform(batch_y)
 
         if self.args.stacks == 1:
-            return outputs, outputs_scaled, 0,0, batch_y, batch_y_scaled
+            return outputs, outputs_scaled, 0,0, batch_y, batch_y_scaled, recon ,midpred,midrecon#######################
         elif self.args.stacks == 2:
             return outputs, outputs_scaled, mid, mid_scaled, batch_y, batch_y_scaled
         else:

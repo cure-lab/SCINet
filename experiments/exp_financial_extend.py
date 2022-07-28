@@ -19,11 +19,11 @@ from utils.tools import EarlyStopping, adjust_learning_rate, save_model, load_mo
 from metrics.ETTh_metrics import metric
 from utils.math_utils import smooth_l1_loss
 from models.SCINet import SCINet
-from models.SCINet_decompose import SCINet_decompose
+from models.SCINet_decompose import extend_SCINet
 
-class Exp_financial(Exp_Basic):
+class Exp_financial_extend(Exp_Basic):
     def __init__(self, args):
-        super(Exp_financial, self).__init__(args)
+        super(Exp_financial_extend, self).__init__(args)
         if self.args.L1Loss:
             self.criterion = smooth_l1_loss
         else:
@@ -45,44 +45,24 @@ class Exp_financial(Exp_Basic):
         if self.args.dataset_name == 'traffic':
             self.input_dim = 862
         
-        if self.args.decompose:
-            model = SCINet_decompose(
-                output_len=self.args.horizon,
-                input_len=self.args.window_size,
-                input_dim=self.input_dim,
-                hid_size=self.args.hidden_size,
-                num_stacks=self.args.stacks,
-                num_levels=self.args.levels,
-                num_decoder_layer=self.args.num_decoder_layer,
-                concat_len=self.args.concat_len,
-                groups=self.args.groups,
-                kernel=self.args.kernel,
-                dropout=self.args.dropout,
-                single_step_output_One=self.args.single_step_output_One,
-                positionalE=self.args.positionalEcoding,
-                modified=True,
-                RIN=self.args.RIN
-            )
+        model = extend_SCINet(
+            output_len=self.args.horizon,
+            input_len=self.args.window_size,
+            input_dim=self.input_dim,
+            hid_size=self.args.hidden_size,
+            num_stacks=1,
+            num_levels=self.args.levels,
+            # num_decoder_layer=self.args.num_decoder_layer,
+            concat_len=self.args.concat_len,
+            groups=self.args.groups,
+            kernel=self.args.kernel,
+            dropout=self.args.dropout,
+            single_step_output_One=self.args.single_step_output_One,
+            positionalE=self.args.positionalEcoding,
+            modified=True,
+            RIN=self.args.RIN
+        )
             
-        else: 
-            
-            model = SCINet(
-                output_len=self.args.horizon,
-                input_len=self.args.window_size,
-                input_dim=self.input_dim,
-                hid_size=self.args.hidden_size,
-                num_stacks=self.args.stacks,
-                num_levels=self.args.levels,
-                num_decoder_layer=self.args.num_decoder_layer,
-                concat_len=self.args.concat_len,
-                groups=self.args.groups,
-                kernel=self.args.kernel,
-                dropout=self.args.dropout,
-                single_step_output_One=self.args.single_step_output_One,
-                positionalE=self.args.positionalEcoding,
-                modified=True,
-                RIN=self.args.RIN
-            )
         print(model)
         return model
     
@@ -138,10 +118,9 @@ class Exp_financial(Exp_Basic):
 
             for tx, ty in data.get_batches(X, Y, self.args.batch_size, True):
                 self.model.zero_grad()             #torch.Size([32, 168, 137])
-                if self.args.stacks == 1:
-                    forecast = self.model(tx)
-                elif self.args.stacks == 2: 
-                    forecast, res = self.model(tx)
+                forecast, recon, _, __ = self.model(tx)
+                # elif self.args.stacks == 2: 
+                #     forecast, res = self.model(tx)
                 scale = data.scale.expand(forecast.size(0), self.args.horizon, data.m)
                 bias = data.bias.expand(forecast.size(0), self.args.horizon, data.m)
                 weight = torch.tensor(self.args.lastWeight).cuda() #used with multi-step
@@ -151,61 +130,40 @@ class Exp_financial(Exp_Basic):
                     scale_last = data.scale.expand(forecast.size(0), data.m)
                     bias_last = data.bias.expand(forecast.size(0), data.m)
                     if self.args.normalize == 3:
-                        loss_f = self.criterion(forecast[:, -1], ty_last)
-                        if self.args.stacks == 2:
-                            loss_m = self.criterion(res, ty)/res.shape[1] #average results
+                        loss_f = self.criterion(forecast[:, -1], ty_last) 
 
                     else:
                         loss_f = self.criterion(forecast[:, -1] * scale_last + bias_last, ty_last * scale_last + bias_last)
-                        if self.args.stacks == 2:
-                            loss_m = self.criterion(res * scale + bias, ty * scale + bias)/res.shape[1] #average results
 
                 else:
                     if self.args.normalize == 3:
                         if self.args.lastWeight == 1.0:
-                            loss_f = self.criterion(forecast, ty)
-                            if self.args.stacks == 2:
-                                loss_m = self.criterion(res, ty)
+                            loss_f = self.criterion(forecast, ty) + self.criterion(recon, tx)
                         else:
                             loss_f = self.criterion(forecast[:, :-1, :], ty[:, :-1, :] ) \
-                                    + weight * self.criterion(forecast[:, -1:, :], ty[:, -1:, :] )
-                            if self.args.stacks == 2:
-                                loss_m = self.criterion(res[:, :-1, :] , ty[:, :-1, :] ) \
-                                        + weight * self.criterion(res[:, -1:, :], ty[:, -1:, :] )
+                                    + weight * self.criterion(forecast[:, -1:, :], ty[:, -1:, :] ) + self.criterion(recon, tx)
                     else:
                         if self.args.lastWeight == 1.0:
-                            loss_f = self.criterion(forecast * scale + bias, ty * scale + bias)
-                            if self.args.stacks == 2:
-                                loss_m = self.criterion(res * scale + bias, ty * scale + bias)
+                            loss_f = self.criterion(forecast * scale + bias, ty * scale + bias) + self.criterion(recon* scale + bias, tx* scale + bias)
                         else:
                             loss_f = self.criterion(forecast[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :],
                                             ty[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :]) \
                                 + weight * self.criterion(forecast[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :],
-                                                        ty[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :])
-                            if self.args.stacks == 2:
-                                loss_m = self.criterion(res[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :],
-                                                ty[:, :-1, :] * scale[:, :-1, :] + bias[:, :-1, :]) \
-                                    + weight * self.criterion(res[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :],
-                                                            ty[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :])
+                                                        ty[:, -1:, :] * scale[:, -1:, :] + bias[:, -1:, :]) + self.criterion(recon* scale + bias, tx* scale + bias)
                 loss = loss_f
-                if self.args.stacks == 2:
-                    loss += loss_m
+
 
                 loss.backward()
                 total_loss += loss.item()
 
                 final_loss  += loss_f.item()
-                if self.args.stacks == 2:
-                    min_loss  += loss_m.item()
+
                 n_samples += (forecast.size(0) * data.m)
                 grad_norm = optim.step()
 
                 if iter%100==0:
-                    if self.args.stacks == 1:
-                        print('iter:{:3d} | loss: {:.7f}'.format(iter, loss.item()/(forecast.size(0) * data.m)))
-                    elif self.args.stacks == 2:
-                        print('iter:{:3d} | loss: {:.7f}, loss_final: {:.7f}, loss_mid: {:.7f}'.format(iter, loss.item()/(forecast.size(0) * data.m),
-                                loss_f.item()/(forecast.size(0) * data.m),loss_m.item()/(forecast.size(0) * data.m)))
+                    print('iter:{:3d} | loss: {:.7f}'.format(iter, loss.item()/(forecast.size(0) * data.m)))
+
                 iter += 1
             if self.args.stacks == 1:
                 val_loss, val_rae, val_corr, val_mse, val_mae = self.validate(data, data.valid[0],data.valid[1])
@@ -270,44 +228,31 @@ class Exp_financial(Exp_Basic):
         for X, Y in data.get_batches(X, Y, self.args.batch_size, False):
             with torch.no_grad():
                 if self.args.stacks == 1:
-                    forecast = self.model(X)
-                elif self.args.stacks == 2:
-                    forecast, res = self.model(X) #torch.Size([32, 3, 137])
+                    forecast, recon, _, __ = self.model(X)
             # only predict the last step
             true = Y[:, -1, :].squeeze()
             output = forecast[:,-1,:].squeeze()
 
             forecast_set.append(forecast)
             target_set.append(Y)
-            if self.args.stacks == 2:
-                Mid_set.append(res)
 
             if len(forecast.shape)==1:
                 forecast = forecast.unsqueeze(dim=0)
-                if self.args.stacks == 2:
-                    res = res.unsqueeze(dim=0)
+
             if predict is None:
                 predict = forecast[:,-1,:].squeeze()
                 test = Y[:,-1,:].squeeze() #torch.Size([32, 3, 137])
-                if self.args.stacks == 2:
-                    res_mid = res[:,-1,:].squeeze()
 
             else:
                 predict = torch.cat((predict, forecast[:,-1,:].squeeze()))
                 test = torch.cat((test, Y[:, -1, :].squeeze()))
-                if self.args.stacks == 2:
-                    res_mid = torch.cat((res_mid, res[:,-1,:].squeeze()))
             
             scale = data.scale.expand(output.size(0),data.m)
             bias = data.bias.expand(output.size(0), data.m)
-            if self.args.stacks == 2:
-                output_res = res[:,-1,:].squeeze()
+
 
             total_loss += self.evaluateL2(output * scale + bias, true * scale+ bias).item()
             total_loss_l1 += self.evaluateL1(output * scale+ bias, true * scale+ bias).item()
-            if self.args.stacks == 2:
-                total_loss_mid += self.evaluateL2(output_res * scale+ bias, true * scale+ bias).item()
-                total_loss_l1_mid += self.evaluateL1(output_res * scale+ bias, true * scale+ bias).item()
 
             n_samples += (output.size(0) * data.m)
 
@@ -316,8 +261,6 @@ class Exp_financial(Exp_Basic):
         mse = MSE(forecast_Norm.cpu().numpy(), target_Norm.cpu().numpy())
         mae = MAE(forecast_Norm.cpu().numpy(), target_Norm.cpu().numpy())
 
-        if self.args.stacks == 2:
-            Mid_Norm = torch.cat(Mid_set, axis=0)
 
         rse_final_each = []
         rae_final_each = []
@@ -328,9 +271,6 @@ class Exp_financial(Exp_Basic):
             for i in range(forecast_Norm.shape[1]): #get results of each step
                 lossL2_F = self.evaluateL2(forecast_Norm[:,i,:] * Scale + bias, target_Norm[:,i,:] * Scale+ bias).item()
                 lossL1_F = self.evaluateL1(forecast_Norm[:,i,:] * Scale+ bias, target_Norm[:,i,:] * Scale+ bias).item()
-                if self.args.stacks == 2:
-                    lossL2_M = self.evaluateL2(Mid_Norm[:, i, :] * Scale+ bias, target_Norm[:, i, :] * Scale+ bias).item()
-                    lossL1_M = self.evaluateL1(Mid_Norm[:, i, :] * Scale+ bias, target_Norm[:, i, :] * Scale+ bias).item()
                 rse_F = math.sqrt(lossL2_F / forecast_Norm.shape[0]/ data.m) / data.rse
                 rae_F = (lossL1_F / forecast_Norm.shape[0]/ data.m) / data.rae
                 rse_final_each.append(rse_F.item())
@@ -350,9 +290,6 @@ class Exp_financial(Exp_Basic):
 
         rse = math.sqrt(total_loss / n_samples) / data.rse
         rae = (total_loss_l1 / n_samples) / data.rae
-        if self.args.stacks == 2:
-            rse_mid = math.sqrt(total_loss_mid / n_samples) / data.rse
-            rae_mid = (total_loss_l1_mid / n_samples) / data.rae
 
         # only calculate the last step for financial datasets.
         predict = forecast_Norm.cpu().numpy()[:,-1,:]
@@ -365,23 +302,11 @@ class Exp_financial(Exp_Basic):
         index = (sigma_p * sigma_g != 0)
         correlation = ((predict - mean_p) * (Ytest - mean_g)).mean(axis=0) / (sigma_p * sigma_g)
         correlation = (correlation[index]).mean()
-        if self.args.stacks == 2:
-            mid_pred = Mid_Norm.cpu().numpy()[:,-1,:]
-            sigma_mid = mid_pred.std(axis=0)
-            mean_mid = mid_pred.mean(axis=0)
-            index_mid = (sigma_mid * sigma_g != 0)
-            correlation_mid = ((mid_pred - mean_mid) * (Ytest - mean_g)).mean(axis=0) / (sigma_mid * sigma_g)
-            correlation_mid = (correlation_mid[index_mid]).mean()
+
 
         print(
             '|valid_final mse {:5.4f} |valid_final mae {:5.4f} |valid_final rse {:5.4f} | valid_final rae {:5.4f} | valid_final corr  {:5.4f}'.format(mse,mae,
                 rse, rae, correlation), flush=True)
-        if self.args.stacks == 2:
-            print(
-            '|valid_final mse {:5.4f} |valid_final mae {:5.4f} |valid_mid rse {:5.4f} | valid_mid rae {:5.4f} | valid_mid corr  {:5.4f}'.format(mse,mae,
-                rse_mid, rae_mid, correlation_mid), flush=True)
 
         if self.args.stacks == 1:
             return rse, rae, correlation, mse, mae
-        if self.args.stacks == 2:
-            return rse, rae, correlation, rse_mid, rae_mid, correlation_mid, mse, mae

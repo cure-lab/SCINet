@@ -2,6 +2,7 @@ import os
 import torch
 from datetime import datetime
 from experiments.exp_financial import Exp_financial
+from experiments.exp_financial_extend import Exp_financial_extend
 import argparse
 import pandas as pd
 import numpy as np
@@ -61,6 +62,7 @@ parser.add_argument('--stacks', type=int, default=1)
 parser.add_argument('--long_term_forecast', action='store_true', default=False)
 parser.add_argument('--RIN', type=bool, default=False)
 parser.add_argument('--decompose', type=bool,default=False)
+parser.add_argument('--extend', type=bool,default=False)
 
 args = parser.parse_args()
 
@@ -75,7 +77,10 @@ if __name__ == '__main__':
     torch.backends.cudnn.deterministic = True  # Can change it to False --> default: False
     torch.backends.cudnn.enabled = True
 
-    Exp=Exp_financial
+    if args.extend:
+        Exp = Exp_financial_extend
+    else:
+        Exp=Exp_financial
     exp=Exp(args)
 
     if args.evaluate:
