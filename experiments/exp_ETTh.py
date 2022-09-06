@@ -15,7 +15,7 @@ from experiments.exp_basic import Exp_Basic
 from utils.tools import EarlyStopping, adjust_learning_rate, save_model, load_model
 from metrics.ETTh_metrics import metric
 from models.SCINet import SCINet
-from models.SCINet_decompose import SCINet_decomp
+from models.SCINet_decompose import SCINet_decompose
 
 class Exp_ETTh(Exp_Basic):
     def __init__(self, args):
@@ -31,7 +31,7 @@ class Exp_ETTh(Exp_Basic):
             print('Error!')
 
         if self.args.decompose:
-            model = SCINet_decomp(
+            model = SCINet_decompose(
                 output_len=self.args.pred_len,
                 input_len=self.args.seq_len,
                 input_dim= in_dim,
