@@ -1,38 +1,41 @@
 # SCINet
+[![Arxiv link](https://img.shields.io/badge/arXiv-Time%20Series%20is%20a%20Special%20Sequence%3A%20Forecasting%20with%20Sample%20Convolution%20and%20Interaction-%23B31B1B)](https://arxiv.org/pdf/2106.09305.pdf)
 
-[comment]: <> ([![Arxiv link]&#40;https://img.shields.io/badge/arXiv-Time%20Series%20is%20a%20Special%20Sequence%3A%20Forecasting%20with%20Sample%20Convolution%20and%20Interaction-%23B31B1B&#41;]&#40;https://arxiv.org/pdf/2106.09305.pdf&#41;)
+![state-of-the-art](https://img.shields.io/badge/-STATE--OF--THE--ART-blue?logo=Accenture&labelColor=lightgrey)![pytorch](https://img.shields.io/badge/-PyTorch-%23EE4C2C?logo=PyTorch&labelColor=lightgrey)
 
-[comment]: <> (![pytorch]&#40;https://img.shields.io/badge/-PyTorch-%23EE4C2C?logo=PyTorch&labelColor=lightgrey&#41;)
 
-[comment]: <> ([![cure]&#40;https://img.shields.io/badge/-CURE_Lab-%23B31B1B&#41;]&#40;http://cure-lab.github.io/&#41;)
 
-[comment]: <> (This is the original PyTorch implementation of the following work: [Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction]&#40;https://arxiv.org/pdf/2106.09305.pdf&#41;. If you find this repository useful for your work, please consider citing it as follows:)
+This is the original pytorch implementation for the following paper: [SCINet: Time Series Modeling and Forecasting with Sample Convolution and Interaction](https://arxiv.org/pdf/2106.09305.pdf). Alse see the [Open Review verision](https://openreview.net/pdf?id=AyajSjTAzmg).  
 
-[comment]: <> (```)
+If you find this repository useful for your research work, please consider citing it as follows:
 
-[comment]: <> (@article{liu2021SCINet,)
+```
 
-[comment]: <> (  title={Time Series is a Special Sequence: Forecasting with Sample Convolution and Interaction},)
+@article{liu2022SCINet,
 
-[comment]: <> (  author={Liu, Minhao and Zeng, Ailing and Xu, Zhijian and Lai, Qiuxia and Xu, Qiang},)
+title={SCINet: Time Series Modeling and Forecasting with Sample Convolution and Interaction},
 
-[comment]: <> (  journal={arXiv preprint arXiv:2106.09305},)
+author={Liu, Minhao and Zeng, Ailing and Chen, Muxi and Xu, Zhijian and Lai, Qiuxia and Ma, Lingna and Xu, Qiang},
 
-[comment]: <> (  year={2021})
+journal={Thirty-sixth Conference on Neural Information Processing Systems (NeurIPS), 2022},
 
-[comment]: <> (})
+year={2022}
 
-[comment]: <> (```)
+}
 
-[comment]: <> (## Updates)
+```
 
-[comment]: <> ([2021-09-17] SCINet v1.0 is released)
+## Updates
+- [2022-09-15] SCINet has been accepted to NeurIPS 2022!
 
-[comment]: <> ([2021-11-10] Added Reversible Instance Normalization&#40;RevIN&#41; [[1]&#40;##References&#41;] support!)
+- [2021-09-17] SCINet v1.0 is released
 
-[comment]: <> (## Features)
+- [2021-11-10] Added Reversible Instance Normalization&#40;RevIN&#41; [[1]&#40;##References&#41;] support!
 
-[comment]: <> (- [x] Support **11** popular time-series forecasting datasets.  )
+
+## Features
+
+- [x] Support **11** popular time-series forecasting datasets, namely Electricity Transformer Temperature (ETTh1, ETTh2 and ETTm1) , Traffic, Solar-Energy, Electricity and Exchange Rate and PeMS (PEMS03, PEMS04, PEMS07 and PEMS08), ranging from power, energy, finance and traffic domains.
 
 [comment]: <> (![traffic]&#40;https://img.shields.io/badge/🚅-Traffic-yellow&#41;)
 
@@ -42,24 +45,27 @@
 
 [comment]: <> (![finance]&#40;https://img.shields.io/badge/💵-Finance-yellow&#41;)
 
-[comment]: <> (- [x] Provide all training logs.)
+- [x] Provide all training logs.
 
-[comment]: <> (- [x] Support RevIN to handle datasets with a large train-test sample distribution gap. To activate, simply add ```--RIN True``` to the command line. [**Read more**]&#40;./docs/RevIN.md&#41;)
+- [x] Support RevIN to handle datasets with a large train-test sample distribution gap. To activate, simply add ```--RIN True``` to the command line. [**Read more**]&#40;./docs/RevIN.md&#41;
 
 
-[comment]: <> (## To-do items)
+## To-do items
 
-[comment]: <> (-  Integrate GNN-based spatial models into SCINet for better performance and higher efficiency on spatial-temporal time series. Our preliminary results show that this feature could result in considerable gains on the prediction accuracy of some datasets &#40;e.g., PEMSxx&#41;.)
+-  Integrate GNN-based spatial models into SCINet for better performance and higher efficiency on spatial-temporal time series. Our preliminary results show that this feature could result in considerable gains on the prediction accuracy of some datasets &#40;e.g., PEMSxx&#41;.
 
-[comment]: <> (-  Generate probalistic forecasting results )
+-  Generate probalistic forecasting results.
 
-[comment]: <> (Stay tuned!)
+Stay tuned!
 
-## Dataset
+
+
+
+## Used Datasets
+
 
 We conduct the experiments on **11** popular time-series datasets, namely **Electricity Transformer Temperature (ETTh1, ETTh2 and ETTm1) ,  PeMS (PEMS03, PEMS04, PEMS07 and PEMS08) and Traffic, Solar-Energy, Electricity and Exchange Rate**, ranging from **power, energy, finance and traffic domains**. 
 
-[comment]: <> (The results of **Traffic, Solar-Energy, Electricity and Exchange Rate** are shown in the [Appendix]&#40;./Appendix&#41;.)
 
 ### Overall information of the 11 datasets
 
@@ -97,9 +103,9 @@ All datasets can be downloaded [here](https://drive.google.com/drive/folders/1Gv
 ```
 source prepare_data.sh
 ```
-<!-- [![ett](https://img.shields.io/badge/Download-ETT_Dataset-%234285F4?logo=GoogleDrive&labelColor=lightgrey)](https://drive.google.com/drive/folders/1NU85EuopJNkptFroPtQVXMZE70zaBznZ)
+ [![ett](https://img.shields.io/badge/Download-ETT_Dataset-%234285F4?logo=GoogleDrive&labelColor=lightgrey)](https://drive.google.com/drive/folders/1NU85EuopJNkptFroPtQVXMZE70zaBznZ)
 [![pems](https://img.shields.io/badge/Download-PeMS_Dataset-%234285F4?logo=GoogleDrive&labelColor=lightgrey)](https://drive.google.com/drive/folders/17fwxGyQ3Qb0TLOalI-Y9wfgTPuXSYgiI)
-[![financial](https://img.shields.io/badge/Download-financial_Dataset-%234285F4?logo=GoogleDrive&labelColor=lightgrey)](https://drive.google.com/drive/folders/12ffxwxVAGM_MQiYpIk9aBLQrb2xQupT-) -->
+[![financial](https://img.shields.io/badge/Download-financial_Dataset-%234285F4?logo=GoogleDrive&labelColor=lightgrey)](https://drive.google.com/drive/folders/12ffxwxVAGM_MQiYpIk9aBLQrb2xQupT-) 
 
 The data directory structure is shown as follows. 
 ```
@@ -243,7 +249,10 @@ predict 336
 ```
 python -u run_financial.py --dataset_name traffic --window_size 96 --horizon 336 --hidden-size 1 --stacks 1 --levels 3 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I96_o336_lr5e-4_bs16_dp0.25_h2_s1l3_w1.0 --normalize 4 --long_term_forecast
 ```
-
+predict 720
+```
+python -u run_financial.py --dataset_name traffic --window_size 96 --horizon 720 --hidden-size 1 --stacks 1 --levels 3 --lr 5e-4 --dropout 0.25 --batch_size 16 --model_name traf_I96_o720_lr5e-4_bs16_dp0.25_h2_s1l3_w1.0 --normalize 4 --long_term_forecast
+```
 #### For Exchange rate dataset:
 
 predict 3 
@@ -438,38 +447,34 @@ python run_ETTh.py --data ETTm1 --features S  --seq_len 672 --label_len 672 --pr
 | levels         | SCINet block levels          | L                  | 3                          |
 | stacks         | The number of SCINet blocks  | K                  | 1                          |
 
-[comment]: <> (## Special Constraint)
+## Special Constraint
 
-[comment]: <> (- Because of the stacked binary down-sampling method that SCINet adopts, the number of levels &#40;L&#41; and look-back window &#40;W&#41; size should satisfy:)
+- Because of the stacked binary down-sampling method that SCINet adopts, the number of levels &#40;L&#41; and look-back window &#40;W&#41; size should satisfy:)
 
-[comment]: <> (<img src="https://render.githubusercontent.com/render/math?math=W\bmod{2^{L}}=0">)
+<img src="https://render.githubusercontent.com/render/math?math=W\bmod{2^{L}}=0">
 
-[comment]: <> (&#40;The formula might not be shown in the darkmode Github&#41;)
+&#40;The formula might not be shown in the darkmode Github&#41;
 
-[comment]: <> (## References)
+## References
 
-[comment]: <> ([1] [Reversible Instance Normalization for Accurate Time-Series Forecasting against Distribution Shift]&#40;https://openreview.net/forum?id=cGDAkQo1C0p&#41;)
+[1] [Reversible Instance Normalization for Accurate Time-Series Forecasting against Distribution Shift]&#40;https://openreview.net/forum?id=cGDAkQo1C0p&#41;
 
-[comment]: <> (## Contact)
+## Contact
 
-[comment]: <> (If you have any questions, feel free to contact us or post github issues. Pull requests are highly welcomed! )
+If you have any questions, feel free to contact us or post github issues. Pull requests are highly welcomed!
 
-[comment]: <> (```)
+```
 
-[comment]: <> (Minhao Liu: mhliu@cse.cuhk.edu.hk)
+Minhao Liu: mhliu@cse.cuhk.edu.hk
 
-[comment]: <> (Ailing Zeng: alzeng@cse.cuhk.edu.hk)
+Ailing Zeng: alzeng@cse.cuhk.edu.hk
 
-[comment]: <> (Zhijian Xu: zjxu21@cse.cuhk.edu.hk)
+Zhijian Xu: zjxu21@cse.cuhk.edu.hk
 
-[comment]: <> (```)
+```
 
-[comment]: <> (## Send us feedback!)
+## Acknowledgements
 
-[comment]: <> (First of all, thank you all for your attention to this work!)
+Thank you all for your attention to our work!
 
-[comment]: <> (Our library is open source for research purposes, and we would like to keep on improving it for a very long time! So please let us know if you:)
-
-[comment]: <> (- Find/fix any bug or know how to improve any part of SCINet.)
-
-[comment]: <> (- Want to add/show some cool functionalities/projects made on top of SCINet. We could add your project link to our Community-based Projects section later or  integrate it into the next version of SCINet!)
+This code uses ([Informer](https://github.com/zhouhaoyi/Informer2020), [MTGNN](https://github.com/nnzhan/MTGNN), [StemGNN](https://github.com/microsoft/StemGNN)) as baseline methods for comparison.
