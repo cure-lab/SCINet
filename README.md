@@ -28,9 +28,9 @@ year={2022}
 ## Updates
 - [2022-09-15] SCINet has been accepted to NeurIPS 2022!
 
-- [2021-09-17] SCINet v1.0 is released
+- [2021-11-10] Added Reversible Instance Normalization RevIN[1] support!
 
-- [2021-11-10] Added Reversible Instance Normalization&#40;RevIN&#41; [[1]&#40;##References&#41;] support!
+- [2021-09-17] SCINet v1.0 is released
 
 
 ## Features
