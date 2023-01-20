@@ -17,7 +17,7 @@ from metrics.ETTh_metrics import metric
 from torch.utils.tensorboard import SummaryWriter
 from utils.math_utils import evaluate, creatMask
 from models.SCINet import SCINet
-from models.SCINet_decompose import SCINet_decomp
+from models.SCINet_decompose import SCINet_decompose
 
 class Exp_pems(Exp_Basic):
     def __init__(self, args):
