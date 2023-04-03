@@ -19,7 +19,7 @@ from utils.tools import EarlyStopping, adjust_learning_rate, save_model, load_mo
 from metrics.ETTh_metrics import metric
 from utils.math_utils import smooth_l1_loss
 from models.SCINet import SCINet
-from models.SCINet_decompose import SCINet_decomp
+from models.SCINet_decompose import SCINet_decompose
 
 class Exp_financial(Exp_Basic):
     def __init__(self, args):
